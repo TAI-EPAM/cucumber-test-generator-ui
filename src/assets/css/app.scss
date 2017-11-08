@@ -41,6 +41,7 @@ input[type=text] {
   padding: 4px 8px;
   color: $form-text-color;
   width: 100%;
+  box-sizing: border-box;
   box-shadow: inset 0px 2px 2px 0px rgba(240,240,240,0.5);
 
   &:focus {
@@ -58,6 +59,7 @@ textarea {
   width: 100%;
   box-shadow: inset 0px 2px 2px 0px rgba(240,240,240,0.5);
   min-height: 100px;
+  box-sizing: border-box;
 
   &:focus {
     font-family: Helvetica, Arial, sans-serif;

@@ -1,6 +1,5 @@
 <template>
   <div class="suits holder">
-    <h2>{{ title }}</h2>
     <div class="wrapper">
       <div class="left-side">
         <suits-menu :items="suits" :menuClick="menuClick" />
@@ -8,12 +7,13 @@
           <v-button @click="addSuitLink">Add suit</v-button>
         </div>
       </div>
+      <div class="center-side">
+
+      </div>
       <div class="right-side">
         <suit v-if="activeSuit" :suit="activeSuit" />
-        <div v-if="!activeSuit">There aren't  suits</div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -57,12 +57,20 @@
         .catch((e) => {
           console.warn(e);
         });
+
+      //  View events through event bus
       this.$bus.$on('suit-delete', (suitId) => {
         const removedIndex = this.suits.indexOf(this.suits.filter(suit => suit.id === suitId)[0]);
         if (removedIndex !== -1) {
           this.suits.splice(removedIndex, 1);
           this.activeSuit = null;
-          console.warn(`${suitId} deleted`);
+        }
+      });
+      this.$bus.$on('suit-save', (suit) => {
+        const editedSuitIndex =
+          this.suits.indexOf(this.suits.filter(_suit => _suit.id === suit.id)[0]);
+        if (editedSuitIndex !== -1) {
+          Object.assign(this.suits[editedSuitIndex], suit);
         }
       });
     },
@@ -75,10 +83,15 @@
     display: flex;
   }
   .left-side {
-    flex: 0 0 300px;
+    flex: 0 0 20%;
+  }
+  .center-side {
+    flex: 1;
+    margin: 0 20px;
+    padding: 10px;
   }
   .right-side {
-
+    flex: 0 0 30%;
   }
 
   .suits {

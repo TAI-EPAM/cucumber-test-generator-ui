@@ -46,7 +46,7 @@
     },
     methods: {
       editSuit() {
-        AxiosClient.pust('/cucumber/suits/', this.localSuit)
+        AxiosClient.post('/cucumber/suits/', this.localSuit)
           .then(() => {
             this.$router.push({ name: 'suits' });
           })

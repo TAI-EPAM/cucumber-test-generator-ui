@@ -1,7 +1,7 @@
 <template>
   <div class="suits-menu">
     <draggable v-model="localItems" v-if="localItems">
-      <div @click="handleClick(index, item)" v-for="(item, index) in localItems" class="suit-menu-item">
+      <div @click="handleClick(index, item)" v-for="(item, index) in localItems" v-bind:class="['suit-menu-item', {'suit-menu-item__active': isActive(item.id)}]">
         <span>{{item.name}}</span>
       </div>
     </draggable>
@@ -18,11 +18,16 @@
     data() {
       return {
         localItems: this.items,
+        activeItemId: null,
       };
     },
     methods: {
       handleClick(index, item) {
+        this.activeItemId = item.id;
         if (this.menuClick) this.menuClick(index, item);
+      },
+      isActive(itemId) {
+        return itemId === this.activeItemId;
       },
     },
     mounted() {
@@ -41,6 +46,7 @@
     watch: {
       items(newValue) {
         this.$data.localItems = newValue;
+        this.$data.activeItemId = newValue[0].id;
       },
     },
   };
@@ -68,6 +74,9 @@
         opacity: 1;
         border-style: dashed;
         border-color: red;
+      }
+      &.suit-menu-item__active {
+        border: 1px solid rgba(0,0,0,0.5);
       }
     }
   }
