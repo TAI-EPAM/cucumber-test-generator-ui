@@ -1,13 +1,13 @@
 <template>
   <div class="cases-list">
 
-    <div v-if="suit.cases.length">
+    <div v-if="suit.cases && suit.cases.length">
       <div>
         <span>Description</span>
         <span>Priority</span>
       </div>
       <div v-for="(item, index) in suit.cases">
-        {{item.description}} / {{item.priority}}
+        <span @dblclick="caseView(item)">{{item.description}}</span> / {{item.priority}}
       </div>
     </div>
 
@@ -33,8 +33,10 @@
     },
     methods: {
       addCaseView() {
-        this.$bus.$emit('mode-change', ['caseMode', 'add']);
-        this.$bus.$emit('mode-change', ['suitMode', 'none']);
+        this.$bus.$emit('case-add-show');
+      },
+      caseView(item) {
+        this.$bus.$emit('case-view-show', item);
       },
     },
     mounted() {

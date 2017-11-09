@@ -1,7 +1,7 @@
 <template>
-  <div class="suit-card">
+  <div class="entity-card">
     <h3>{{suit.name}} <span class="priority">priority: {{suit.priority }}</span> </h3>
-    <ul class="suit-props">
+    <ul class="entity-props">
       <li>{{suit.description }}</li>
       <li>created: {{ suit.creationDate}}</li>
       <li class="suit-tags"><strong>tags:</strong> {{suit.tags }}</li>

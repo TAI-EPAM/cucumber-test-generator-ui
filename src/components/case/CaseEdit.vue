@@ -2,9 +2,9 @@
   <div class="entity-card">
     <h3>Suit Edit</h3>
     <div class="entity-card-edit">
-      <label><span>Name:</span> <input type="text" v-model.lazy="localSuit.name"/></label>
+      <label><span>Description:</span> <textarea maxlength="255" v-model.lazy="localEntity.description"/></label>
       <label><span>Priority:</span>
-        <select v-model="localSuit.priority">
+        <select v-model="localEntity.priority">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -12,13 +12,14 @@
           <option value="5">5</option>
         </select>
       </label>
-      <label><span>Description:</span> <textarea maxlength="255" v-model.lazy="localSuit.description"/></label>
-      <label><span>Tags:</span> <input type="text" v-model.lazy="localSuit.tags"/></label>
+      <label><span>Tags:</span> <input type="text" v-model.lazy="localEntity.temp_tags"/></label>
     </div>
 
+    !{{this.suitId}}!
+
     <div class="buttons-holder">
-      <v-button @click="saveSuit">Save Suit</v-button>
-      <v-button @click="cancelEditSuit" markup="warning">Cancel</v-button>
+      <v-button @click="save">Save Case</v-button>
+      <v-button @click="cancel" markup="warning">Cancel</v-button>
     </div>
   </div>
 </template>
@@ -33,20 +34,20 @@
     },
     data() {
       return {
-        localSuit: Object.assign({}, this.suit),
+        localEntity: Object.assign({}, this.entity),
         dirty: false,
       };
     },
     methods: {
-      cancelEditSuit() {
-        this.localSuit = Object.assign({}, this.suit);
-        this.$bus.$emit('suit-cancel', this.localSuit);
+      cancel() {
+        this.localEntity = Object.assign({}, this.localEntity);
+        this.$bus.$emit('suit-cancel', this.localEntity);
       },
-      saveSuit() {
-        AxiosClient.post('/cucumber/suits/', this.localSuit)
+      save() {
+        AxiosClient.post(`/cucumber/suits/${this.suitId}/cases`, this.localEntity)
           .then(() => {
-            Object.assign(this.suit, this.localSuit);
-            this.$bus.$emit('suit-save', this.localSuit);
+            Object.assign(this.entity, this.localEntity);
+            this.$bus.$emit('case-save', this.localEntity);
           })
           .catch(() => {
           });
@@ -55,9 +56,9 @@
     mounted() {
 
     },
-    name: 'suit-edit',
+    name: 'case-edit',
     props: {
-      suit: {
+      entity: {
         description: {
           type: String,
           default: null,
@@ -66,21 +67,21 @@
           type: Number,
           default: null,
         },
-        name: {
-          type: String,
-          default: null,
-        },
         priority: Number,
         default: 1,
         tags: {
-          type: String,
+          type: [],
           default: null,
         },
+      },
+      suitId: {
+        type: Number,
+        default: null,
       },
     },
     watch: {
       suit(newValue) {
-        this.$data.localSuit = Object.assign({}, newValue);
+        this.localEntity = Object.assign({}, newValue);
         this.dirty = false;
       },
     },

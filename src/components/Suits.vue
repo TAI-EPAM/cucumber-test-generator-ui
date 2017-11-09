@@ -29,7 +29,8 @@
   import SuitEdit from './suit/SuitEdit';
   import VButton from './ui/VButton';
   import CasesList from './case/CasesList';
-  // import Case from './case/Case';
+  import Case from './case/Case';
+  import CaseAdd from './case/CaseAdd';
 
   export default {
     components: {
@@ -112,20 +113,39 @@
         };
       });
 
+      this.$bus.$on('case-add-show', () => {
+        this.rightComponent = CaseAdd;
+        this.rightComponentOptions = {
+          suitId: this.activeSuit.id,
+        };
+      });
+
+      this.$bus.$on('case-cancel', () => {
+        this.rightComponent = Suit;
+        this.rightComponentOptions = {
+          suit: this.activeSuit,
+        };
+      });
 
       this.$bus.$on('case-add', (caseId) => {
         AxiosClient.get(`/cucumber/suits/${this.activeSuit.id}/cases/${caseId}`)
           .then((response) => {
             this.activeSuit.cases.push(response.data);
-            this.caseMode = 'none';
+            this.rightComponent = Suit;
+            this.rightComponentOptions = {
+              suit: this.activeSuit,
+            };
           })
           .catch(() => {
           });
       });
-      this.$bus.$on('mode-change', (arrParams) => {
-        if (this[arrParams[0]]) {
-          this[arrParams[0]] = arrParams[1];
-        }
+
+      this.$bus.$on('case-view-show', (entity) => {
+        this.rightComponent = Case;
+        this.rightComponentOptions = {
+          entity,
+          suitId: this.activeSuit.id,
+        };
       });
     },
     name: 'Suits',

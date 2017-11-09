@@ -1,7 +1,7 @@
 <template>
-  <div class="suit-card">
+  <div class="entity-card">
     <h3>Add Suit</h3>
-    <div class="suit-card-edit">
+    <div class="entity-card-edit">
       <label><span>Name:</span> <input type="text" v-model.lazy="suit.name"/></label>
       <label><span>Priority:</span>
         <select v-model="suit.priority">
