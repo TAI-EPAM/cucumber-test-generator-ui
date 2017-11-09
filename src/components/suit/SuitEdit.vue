@@ -1,8 +1,8 @@
 <template>
-  <div class="suit-card-add holder">
-    <h1>Suit Edit</h1>
-    <div><label><span>Title:</span><input v-model.lazy="localSuit.name" type="text" /></label></div>
-    <div>
+  <div class="suit-card">
+    <h3>Suit Edit</h3>
+    <div class="suit-card-edit">
+      <label><span>Name:</span> <input type="text" v-model.lazy="localSuit.name"/></label>
       <label><span>Priority:</span>
         <select v-model="localSuit.priority">
           <option value="1">1</option>
@@ -12,12 +12,13 @@
           <option value="5">5</option>
         </select>
       </label>
+      <label><span>Description:</span> <textarea maxlength="255" v-model.lazy="localSuit.description"/></label>
+      <label><span>Tags:</span> <input type="text" v-model.lazy="localSuit.tags"/></label>
     </div>
-    <div><label><span>Tags:</span><input v-model.lazy="localSuit.tags" type="text" /></label></div>
-    <div><label><span class="b-block">Description:</span><textarea v-model.lazy="localSuit.description"></textarea></label></div>
+
     <div class="buttons-holder">
-      <v-button :disabled="!isDirty" @click="editSuit">Save</v-button>
-      <v-button  @click="resetSuit" markup="warning">Reset</v-button>
+      <v-button @click="saveSuit">Save Suit</v-button>
+      <v-button @click="cancelEditSuit" markup="warning">Cancel</v-button>
     </div>
   </div>
 </template>
@@ -29,55 +30,64 @@
   export default {
     components: { VButton },
     computed: {
-      isDirty() {
-        return this.dirty;
-      },
     },
     data() {
       return {
-        suit: {
-          name: null,
-          description: null,
-          priority: 1,
-          tags: null,
-        },
+        localSuit: Object.assign({}, this.suit),
         dirty: false,
       };
     },
     methods: {
-      editSuit() {
+      cancelEditSuit() {
+        this.localSuit = Object.assign({}, this.suit);
+        this.$bus.$emit('suit-cancel', this.localSuit);
+      },
+      saveSuit() {
         AxiosClient.post('/cucumber/suits/', this.localSuit)
           .then(() => {
-            this.$router.push({ name: 'suits' });
+            Object.assign(this.suit, this.localSuit);
+            this.$bus.$emit('suit-save', this.localSuit);
           })
-          .catch((e) => {
-            console.warn(e);
+          .catch(() => {
           });
       },
-      resetSuit() {
-        Object.assign(this.localSuit, this.suit);
+    },
+    mounted() {
+
+    },
+    name: 'suit-edit',
+    props: {
+      suit: {
+        description: {
+          type: String,
+          default: null,
+        },
+        id: {
+          type: Number,
+          default: null,
+        },
+        name: {
+          type: String,
+          default: null,
+        },
+        priority: Number,
+        default: 1,
+        tags: {
+          type: String,
+          default: null,
+        },
+      },
+    },
+    watch: {
+      suit(newValue) {
+        this.$data.localSuit = Object.assign({}, newValue);
         this.dirty = false;
       },
     },
-    name: 'suit-edit',
-    watch: {
-      suit: {
-        handler() {
-          this.dirty = true;
-        },
-        deep: true,
-      },
-    },
   };
+
 </script>
 
 <style lang="scss" scoped>
-
-  .suit-card-add {
-    width: 400px;
-    & div {
-      margin: 0 0 10px 0;
-    }
-  }
 
 </style>

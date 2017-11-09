@@ -44,9 +44,9 @@
       },
     },
     watch: {
-      items(newValue) {
+      items(newValue, oldValue) {
         this.$data.localItems = newValue;
-        this.$data.activeItemId = newValue[0].id;
+        if (oldValue.length === 0) this.$data.activeItemId = newValue[0].id;
       },
     },
   };
