@@ -11,8 +11,11 @@
         <cases-list v-if="activeSuit" :suit="activeSuit"></cases-list>
       </div>
       <div class="right-side">
+        <component :is="rightComponent" v-bind="rightComponentOptions" />
+        <!--
         <suit :suit="activeSuit" :mode="suitMode" />
         <case :mode="caseMode" :suitId="activeSuit.id" v-if="activeSuit" />
+        -->
       </div>
     </div>
   </div>
@@ -22,15 +25,15 @@
   import AxiosClient from '../utils/httpClient';
   import SuitsMenu from './suit/SuitsMenu';
   import Suit from './suit/Suit';
+  import SuitAdd from './suit/SuitAdd';
+  import SuitEdit from './suit/SuitEdit';
   import VButton from './ui/VButton';
   import CasesList from './case/CasesList';
-  import Case from './case/Case';
+  // import Case from './case/Case';
 
   export default {
     components: {
-      Case,
       CasesList,
-      Suit,
       SuitsMenu,
       VButton,
     },
@@ -41,20 +44,33 @@
         activeSuit: null,
         suitMode: 'view',
         caseMode: 'none',
+        rightComponent: null,
+        rightComponentOptions: null,
       };
     },
     methods: {
+      addSuit() {
+        this.rightComponent = SuitAdd;
+        this.rightComponentOptions = {};
+      },
+      loadEditSuit() {
+        this.rightComponent = SuitEdit;
+        this.rightComponentOptions = {
+          suit: this.activeSuit,
+        };
+      },
       loadSuit(index = 0) {
         this.activeSuit = this.suits[index];
-        this.suitMode = 'view';
-        this.caseMode = 'none';
+        this.rightComponent = Suit;
+        this.rightComponentOptions = {
+          suit: this.activeSuit,
+        };
       },
       menuClick(index) {
-        this.activeSuit = this.suits[index];
+        this.loadSuit(index);
       },
       addSuitLink() {
-        this.activeSuit = null;
-        this.suitMode = 'add';
+        this.addSuit();
       },
     },
     mounted() {
@@ -63,11 +79,22 @@
           this.suits = response.data;
           this.loadSuit();
         })
-        .catch((e) => {
-          console.warn(e);
+        .catch(() => {
         });
 
       //  View events through event bus
+
+      // Suit events
+      this.$bus.$on('suit-add', (suit) => {
+        this.suits.push(suit);
+        this.loadSuit(this.suits.length - 1);
+      });
+      this.$bus.$on('suit-cancel', () => {
+        this.rightComponent = Suit;
+        this.rightComponentOptions = {
+          suit: this.activeSuit,
+        };
+      });
       this.$bus.$on('suit-delete', (suitId) => {
         const removedIndex = this.suits.indexOf(this.suits.filter(suit => suit.id === suitId)[0]);
         if (removedIndex !== -1) {
@@ -75,25 +102,24 @@
           this.loadSuit();
         }
       });
-      this.$bus.$on('suit-save', (suit) => {
-        const editedSuitIndex =
-          this.suits.indexOf(this.suits.filter(_suit => _suit.id === suit.id)[0]);
-        if (editedSuitIndex !== -1) {
-          Object.assign(this.suits[editedSuitIndex], suit);
-        }
+      this.$bus.$on('suit-edit', () => {
+        this.loadEditSuit();
       });
-      this.$bus.$on('suit-add', (suit) => {
-        this.suits.push(suit);
-        this.loadSuit(this.suits.length - 1);
+      this.$bus.$on('suit-save', () => {
+        this.rightComponent = Suit;
+        this.rightComponentOptions = {
+          suit: this.activeSuit,
+        };
       });
+
+
       this.$bus.$on('case-add', (caseId) => {
         AxiosClient.get(`/cucumber/suits/${this.activeSuit.id}/cases/${caseId}`)
           .then((response) => {
             this.activeSuit.cases.push(response.data);
             this.caseMode = 'none';
           })
-          .catch((e) => {
-            console.warn(e);
+          .catch(() => {
           });
       });
       this.$bus.$on('mode-change', (arrParams) => {
