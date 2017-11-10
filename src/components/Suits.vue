@@ -4,7 +4,7 @@
       <div class="left-side">
         <suits-menu :items="suits" :menuClick="menuClick" />
         <div class="buttons-holder">
-          <v-button @click="addSuitLink">Add suit</v-button>
+          <v-button @click="loadSuitComponent('add')">Add suit</v-button>
         </div>
       </div>
       <div class="center-side">
@@ -43,35 +43,65 @@
         title: 'Suits',
         suits: [],
         activeSuit: null,
-        suitMode: 'view',
-        caseMode: 'none',
         rightComponent: null,
         rightComponentOptions: null,
       };
     },
     methods: {
-      addSuit() {
-        this.rightComponent = SuitAdd;
-        this.rightComponentOptions = {};
-      },
-      loadEditSuit() {
-        this.rightComponent = SuitEdit;
-        this.rightComponentOptions = {
-          suit: this.activeSuit,
-        };
+      loadCaseComponent(mode = 'view', entity) {
+        switch (mode) {
+          case 'add': {
+            this.rightComponent = CaseAdd;
+            this.rightComponentOptions = {
+              suitId: this.activeSuit.id,
+            };
+            break;
+          }
+          case 'view': {
+            this.rightComponent = Case;
+            this.rightComponentOptions = {
+              entity,
+              suitId: this.activeSuit.id,
+            };
+            break;
+          }
+          default: {
+            break;
+          }
+        }
       },
       loadSuit(index = 0) {
         this.activeSuit = this.suits[index];
-        this.rightComponent = Suit;
-        this.rightComponentOptions = {
-          suit: this.activeSuit,
-        };
+        this.loadSuitComponent();
+      },
+      loadSuitComponent(mode = 'view') {
+        switch (mode) {
+          case 'add': {
+            this.rightComponent = SuitAdd;
+            this.rightComponentOptions = {};
+            break;
+          }
+          case 'edit': {
+            this.rightComponent = SuitEdit;
+            this.rightComponentOptions = {
+              suit: this.activeSuit,
+            };
+            break;
+          }
+          case 'view': {
+            this.rightComponent = Suit;
+            this.rightComponentOptions = {
+              suit: this.activeSuit,
+            };
+            break;
+          }
+          default: {
+            break;
+          }
+        }
       },
       menuClick(index) {
         this.loadSuit(index);
-      },
-      addSuitLink() {
-        this.addSuit();
       },
     },
     mounted() {
@@ -91,10 +121,7 @@
         this.loadSuit(this.suits.length - 1);
       });
       this.$bus.$on('suit-cancel', () => {
-        this.rightComponent = Suit;
-        this.rightComponentOptions = {
-          suit: this.activeSuit,
-        };
+        this.loadSuitComponent();
       });
       this.$bus.$on('suit-delete', (suitId) => {
         const removedIndex = this.suits.indexOf(this.suits.filter(suit => suit.id === suitId)[0]);
@@ -104,48 +131,33 @@
         }
       });
       this.$bus.$on('suit-edit', () => {
-        this.loadEditSuit();
+        this.loadSuitComponent('edit');
       });
       this.$bus.$on('suit-save', () => {
-        this.rightComponent = Suit;
-        this.rightComponentOptions = {
-          suit: this.activeSuit,
-        };
+        this.loadSuitComponent();
       });
 
-      this.$bus.$on('case-add-show', () => {
-        this.rightComponent = CaseAdd;
-        this.rightComponentOptions = {
-          suitId: this.activeSuit.id,
-        };
-      });
-
-      this.$bus.$on('case-cancel', () => {
-        this.rightComponent = Suit;
-        this.rightComponentOptions = {
-          suit: this.activeSuit,
-        };
-      });
-
+      // case events
       this.$bus.$on('case-add', (caseId) => {
         AxiosClient.get(`/cucumber/suits/${this.activeSuit.id}/cases/${caseId}`)
           .then((response) => {
             this.activeSuit.cases.push(response.data);
-            this.rightComponent = Suit;
-            this.rightComponentOptions = {
-              suit: this.activeSuit,
-            };
+            this.loadSuitComponent();
           })
           .catch(() => {
           });
       });
 
+      this.$bus.$on('case-add-show', () => {
+        this.loadCaseComponent('add');
+      });
+
+      this.$bus.$on('case-cancel', () => {
+        this.loadSuitComponent();
+      });
+
       this.$bus.$on('case-view-show', (entity) => {
-        this.rightComponent = Case;
-        this.rightComponentOptions = {
-          entity,
-          suitId: this.activeSuit.id,
-        };
+        this.loadCaseComponent('view', entity);
       });
     },
     name: 'Suits',
