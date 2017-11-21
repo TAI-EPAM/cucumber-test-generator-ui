@@ -12,10 +12,6 @@
       </div>
       <div class="right-side">
         <component :is="rightComponent" v-bind="rightComponentOptions" />
-        <!--
-        <suit :suit="activeSuit" :mode="suitMode" />
-        <case :mode="caseMode" :suitId="activeSuit.id" v-if="activeSuit" />
-        -->
       </div>
     </div>
   </div>

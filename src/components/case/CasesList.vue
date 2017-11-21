@@ -2,17 +2,18 @@
   <div class="cases-list">
 
     <div v-if="suit.cases && suit.cases.length">
-      <div>
-        <span>Description</span>
-        <span>Priority</span>
-      </div>
-      <div v-for="(item, index) in suit.cases">
-        <span @dblclick="caseView(item)">{{item.description}}</span> / {{item.priority}}
-      </div>
+      <v-data-grid
+        :data="localCases"
+        :columns="dataColumns"
+        :onSelect="onSelect"
+      >
+      </v-data-grid>
+
     </div>
 
     <div class="buttons-holder">
       <v-button @click="addCaseView">Add Case</v-button>
+      <v-button @click="deleteCase" markup="error">Delete Case</v-button>
     </div>
 
 
@@ -21,14 +22,17 @@
 
 <script>
   import VButton from '@/components/ui/VButton';
+  import VDataGrid from '@/components/ui/VDataGrid';
 
   export default {
     components: {
       VButton,
+      VDataGrid,
     },
     data() {
       return {
         localCases: this.$props.suit.cases,
+        dataColumns: ['description', 'priority', 'updateDate'],
       };
     },
     methods: {
@@ -37,6 +41,12 @@
       },
       caseView(item) {
         this.$bus.$emit('case-view-show', item);
+      },
+      deleteCase() {
+        console.warn('1111');
+      },
+      onSelect(entry) {
+        console.warn(entry);
       },
     },
     mounted() {
