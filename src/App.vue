@@ -2,6 +2,7 @@
   <div id="app">
     <app-header></app-header>
     <div class="app-content">
+      <app-menu></app-menu>
       <router-view/>
     </div>
     <app-footer></app-footer>
@@ -11,9 +12,11 @@
 <script>
   import AppHeader from './components/ui/AppHeader';
   import AppFooter from './components/ui/AppFooter';
+  import AppMenu from './components/ui/AppMenu';
 
   export default {
     components: {
+      AppMenu,
       AppHeader,
       AppFooter,
     },
