@@ -1,9 +1,13 @@
 <template>
-  <div id="app">
-    <app-header></app-header>
-    <div class="app-content">
+  <div class="wrapper" id="app">
+    <app-header />
+    <aside>
       <app-menu></app-menu>
-      <router-view/>
+    </aside>
+    <div class="uui-main-container">
+      <main>
+        <router-view/>
+      </main>
     </div>
     <app-footer></app-footer>
   </div>
@@ -24,7 +28,11 @@
   };
 </script>
 
-<style lang="scss">
-	@import 'assets/css/variables.scss';
-	@import 'assets/css/app.scss';
+<style lang="less">
+  @import "assets/vendors/epam-ui/less/uui-core";
+
+  * {
+    box-sizing: border-box;
+  }
+
 </style>

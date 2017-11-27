@@ -1,27 +1,18 @@
 <template>
-  <div class="suits holder">
-    <div class="wrapper">
-      <div class="left-side">
-        <suits-menu :items="suits" :menuClick="menuClick" />
-        <div class="buttons-holder">
-          <v-button @click="loadSuitComponent('add')">Add suit</v-button>
-        </div>
-      </div>
-      <div class="center-side">
-        <cases-list v-if="activeSuit" :suit="activeSuit"></cases-list>
-      </div>
-      <div class="right-side">
-        <component :is="rightComponent" v-bind="rightComponentOptions" />
-      </div>
-    </div>
+
+  <div>
+    <v-button markup="orange">1111</v-button>
   </div>
+
 </template>
 
 <script>
+  import VButton from './ui/VButton';
   // import AxiosClient from '../utils/httpClient';
 
   export default {
     components: {
+      VButton,
     },
     data() {
       return {
@@ -33,8 +24,13 @@
       };
     },
     methods: {
+      viewCase(data) {
+        console.warn(data.caseItem);
+        console.warn(data.suit);
+      },
     },
     mounted() {
+      this.$bus.$on('viewCase', this.viewCase);
     },
     name: 'Suits',
 };
