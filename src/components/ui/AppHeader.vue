@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import VButton from './VButton';
+  import VButton from './EpamButton';
 
   export default {
     components: {

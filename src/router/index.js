@@ -10,6 +10,13 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: {
+        name: 'suits',
+        params: { mode: 'add' },
+      },
+    },
+    {
+      path: '/suits/:mode',
       name: 'suits',
       component: Suits,
     },
@@ -19,7 +26,7 @@ export default new Router({
       component: StepsSuggestions,
     },
     {
-      path: '/suit/:suitId/case/:caseId',
+      path: '/suits/:suitId/case/:caseId',
       name: 'viewCase',
       component: Case,
     },

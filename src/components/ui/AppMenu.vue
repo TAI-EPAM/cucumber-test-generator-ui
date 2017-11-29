@@ -2,17 +2,17 @@
 
   <div class="uui-side-bar">
     <ul class="sidebar-menu">
-      <li v-for="suit in suits" class="sub-menu">
+      <li v-for="suit in items" class="sub-menu">
         <a href="#">
           <div class="fa fa-angle-down arrow" />
           <span>{{suit.name}}</span>
         </a>
         <ul class="sub">
           <li v-for="item in suit.cases">
-            <a href="#" @click="selectCase(item, suit, $event)">
+            <router-link :to="{ name: 'viewCase', params: { suitId: suit.id, caseId: item.id }}">
               <input type="checkbox" />
-              <span>Sub Item 2-1</span>
-            </a>
+              <span>{{item.description}}</span>
+            </router-link>
           </li>
         </ul>
       </li>
@@ -21,8 +21,7 @@
 </template>
 
 <script>
-  import AxiosClient from '@/utils/httpClient';
-  import VButton from './VButton';
+  import VButton from './EpamButton';
   import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
 
   export default {
@@ -30,17 +29,15 @@
       VButton,
     },
     updated() {
-      UUI.Sidebar.init({ open: true });
     },
     name: 'app-menu',
     data() {
       return {
-        suits: [],
+
       };
     },
     methods: {
       selectCase(caseItem, suit, e) {
-        this.$bus.$emit('viewCase', { caseItem, suit });
         this.$router.push(
           {
             name: 'viewCase',
@@ -50,13 +47,12 @@
       },
     },
     mounted() {
-      AxiosClient.get('/cucumber/suits/')
-        .then((response) => {
-          this.suits = response.data;
-          this.init();
-        })
-        .catch(() => {
-        });
+      UUI.Sidebar.init({ open: false });
+    },
+    props: {
+      items: {
+        type: Array,
+      },
     },
   };
 </script>
