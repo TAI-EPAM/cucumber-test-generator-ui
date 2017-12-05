@@ -13,8 +13,8 @@
       </div>
     </div>
     <div>
-      <v-button @click="sendData" class="lime-green large">Add Suit</v-button>
-      <v-button @click="resetData" class="large">Cancel</v-button>
+      <epam-button @click="sendData" class="lime-green large">Add Suit</epam-button>
+      <epam-button @click="resetData" class="large">Cancel</epam-button>
     </div>
 
 
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-  import VButton from './ui/EpamButton';
+  import EpamButton from './ui/EpamButton';
   import EpamMultiswitch from './ui/EpamMuiltswitch';
   import AxiosClient from '../utils/httpClient';
 
   export default {
     components: {
-      VButton,
+      EpamButton,
       EpamMultiswitch,
     },
     data() {
@@ -73,7 +73,7 @@
     },
     mounted() {
     },
-    name: 'AddSuits',
+    name: 'suitAdd',
 };
 </script>
 

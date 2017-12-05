@@ -16,7 +16,6 @@ function createStore() {
   };
   return {
     setSuits(data) {
-      // if (Store.debug) console.log(data);
       Store.suits = data;
     },
     getSuits() {
@@ -24,6 +23,24 @@ function createStore() {
     },
     addSuit(suit) {
       Store.suits.push(suit);
+    },
+    getSuit(suitId) {
+      if (suitId) {
+        return Store.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
+      }
+      return false;
+    },
+    updateSuit(suitId, updateData) {
+      const target = Store.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
+      Object.assign(target, updateData);
+    },
+    getCase(suitId, caseId) {
+      const suit = this.getSuit(suitId);
+      return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
+    },
+    updateCase(suitId, caseId, updateData) {
+      const target = this.getCase(suitId, caseId);
+      Object.assign(target, updateData);
     },
   };
 }

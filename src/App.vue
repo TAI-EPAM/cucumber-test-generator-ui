@@ -6,7 +6,9 @@
     </aside>
     <main class="uui-main-container">
       <div class="app-wrapper">
-        <router-view/>
+        <keep-alive>
+          <router-view v-if="dataIsLoaded"/>
+        </keep-alive>
       </div>
     </main>
     <app-footer></app-footer>
