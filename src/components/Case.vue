@@ -1,6 +1,9 @@
 <template>
   <section class="panel">
   <h2>{{ localCase.description }}</h2>
+    <div v-if="isDirty">
+      Модель испачкана
+    </div>
     <div class="case-props">
       <ul>
         <li>Status: <span>NOT DONE</span></li>
@@ -14,11 +17,12 @@
 
     <!-- Steps-->
     <case-steps v-model="localCase.steps"></case-steps>
-
     <epam-button markup="large" class="lime-green" @click="saveCase">Save Tests</epam-button>
 
-
-
+    <!--div class="debug">
+      {{ localCase.steps }}
+      <p>dirty: {{ isDirty }}</p>
+    </div-->
 
   </section>
 </template>
@@ -33,9 +37,18 @@
       EpamButton,
       CaseSteps,
     },
+    computed: {
+      isDirty() {
+        if (JSON.stringify(this.value) === JSON.stringify(this.localCase)) {
+          this.dirty = false;
+        }
+        return this.dirty;
+      },
+    },
     data() {
       return {
         localCase: JSON.parse(JSON.stringify(this.value)),
+        dirty: false,
       };
     },
     methods: {
@@ -56,6 +69,12 @@
     watch: {
       value(n) {
         this.localCase = JSON.parse(JSON.stringify(n));
+      },
+      localCase: {
+        handler() {
+          this.dirty = true;
+        },
+        deep: true,
       },
     },
   };

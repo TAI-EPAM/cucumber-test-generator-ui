@@ -15,7 +15,9 @@
                     <epam-button markup="small">delete</epam-button>
                   </li>
               </draggable>
-              <epam-button @click="addStep(0)">add new step</epam-button>
+              <div class="add-step-section">
+                <input type="text" class="uui-form-element" /><epam-button @click="addStep(0)">add new step</epam-button>
+              </div>
             </div>
           </div>
         </div>
@@ -33,7 +35,9 @@
                   <epam-button markup="small">delete</epam-button>
                 </li>
               </draggable>
-              <epam-button @click="addStep(1)">add new step</epam-button>
+              <div class="add-step-section">
+                <input type="text" class="uui-form-element" /><epam-button @click="addStep(1)">add new step</epam-button>
+              </div>
             </div>
           </div>
         </div>
@@ -105,7 +109,6 @@
           // eslint-disable-next-line no-param-reassign
           item.rowNumber = index + 1;
         });
-        this.normalizeStepList();
         this.$emit('input', this.normalizeStepList());
       },
     },
