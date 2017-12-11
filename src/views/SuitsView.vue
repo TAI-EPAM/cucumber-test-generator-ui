@@ -1,13 +1,14 @@
 <template>
   <section class="suits-view">
     <h2>Suits View</h2>
+    <!--
     <div v-if="$route.params.suitId">
       <suit-edit v-if="activeSuit" v-model="activeSuit" />
     </div>
     <div v-else>
       <suit-add />
     </div>
-
+    -->
   </section>
 </template>
 

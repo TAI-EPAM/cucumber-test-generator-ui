@@ -29,10 +29,21 @@
     mounted() {
       if (this.$route.params.suitId && this.$route.params.caseId) this.getCaseFromStore();
     },
+    updated() {
+
+    },
     watch: {
       // eslint-disable-next-line object-shorthand
       '$route'(n) {
         this.getCaseFromStore(n.params.suitId, n.params.caseeId);
+      },
+      localCase: {
+        handler(n) {
+          console.warn('case view');
+          this.localCase = n;
+          console.warn(this.localCase);
+        },
+        deep: true,
       },
     },
     name: 'CaseView',

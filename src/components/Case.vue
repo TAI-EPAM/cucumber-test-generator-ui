@@ -17,12 +17,14 @@
 
     <!-- Steps-->
     <case-steps v-model="localCase.steps"></case-steps>
+
+    <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
     <epam-button markup="large" class="lime-green" @click="saveCase">Save Tests</epam-button>
 
-    <!--div class="debug">
-      {{ localCase.steps }}
+    <div class="debug">
+      {{ localCase.description }}
       <p>dirty: {{ isDirty }}</p>
-    </div-->
+    </div>
 
   </section>
 </template>
@@ -31,11 +33,13 @@
   import AxiosClient from '../utils/httpClient';
   import EpamButton from './ui/EpamButton';
   import CaseSteps from './CaseSteps';
+  import CaseEdit from './case/CaseEdit';
 
   export default {
     components: {
       EpamButton,
       CaseSteps,
+      CaseEdit,
     },
     computed: {
       isDirty() {
@@ -61,17 +65,39 @@
           .catch(() => {
           });
       },
+      editCase() {
+        this.$vuedals.open({
+          title: 'Edit Case',
+          component: CaseEdit,
+          props: {
+            value: this.localCase,
+            suitId: this.$route.params.suitId,
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit(updateData) {
+              this.$store.updateCase(this.suitId, this.entity.id, updateData);
+              this.$vuedals.close();
+            },
+          },
+        });
+      },
     },
     mounted() {
+    },
+    update() {
+
     },
     props: ['value'],
     name: 'Case',
     watch: {
       value(n) {
+        console.warn('new value');
         this.localCase = JSON.parse(JSON.stringify(n));
       },
       localCase: {
         handler() {
+          console.warn('new value');
           this.dirty = true;
         },
         deep: true,

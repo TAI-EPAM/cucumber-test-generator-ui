@@ -10,9 +10,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: {
-        name: 'suitsView',
-      },
+      name: 'suitView',
+      component: SuitsView,
     },
     {
       path: '/suits/:suitId',

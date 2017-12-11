@@ -19,9 +19,9 @@
 </template>
 
 <script>
-  import EpamButton from './ui/EpamButton';
-  import EpamMultiswitch from './ui/EpamMuiltswitch';
-  import AxiosClient from '../utils/httpClient';
+  import EpamButton from '../ui/EpamButton';
+  import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import AxiosClient from '../../utils/httpClient';
 
   export default {
     components: {
@@ -73,33 +73,33 @@
     },
     mounted() {
     },
-    name: 'suitAdd',
+    name: 'caseAdd',
     props: {
       onCancel: Function,
       onSubmit: Function,
     },
-};
+  };
 </script>
 
 <style lang="less" scoped>
-.suit-add {
-  width: 600px;
-  margin: 0 auto;
-}
-
-.priority-component {
-  display: flex;
-  align-items: center;
-  & > .title {
-    padding: 0 20px 0 0;
-    vertical-align: bottom;
+  .suit-add {
+    width: 600px;
+    margin: 0 auto;
   }
-  & > .component {
-    flex-grow: 1;
-    & > ul {
-      width: 100%;
+
+  .priority-component {
+    display: flex;
+    align-items: center;
+    & > .title {
+      padding: 0 20px 0 0;
+      vertical-align: bottom;
+    }
+    & > .component {
+      flex-grow: 1;
+      & > ul {
+        width: 100%;
+      }
     }
   }
-}
 
 </style>
