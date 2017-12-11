@@ -12,6 +12,7 @@
       </div>
     </main>
     <app-footer></app-footer>
+    <vuedal></vuedal>
   </div>
 </template>
 
@@ -20,12 +21,14 @@
   import AppHeader from './components/ui/AppHeader';
   import AppFooter from './components/ui/AppFooter';
   import AppMenu from './components/ui/AppMenu';
+  import { Component as Vuedal } from './components/ui/popoup-vuedals';
 
   export default {
     components: {
       AppMenu,
       AppHeader,
       AppFooter,
+      Vuedal,
     },
     data() {
       return {

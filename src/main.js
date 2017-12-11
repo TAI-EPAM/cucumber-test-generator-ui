@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+// eslint-disable-next-line no-unused-vars
+import { Vuedals, Component as Vuedal, Bus as VuedalsBus } from './components/ui/popoup-vuedals';
 
 Vue.config.productionTip = false;
-Vue.prototype.$bus = new Vue({});
+// Vue.prototype.$bus = new Vue({});
+Vue.use(Vuedals);
 
 /*
  Store implementation

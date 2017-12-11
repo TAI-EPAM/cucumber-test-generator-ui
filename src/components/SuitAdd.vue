@@ -1,6 +1,5 @@
 <template>
   <section class="suit-add">
-    <h2>Add Suit</h2>
     <div class="uui-form-wrapper">
       <input type="text" v-model="suit.name" class="uui-form-element large" placeholder="Suit Name" />
       <input type="text" v-model="suit.description" class="uui-form-element large" placeholder="Suit Description" />
@@ -12,12 +11,10 @@
         </div>
       </div>
     </div>
-    <div>
-      <epam-button @click="sendData" class="lime-green large">Add Suit</epam-button>
+    <div class="form-buttons-holder">
       <epam-button @click="resetData" class="large">Cancel</epam-button>
+      <epam-button @click="sendData" class="lime-green large">Add Suit</epam-button>
     </div>
-
-
   </section>
 </template>
 
@@ -58,6 +55,9 @@
           priority: 1,
           tags: null,
         });
+        if (this.onCancel) {
+          this.onCancel();
+        }
       },
       sendData() {
         const sendData = Object.assign({}, this.suit);
@@ -74,6 +74,10 @@
     mounted() {
     },
     name: 'suitAdd',
+    props: {
+      onCancel: Function,
+      onSubmit: Function,
+    },
 };
 </script>
 

@@ -21,18 +21,22 @@
       </li>
     </ul>
 
-    <epam-button @click="addSuit">Add Suit</epam-button>
+    <epam-button @click="addSuit">Open Add Suit Modal</epam-button>
 
   </div>
 </template>
 
 <script>
   import EpamButton from './EpamButton';
+  import SuitAdd from '../SuitAdd';
+// eslint-disable-next-line no-unused-vars
+// import { Component as Vuedal, Bus as VuedalsBus } from './popoup-vuedals';
   import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
 
   export default {
     components: {
       EpamButton,
+      SuitAdd,
     },
     updated() {
     },
@@ -44,10 +48,21 @@
     },
     methods: {
       addSuit() {
-        this.$router.push(
-          {
-            name: 'suitAdd',
-          });
+        this.$vuedals.open({
+          title: 'Add new Suit',
+          component: SuitAdd,
+          props: {
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit() {
+              this.$vuedals.close();
+            },
+          },
+        });
+      },
+      editSuit(suitId) {
+        this.$router.push({ path: `/suits/${suitId}` });
       },
       selectCase(caseItem, suit, e) {
         this.$router.push(
@@ -56,9 +71,6 @@
             params: { suitId: suit.id, caseId: caseItem.id },
           });
         e.preventDefault();
-      },
-      editSuit(suitId) {
-        this.$router.push({ path: `/suits/${suitId}` });
       },
     },
     mounted() {
