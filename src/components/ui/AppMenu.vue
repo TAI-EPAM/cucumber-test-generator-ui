@@ -15,7 +15,7 @@
             </router-link>
           </li>
           <li>
-            <epam-button @click="editSuit(suit.id)" small>Edit suit</epam-button>
+            <epam-button @click="editSuitModal(suit.id)" small>Edit suit modal</epam-button>
           </li>
         </ul>
       </li>
@@ -29,6 +29,7 @@
 <script>
   import EpamButton from './EpamButton';
   import SuitAdd from '../SuitAdd';
+  import SuitEdit from '../SuitEdit';
 // eslint-disable-next-line no-unused-vars
 // import { Component as Vuedal, Bus as VuedalsBus } from './popoup-vuedals';
   import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
@@ -37,6 +38,7 @@
     components: {
       EpamButton,
       SuitAdd,
+      SuitEdit,
     },
     updated() {
     },
@@ -63,6 +65,21 @@
       },
       editSuit(suitId) {
         this.$router.push({ path: `/suits/${suitId}` });
+      },
+      editSuitModal(suitId) {
+        this.$vuedals.open({
+          title: 'Edit Suit',
+          component: SuitEdit,
+          props: {
+            value: this.$store.getSuit(suitId),
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit() {
+              this.$vuedals.close();
+            },
+          },
+        });
       },
       selectCase(caseItem, suit, e) {
         this.$router.push(

@@ -1,6 +1,5 @@
 <template>
     <section class="suit-add" v-if="suit">
-      <h2>Edit Suit </h2>
       <div class="uui-form-wrapper">
         <input type="text" v-model="suit.name" class="uui-form-element large" placeholder="Suit Name" />
         <input type="text" v-model="suit.description" class="uui-form-element large" placeholder="Suit Description" />
@@ -12,9 +11,9 @@
           </div>
         </div>
       </div>
-      <div>
-        <epam-button @click="save" class="lime-green large">Save</epam-button>
+      <div class="form-buttons-holder">
         <epam-button @click="reset" class="large">Cancel</epam-button>
+        <epam-button @click="save" class="lime-green large">Save</epam-button>
       </div>
     </section>
 </template>
@@ -47,13 +46,19 @@
         AxiosClient.put(`/cucumber/suits/${this.suit.id}`, this.suit)
           .then(() => {
             this.$store.updateSuit(this.suit.id, this.suit);
+            if (this.onSubmit) {
+              this.onSubmit();
+            }
           })
           .catch(() => {
           });
-        this.$emit('input', this.suit);
+          // this.$emit('input', this.suit);
       },
       reset() {
         this.suit = JSON.parse(JSON.stringify(this.value));
+        if (this.onCancel) {
+          this.onCancel();
+        }
       },
     },
     mounted() {
@@ -65,7 +70,7 @@
         this.suit = JSON.parse(JSON.stringify(n));
       },
     },
-    props: ['value'],
+    props: ['value', 'onCancel', 'onSubmit'],
     name: 'SuitEdit',
   };
 </script>
