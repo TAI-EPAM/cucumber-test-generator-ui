@@ -300,4 +300,14 @@
     position: absolute;
   }
 
+  .uui-modal .modal-header {
+    .modal-title {
+      margin: 0;
+    }
+    button.close {
+      float: right;
+    }
+  }
+
+
 </style>
