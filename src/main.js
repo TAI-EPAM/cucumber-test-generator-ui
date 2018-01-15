@@ -16,6 +16,11 @@ function createStore() {
   const Store = {
     debug: false,
     suits: [],
+    auth: {
+      isAuth: true,
+      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjdWN1bWJlciIsImlkIjoxfQ.20lNjQ6eDg2776p_rY1t1-8_M04K8krijJgNg-_uQL4',
+      user: null,
+    },
   };
   return {
     setSuits(data) {
@@ -44,6 +49,16 @@ function createStore() {
     updateCase(suitId, caseId, updateData) {
       const target = this.getCase(suitId, caseId);
       Object.assign(target, updateData);
+    },
+    isAuth() {
+      return Store.auth.isAuth;
+    },
+    setToken(token) {
+      Store.auth.token = token;
+      Store.auth.isAuth = true;
+    },
+    getToken() {
+      return this.isAuth() && Store.auth.token;
     },
   };
 }
