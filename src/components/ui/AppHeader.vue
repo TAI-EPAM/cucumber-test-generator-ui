@@ -19,6 +19,9 @@
         </a>
       </nav>
       <v-button markup="blue">edit step suggestions</v-button>
+      <div class="user-info">
+        <a @click="logout" v-if="isAuth">Logout</a>
+      </div>
     </div>
   </header>
 </template>
@@ -30,7 +33,20 @@
     components: {
       VButton,
     },
+    data() {
+      return {
+        isAuth: this.$store.isAuth(),
+      };
+    },
     methods: {
+      logout() {
+        this.$store.logout();
+        this.isAuth = false;
+        this.$router.push(
+          {
+            path: '/',
+          });
+      },
     },
     name: 'app-header',
   };
@@ -41,4 +57,15 @@
     float: right;
     margin: 12px 12px 0 0;
   }
+  header .user-info {
+    width: 200px;
+    float: right;
+    height: 60px;
+    & a {
+      color: white;
+      display: inline-block;
+      margin: 20px 0 0 0;
+    }
+  }
+
 </style>

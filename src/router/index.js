@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import SuitsView from '@/views/SuitsView';
 import CaseView from '@/views/CaseView';
+import DashboardView from '@/views/DashboardView';
 import StepsSuggestions from '@/components/StepSuggestions';
 
 Vue.use(Router);
@@ -10,6 +11,11 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'Dashboard',
+      component: DashboardView,
+    },
+    {
+      path: '/suits/',
       name: 'suitView',
       component: SuitsView,
       meta: { requiresAuth: true },

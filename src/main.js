@@ -1,12 +1,13 @@
 import Vue from 'vue';
+import VueLocalStorage from 'vue-ls';
 import App from './App';
 import router from './router';
 // eslint-disable-next-line no-unused-vars
 import { Vuedals, Component as Vuedal, Bus as VuedalsBus } from './components/ui/popoup-vuedals';
 
 Vue.config.productionTip = false;
-// Vue.prototype.$bus = new Vue({});
 Vue.use(Vuedals);
+Vue.use(VueLocalStorage);
 
 /*
  Store implementation
@@ -17,8 +18,8 @@ function createStore() {
     debug: false,
     suits: [],
     auth: {
-      isAuth: true,
-      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjdWN1bWJlciIsImlkIjoxfQ.20lNjQ6eDg2776p_rY1t1-8_M04K8krijJgNg-_uQL4',
+      isAuth: Vue.ls.get('isAuth', false),
+      token: Vue.ls.get('token', null),
       user: null,
     },
   };
@@ -59,6 +60,12 @@ function createStore() {
     },
     getToken() {
       return this.isAuth() && Store.auth.token;
+    },
+    logout() {
+      Store.auth.token = null;
+      Store.auth.isAuth = false;
+      Vue.ls.remove('isAuth');
+      Vue.ls.remove('token');
     },
   };
 }

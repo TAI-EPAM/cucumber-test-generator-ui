@@ -1,17 +1,31 @@
 <template>
   <div class="wrapper" id="app">
-    <app-header />
-    <aside>
-      <app-menu v-if="dataIsLoaded" :items="menuItems"></app-menu>
-    </aside>
-    <main class="uui-main-container">
+    <keep-alive>
+      <app-header />
+    </keep-alive>
+
+    <main class="uui-main-container" v-if="$route.name === 'Login'">
+      <div class="app-wrapper">
+        <app-login />
+      </div>
+    </main>
+    <main class="uui-main-container" v-else-if="$route.name === 'Dashboard'">
+      <div class="app-wrapper">
+          <router-view />
+      </div>
+    </main>
+    <main class="uui-main-container" v-else>
       <div class="app-wrapper">
         <keep-alive>
           <router-view v-if="dataIsLoaded"/>
         </keep-alive>
-        <app-login v-if="$route.name === 'Login'" />
       </div>
     </main>
+
+    <aside v-if="$route.name != 'Dashboard' && $route.name != 'Login'">
+      <app-menu v-if="dataIsLoaded" :items="menuItems"></app-menu>
+    </aside>
+
     <app-footer></app-footer>
     <vuedal></vuedal>
   </div>
@@ -59,6 +73,7 @@
       }
     },
     beforeUpdate() {
+      console.warn('beforeUpdate App.vue');
       if (this.$store.isAuth() && !this.dataIsLoaded) {
         this.fetchData();
       }

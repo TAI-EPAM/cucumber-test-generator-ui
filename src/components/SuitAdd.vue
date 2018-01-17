@@ -53,7 +53,7 @@
           description: null,
           name: null,
           priority: 1,
-          tags: null,
+          // tags: null,
         });
         if (this.onCancel) {
           this.onCancel();

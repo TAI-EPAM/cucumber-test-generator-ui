@@ -29,8 +29,11 @@
       login() {
         AxiosClient.post('/cucumber/login', this.entity)
           .then((resp) => {
-            this.$store.setToken(resp.data.token);
-            console.warn(resp.data.token);
+            if (resp.data.token) {
+              this.$store.setToken(resp.data.token);
+              this.$ls.set('token', resp.data.token);
+              this.$ls.set('isAuth', 'true');
+            }
             if (this.$route.query && this.$route.query.redirect) {
               this.$router.push(
                 {

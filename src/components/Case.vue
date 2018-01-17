@@ -92,12 +92,10 @@
     name: 'Case',
     watch: {
       value(n) {
-        console.warn('new value');
         this.localCase = JSON.parse(JSON.stringify(n));
       },
       localCase: {
         handler() {
-          console.warn('new value');
           this.dirty = true;
         },
         deep: true,
