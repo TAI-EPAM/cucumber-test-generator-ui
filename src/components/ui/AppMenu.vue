@@ -11,11 +11,13 @@
           <li v-for="item in suit.cases">
             <router-link :to="{ name: 'caseView', params: { suitId: suit.id, caseId: item.id }}">
               <input type="checkbox" />
-              <span>{{item.description}}</span>
+              <span>{{item.name}}</span>
             </router-link>
           </li>
           <li>
             <epam-button @click="editSuitModal(suit.id)" small>Edit suit modal</epam-button>
+            <epam-button @click="addCaseToSuit(suit.id)" small>Add case modal</epam-button>
+            <epam-button @click="removeSuit(suit.id)" small>DEL</epam-button>
           </li>
         </ul>
       </li>
@@ -28,10 +30,11 @@
 
 <script>
   import EpamButton from './EpamButton';
-  import SuitAdd from '../SuitAdd';
-  import SuitEdit from '../SuitEdit';
-// eslint-disable-next-line no-unused-vars
-// import { Component as Vuedal, Bus as VuedalsBus } from './popoup-vuedals';
+  import SuitAdd from '../suit/SuitAdd';
+  import SuitEdit from '../suit/SuitEdit';
+  import CaseAdd from '../case/CaseAdd';
+  import Confirmation from '../Confimation';
+  import AxiosClient from '../../utils/httpClient';
   import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
 
   export default {
@@ -49,6 +52,21 @@
       };
     },
     methods: {
+      addCaseToSuit(suitId) {
+        this.$vuedals.open({
+          title: 'Add New Case',
+          component: CaseAdd,
+          props: {
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit() {
+              this.$vuedals.close();
+            },
+            suitId,
+          },
+        });
+      },
       addSuit() {
         this.$vuedals.open({
           title: 'Add new Suit',
@@ -88,6 +106,26 @@
             params: { suitId: suit.id, caseId: caseItem.id },
           });
         e.preventDefault();
+      },
+      removeSuit(suitId) {
+        this.$vuedals.open({
+          title: 'Delete Suit',
+          component: Confirmation,
+          props: {
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit() {
+              AxiosClient.delete(`/cucumber/suits/${suitId}`)
+                .then(() => {
+                  this.$store.removeSuit(suitId);
+                  this.$vuedals.close();
+                })
+                .catch(() => {
+                });
+            },
+          },
+        });
       },
     },
     mounted() {

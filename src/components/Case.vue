@@ -1,6 +1,6 @@
 <template>
   <section class="panel">
-  <h2>{{ localCase.description }}</h2>
+  <h2>{{ localCase.name }}</h2>
     <div v-if="isDirty">
       Модель испачкана
     </div>
@@ -13,6 +13,7 @@
         <li>Creation Date: {{localCase.creationDate}}</li>
         <li>Last update Date: {{localCase.updateDate}}</li>
       </ul>
+      <p>{{localCase.description}}</p>
     </div>
 
     <!-- Steps-->
@@ -20,6 +21,7 @@
 
     <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
     <epam-button markup="large" class="lime-green" @click="saveCase">Save Tests</epam-button>
+    <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
     <div class="debug">
       {{ localCase.description }}
@@ -34,6 +36,7 @@
   import EpamButton from './ui/EpamButton';
   import CaseSteps from './CaseSteps';
   import CaseEdit from './case/CaseEdit';
+  import Confirmation from './Confimation';
 
   export default {
     components: {
@@ -76,8 +79,31 @@
               this.$vuedals.close();
             },
             onSubmit(updateData) {
-              this.$store.updateCase(this.suitId, this.entity.id, updateData);
+              this.$store.updateCase(this.suitId, this.localCase.id, updateData);
               this.$vuedals.close();
+            },
+          },
+        });
+      },
+      removeCase() {
+        const vm = this;
+        this.$vuedals.open({
+          title: 'Delete Case',
+          component: Confirmation,
+          props: {
+            suitId: this.$route.params.suitId,
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit() {
+              AxiosClient.delete(`/cucumber/suits/${this.$route.params.suitId}
+              /cases/${vm.localCase.id}`)
+                .then(() => {
+                  this.$store.removeCase(this.$route.params.suitId, vm.localCase.id);
+                  this.$vuedals.close();
+                })
+                .catch(() => {
+                });
             },
           },
         });
@@ -116,5 +142,4 @@
       }
     }
   }
-
 </style>

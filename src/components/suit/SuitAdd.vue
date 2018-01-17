@@ -1,13 +1,13 @@
 <template>
-  <section class="entitiy-add">
+  <section class="entity-add">
     <div class="uui-form-wrapper">
-      <input type="text" v-model="entitiy.name" class="uui-form-element large" placeholder="Suit Name" />
-      <input type="text" v-model="entitiy.description" class="uui-form-element large" placeholder="Suit Description" />
-      <input type="text" v-model="entitiy.tags" class="uui-form-element large" placeholder="Suit Tags" />
+      <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Suit Name" />
+      <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Suit Description" />
+      <input type="text" v-model="entity.tags" class="uui-form-element large" placeholder="Suit Tags" />
       <div class="priority-component">
         <div class="title">Priority:</div>
         <div class="component">
-          <epam-multiswitch large="true" :values="priorityValues" v-model="entitiy.priority"/>
+          <epam-multiswitch large="true" :values="priorityValues" v-model="entity.priority"/>
         </div>
       </div>
     </div>
@@ -19,9 +19,9 @@
 </template>
 
 <script>
-  import EpamButton from './ui/EpamButton';
-  import EpamMultiswitch from './ui/EpamMuiltswitch';
-  import AxiosClient from '../utils/httpClient';
+  import EpamButton from '../ui/EpamButton';
+  import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import AxiosClient from '../../utils/httpClient';
 
   export default {
     components: {
@@ -30,7 +30,7 @@
     },
     data() {
       return {
-        entitiy: {
+        entity: {
           id: null,
           description: null,
           name: null,
@@ -48,7 +48,7 @@
     },
     methods: {
       resetData() {
-        Object.assign(this.entitiy, {
+        Object.assign(this.entity, {
           id: null,
           description: null,
           name: null,
@@ -60,7 +60,7 @@
         }
       },
       sendData() {
-        const sendData = Object.assign({}, this.entitiy);
+        const sendData = Object.assign({}, this.entity);
         AxiosClient.post('/cucumber/suits/', sendData)
           .then((response) => {
             sendData.id = response.data;

@@ -1,8 +1,8 @@
 <template>
   <section class="entity-add" v-if="entity">
     <div class="uui-form-wrapper">
-      <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Case Description" />
-      <input type="text" v-model="entity.tags" class="uui-form-element large" placeholder="Case Tags" />
+      <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Case Description" />
+      <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Case Tags" />
       <div class="priority-component">
         <div class="title">Priority:</div>
         <div class="component">
@@ -43,6 +43,7 @@
     methods: {
       save() {
         const sendData = this.entity;
+        sendData.action = 'CREATE';
         delete sendData.steps;
         AxiosClient.put(`/cucumber/suits/${this.suitId}/cases/${this.entity.id}`, sendData)
           .then(() => {
@@ -66,11 +67,6 @@
     update() {
     },
     watch: {
-      /*
-      value(n) {
-        this.entity = JSON.parse(JSON.stringify(n));
-      },
-      */
     },
     props: ['value', 'suitId', 'onCancel', 'onSubmit'],
     name: 'caseEdit',

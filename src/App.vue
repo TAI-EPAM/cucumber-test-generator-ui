@@ -73,7 +73,6 @@
       }
     },
     beforeUpdate() {
-      console.warn('beforeUpdate App.vue');
       if (this.$store.isAuth() && !this.dataIsLoaded) {
         this.fetchData();
       }

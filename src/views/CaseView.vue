@@ -39,9 +39,7 @@
       },
       localCase: {
         handler(n) {
-          console.warn('case view');
           this.localCase = n;
-          console.warn(this.localCase);
         },
         deep: true,
       },

@@ -43,6 +43,18 @@ function createStore() {
       const target = Store.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
       Object.assign(target, updateData);
     },
+    removeSuit(suitId) {
+      const suitItem = Store.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
+      Store.suits.splice(Store.suits.indexOf(suitItem), 1);
+    },
+    addCase(suitId, data) {
+      const suitItem = Store.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
+      if (suitItem.cases) {
+        suitItem.cases.push(data);
+      } else {
+        suitItem.cases = [data];
+      }
+    },
     getCase(suitId, caseId) {
       const suit = this.getSuit(suitId);
       return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
@@ -50,6 +62,11 @@ function createStore() {
     updateCase(suitId, caseId, updateData) {
       const target = this.getCase(suitId, caseId);
       Object.assign(target, updateData);
+    },
+    removeCase(suitId, caseId) {
+      const suitItem = this.getSuit(suitId);
+      const caseItem = this.getCase(suitId, caseId);
+      suitItem.cases.splice(suitItem.cases.indexOf(caseItem), 1);
     },
     isAuth() {
       return Store.auth.isAuth;

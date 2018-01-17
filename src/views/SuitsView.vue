@@ -5,13 +5,8 @@
 </template>
 
 <script>
-  import SuitAdd from '@/components/SuitAdd';
-  import SuitEdit from '@/components/SuitEdit';
-
   export default {
     components: {
-      SuitAdd,
-      SuitEdit,
     },
     data() {
       return {

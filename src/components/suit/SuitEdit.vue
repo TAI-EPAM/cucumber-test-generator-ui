@@ -19,9 +19,9 @@
 </template>
 
 <script>
-  import AxiosClient from '../utils/httpClient';
-  import EpamButton from './ui/EpamButton';
-  import EpamMultiswitch from './ui/EpamMuiltswitch';
+  import AxiosClient from '../../utils/httpClient';
+  import EpamButton from '../ui/EpamButton';
+  import EpamMultiswitch from '../ui/EpamMuiltswitch';
 
   export default {
     components: {
@@ -43,7 +43,9 @@
     },
     methods: {
       save() {
-        AxiosClient.put(`/cucumber/suits/${this.entity.id}`, this.entity)
+        const sendData = Object.assign({}, this.entity);
+        delete sendData.cases;
+        AxiosClient.put(`/cucumber/suits/${this.entity.id}`, sendData)
           .then(() => {
             this.$store.updateSuit(this.entity.id, this.entity);
             if (this.onSubmit) {
