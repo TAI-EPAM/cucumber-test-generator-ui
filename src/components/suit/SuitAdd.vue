@@ -3,17 +3,7 @@
     <div class="uui-form-wrapper">
       <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Suit Name" />
       <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Suit Description" />
-      <!--input type="text" v-model="entity.tags" class="uui-form-element large" placeholder="Suit Tags" /-->
-      <multiselect
-        v-model="entity.tags"
-        :options="tagsArray"
-        :multiple="true"
-        track-by="id"
-        :taggable="true"
-        @tag="addTag"
-        :custom-label="customLabel"
-      ></multiselect>
-
+      <tags-component v-model="entity.tags"></tags-component>
       <div class="priority-component">
         <div class="title">Priority:</div>
         <div class="component">
@@ -29,16 +19,16 @@
 </template>
 
 <script>
-  import Multiselect from 'vue-multiselect';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import TagsComponent from '../ui/TagsInput';
   import AxiosClient from '../../utils/httpClient';
 
   export default {
     components: {
       EpamButton,
       EpamMultiswitch,
-      Multiselect,
+      TagsComponent,
     },
     data() {
       return {
@@ -49,7 +39,6 @@
           priority: 1,
           tags: [],
         },
-        tagsArray: this.$store.getTags(),
         priorityValues: [
           { value: 1, text: 'Critical' },
           { value: 2, text: 'High' },
@@ -60,16 +49,6 @@
       };
     },
     methods: {
-      addTag(newTag) {
-        const tag = {
-          name: newTag,
-        };
-        this.tagsArray.push(tag);
-        this.entity.tags.push(tag);
-      },
-      customLabel(option) {
-        return option.name;
-      },
       resetData() {
         Object.assign(this.entity, {
           id: null,
