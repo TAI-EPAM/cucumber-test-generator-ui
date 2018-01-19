@@ -17,15 +17,28 @@ function createStore() {
   const Store = {
     debug: false,
     suits: [],
+    tags: null,
     auth: {
       isAuth: Vue.ls.get('isAuth', false),
       token: Vue.ls.get('token', null),
       user: null,
     },
+    createTags() {
+      const tagsSet = new Set();
+      this.suits.forEach((suit) => {
+        if (suit.tags) {
+          suit.tags.forEach((tag) => {
+            tagsSet.add(tag);
+          });
+        }
+      });
+      this.tags = Array.from(tagsSet);
+    },
   };
   return {
     setSuits(data) {
       Store.suits = data;
+      Store.createTags();
     },
     getSuits() {
       return Store.suits;
@@ -83,6 +96,9 @@ function createStore() {
       Store.auth.isAuth = false;
       Vue.ls.remove('isAuth');
       Vue.ls.remove('token');
+    },
+    getTags() {
+      return Store.tags;
     },
   };
 }
