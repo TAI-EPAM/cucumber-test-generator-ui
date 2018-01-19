@@ -7,6 +7,7 @@
     :taggable="true"
     @tag="addTag"
     :custom-label="customLabel"
+    placeholder="Select or Add Tags"
     @input="submitChange"
   ></multiselect>
 </template>
