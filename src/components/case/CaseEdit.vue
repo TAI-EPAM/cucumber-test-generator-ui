@@ -3,6 +3,7 @@
     <div class="uui-form-wrapper">
       <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Case Description" />
       <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Case Tags" />
+      <tags-component v-model="entity.tags"></tags-component>
       <div class="priority-component">
         <div class="title">Priority:</div>
         <div class="component">
@@ -21,11 +22,13 @@
   import AxiosClient from '../../utils/httpClient';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import TagsComponent from '../ui/TagsInput';
 
   export default {
     components: {
       EpamButton,
       EpamMultiswitch,
+      TagsComponent,
     },
     data() {
       return {
@@ -42,13 +45,12 @@
     },
     methods: {
       save() {
-        const sendData = this.entity;
+        const sendData = Object.assign({}, this.entity);
         sendData.action = 'CREATE';
-        delete sendData.steps;
         AxiosClient.put(`/cucumber/suits/${this.suitId}/cases/${this.entity.id}`, sendData)
           .then(() => {
             if (this.onSubmit) {
-              this.onSubmit(sendData);
+              this.onSubmit(sendData, this.suitId, this.entity.id);
             }
           })
           .catch(() => {

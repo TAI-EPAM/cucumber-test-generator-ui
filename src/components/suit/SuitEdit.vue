@@ -3,7 +3,7 @@
       <div class="uui-form-wrapper">
         <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Suit Name" />
         <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Suit Description" />
-        <input type="text" v-model="entity.tags" class="uui-form-element large" placeholder="Suit Tags" />
+        <tags-component v-model="entity.tags"></tags-component>
         <div class="priority-component">
           <div class="title">Priority:</div>
           <div class="component">
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+  import TagsComponent from '../ui/TagsInput';
   import AxiosClient from '../../utils/httpClient';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
@@ -27,6 +28,7 @@
     components: {
       EpamButton,
       EpamMultiswitch,
+      TagsComponent,
     },
     data() {
       return {

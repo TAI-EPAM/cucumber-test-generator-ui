@@ -69,6 +69,7 @@
           });
       },
       editCase() {
+        const vm = this;
         this.$vuedals.open({
           title: 'Edit Case',
           component: CaseEdit,
@@ -79,8 +80,9 @@
               this.$vuedals.close();
             },
             onSubmit(updateData) {
-              this.$store.updateCase(this.suitId, this.localCase.id, updateData);
               this.$vuedals.close();
+              vm.localCase = updateData;
+              this.$store.updateCase(vm.suitId, vm.localCase.id, updateData);
             },
           },
         });

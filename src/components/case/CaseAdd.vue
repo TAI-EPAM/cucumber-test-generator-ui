@@ -3,6 +3,7 @@
     <div class="uui-form-wrapper">
       <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Case Name" />
       <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Case Description" />
+      <tags-component v-model="entity.tags"></tags-component>
       <div class="priority-component">
         <div class="title">Priority:</div>
         <div class="component">
@@ -21,11 +22,13 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import AxiosClient from '../../utils/httpClient';
+  import TagsComponent from '../ui/TagsInput';
 
   export default {
     components: {
       EpamButton,
       EpamMultiswitch,
+      TagsComponent,
     },
     data() {
       return {
@@ -34,6 +37,7 @@
           description: null,
           name: null,
           priority: 1,
+          tags: [],
           status: 'NOT_DONE',
         },
         priorityValues: [
@@ -52,6 +56,7 @@
           description: null,
           name: null,
           priority: 1,
+          tags: [],
           status: 'NOT_DONE',
         });
         if (this.onCancel) {
