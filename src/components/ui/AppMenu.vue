@@ -89,7 +89,7 @@
           title: 'Edit Suit',
           component: SuitEdit,
           props: {
-            value: this.$store.getSuit(suitId),
+            value: this.$store.getters.getSuit(suitId),
             onCancel() {
               this.$vuedals.close();
             },
@@ -118,7 +118,7 @@
             onSubmit() {
               AxiosClient.delete(`/cucumber/suits/${suitId}`)
                 .then(() => {
-                  this.$store.removeSuit(suitId);
+                  this.$store.commit('removeSuit', suitId);
                   this.$vuedals.close();
                 })
                 .catch(() => {

@@ -30,7 +30,7 @@
         AxiosClient.post('/cucumber/login', this.entity)
           .then((resp) => {
             if (resp.data.token) {
-              this.$store.setToken(resp.data.token);
+              this.$store.commit('setToken', { token: resp.data.token });
               this.$ls.set('token', resp.data.token);
               this.$ls.set('isAuth', 'true');
             }

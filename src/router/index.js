@@ -53,8 +53,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    const store = Vue.prototype.$store;
-    if (!store.isAuth()) {
+    if (!(Vue.ls.get('isAuth', false))) {
       next({
         path: '/login',
         query: { redirect: to.fullPath },

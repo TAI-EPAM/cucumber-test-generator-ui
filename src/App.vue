@@ -56,10 +56,10 @@
     methods: {
       fetchData() {
         if (this.$route.name === 'Login') return;
-        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.$store.getToken()}` } })
+        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.$store.getters.getToken}` } })
           .then((response) => {
-            this.$store.setSuits(response.data);
-            this.menuItems = this.$store.getSuits();
+            this.$store.commit('setSuits', { data: response.data });
+            this.menuItems = this.$store.getters.getSuits;
             this.dataIsLoaded = true;
           })
           .catch((err) => {
@@ -68,12 +68,12 @@
       },
     },
     mounted() {
-      if (this.$store.isAuth()) {
+      if (this.$store.getters.isAuth) {
         this.fetchData();
       }
     },
     beforeUpdate() {
-      if (this.$store.isAuth() && !this.dataIsLoaded) {
+      if (this.$store.getters.isAuth && !this.dataIsLoaded) {
         this.fetchData();
       }
     },
