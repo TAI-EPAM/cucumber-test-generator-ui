@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
 
   export default {
     components: {
@@ -15,12 +14,9 @@
         activeSuit: null,
       };
     },
-    computed: {
-      ...mapGetters(['getSuit']),
-    },
     methods: {
       getSuitById(suitId = this.$route.params.suitId) {
-        this.activeSuit = this.getSuit(suitId);
+        this.activeSuit = this.$store.getters.getSuit(suitId);
       },
     },
     mounted() {

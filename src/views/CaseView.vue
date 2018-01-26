@@ -10,7 +10,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import Case from '@/components/Case';
 
   export default {
@@ -22,12 +21,9 @@
         localCase: null,
       };
     },
-    computed: {
-      ...mapGetters(['getCase']),
-    },
     methods: {
       getCaseFromStore(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        this.localCase = this.getCase(suitId, caseId);
+        this.localCase = this.$store.getters.getCase(suitId, caseId);
       },
     },
     mounted() {
