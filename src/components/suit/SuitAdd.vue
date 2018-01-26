@@ -64,7 +64,6 @@
       sendData() {
         const sendData = Object.assign({}, this.entity);
         this.$store.commit('addSuit', sendData);
-        console.log(this.$store.getters.getSuits);
         AxiosClient.post('/cucumber/suits/', sendData)
           .then((response) => {
             console.log('POST');

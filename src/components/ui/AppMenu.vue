@@ -90,7 +90,7 @@
           title: 'Edit Suit',
           component: SuitEdit,
           props: {
-            value: this.$store.getters.getSuit(suitId),
+            value: this.getSuit(suitId),
             onCancel() {
               this.$vuedals.close();
             },
@@ -136,6 +136,7 @@
       ...mapGetters(
         {
           items: 'getSuits',
+          getSuit: 'getSuit',
         },
       ),
     },

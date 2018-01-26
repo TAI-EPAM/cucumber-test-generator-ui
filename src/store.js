@@ -30,7 +30,7 @@ const store = new Vuex.Store({
       return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
     },
     isAuth: state => state.auth.isAuth,
-    getToken: (state, getters) => getters.isAuth && state.auth.token,      //
+    getToken: (state, getters) => getters.isAuth && state.auth.token,
     getTags: state => state.tags,
   },
 

@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import AxiosClient from '@/utils/httpClient';
   import AppHeader from './components/ui/AppHeader';
   import AppFooter from './components/ui/AppFooter';
@@ -69,14 +70,17 @@
           });
       },
     },
+    computed: {
+      ...mapGetters(['isAuth']),
+    },
     mounted() {
-      if (this.$store.getters.isAuth) {
+      if (this.isAuth) {
         this.fetchData();
       }
     },
     beforeUpdate() {
       console.log('before update');
-      if (this.$store.getters.isAuth && !this.dataIsLoaded) {
+      if (this.isAuth && !this.dataIsLoaded) {
         this.fetchData();
       }
     },
