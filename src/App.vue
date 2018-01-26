@@ -57,7 +57,7 @@
     methods: {
       fetchData() {
         if (this.$route.name === 'Login') return;
-        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.$store.getters.getToken}` } })
+        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.getToken}` } })
           .then((response) => {
             this.$store.commit('setSuits', { data: response.data });
             this.dataIsLoaded = true;
@@ -68,7 +68,7 @@
       },
     },
     computed: {
-      ...mapGetters(['isAuth']),
+      ...mapGetters(['isAuth', 'getToken']),
     },
     mounted() {
       if (this.isAuth) {
