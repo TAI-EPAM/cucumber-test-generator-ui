@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import EpamButton from './EpamButton';
   import SuitAdd from '../suit/SuitAdd';
   import SuitEdit from '../suit/SuitEdit';
@@ -36,7 +37,7 @@
   import Confirmation from '../Confimation';
   import AxiosClient from '../../utils/httpClient';
   import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
-
+  
   export default {
     components: {
       EpamButton,
@@ -131,10 +132,12 @@
     mounted() {
       UUI.Sidebar.init({ open: false });
     },
-    props: {
-      items: {
-        type: Array,
-      },
+    computed: {
+      ...mapGetters(
+        {
+          items: 'getSuits',
+        },
+      ),
     },
   };
 </script>

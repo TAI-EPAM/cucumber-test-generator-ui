@@ -15,6 +15,7 @@
     },
     methods: {
       getSuitById(suitId = this.$route.params.suitId) {
+        console.log('suitView');
         this.activeSuit = this.$store.getters.getSuit(suitId);
       },
     },

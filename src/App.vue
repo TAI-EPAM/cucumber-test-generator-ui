@@ -23,7 +23,7 @@
     </main>
 
     <aside v-if="$route.name != 'Dashboard' && $route.name != 'Login'">
-      <app-menu v-if="dataIsLoaded" :items="menuItems"></app-menu>
+      <app-menu v-if="dataIsLoaded"></app-menu>
     </aside>
 
     <app-footer></app-footer>
@@ -55,11 +55,13 @@
     },
     methods: {
       fetchData() {
+        console.log('fetch data');
         if (this.$route.name === 'Login') return;
         AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.$store.getters.getToken}` } })
           .then((response) => {
+            console.log(response.data);
             this.$store.commit('setSuits', { data: response.data });
-            this.menuItems = this.$store.getters.getSuits;
+            console.log('set suits');
             this.dataIsLoaded = true;
           })
           .catch((err) => {
@@ -73,6 +75,7 @@
       }
     },
     beforeUpdate() {
+      console.log('before update');
       if (this.$store.getters.isAuth && !this.dataIsLoaded) {
         this.fetchData();
       }

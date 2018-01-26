@@ -19,6 +19,7 @@ const store = new Vuex.Store({
   getters: {
     getSuits: state => state.suits,
     getSuit: state => (suitId) => {
+      console.log('Get suit');
       if (suitId) {
         return state.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
       }
@@ -66,7 +67,7 @@ const store = new Vuex.Store({
 
     addSuit(state, payload) {
       const st = state;
-      st.suits.push(payload.suit);
+      st.suits.push(payload);
     },
     updateSuit(state, payload) {
       const target = state.suits.filter(suit =>

@@ -62,12 +62,14 @@
         }
       },
       sendData() {
-        console.log(this.entity);
         const sendData = Object.assign({}, this.entity);
+        this.$store.commit('addSuit', sendData);
+        console.log(this.$store.getters.getSuits);
         AxiosClient.post('/cucumber/suits/', sendData)
           .then((response) => {
+            console.log('POST');
             sendData.id = response.data;
-            this.$store.commit('addSuit', { data: sendData });
+            console.log(sendData);
             this.resetData();
           })
           .catch(() => {
