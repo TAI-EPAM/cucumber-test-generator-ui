@@ -56,13 +56,10 @@
     },
     methods: {
       fetchData() {
-        console.log('fetch data');
         if (this.$route.name === 'Login') return;
         AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.$store.getters.getToken}` } })
           .then((response) => {
-            console.log(response.data);
             this.$store.commit('setSuits', { data: response.data });
-            console.log('set suits');
             this.dataIsLoaded = true;
           })
           .catch((err) => {
@@ -79,7 +76,6 @@
       }
     },
     beforeUpdate() {
-      console.log('before update');
       if (this.isAuth && !this.dataIsLoaded) {
         this.fetchData();
       }

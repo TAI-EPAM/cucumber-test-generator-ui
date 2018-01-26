@@ -19,7 +19,6 @@ const store = new Vuex.Store({
   getters: {
     getSuits: state => state.suits,
     getSuit: state => (suitId) => {
-      console.log('Get suit');
       if (suitId) {
         return state.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
       }
@@ -50,7 +49,6 @@ const store = new Vuex.Store({
     },
     //* ************SUITS***********************/
     setSuits(state, payload) {
-      console.log('I AM HERE');
       const st = state;
       st.suits = payload.data;
 

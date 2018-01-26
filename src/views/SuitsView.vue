@@ -6,7 +6,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  
+
   export default {
     components: {
     },
@@ -20,7 +20,6 @@
     },
     methods: {
       getSuitById(suitId = this.$route.params.suitId) {
-        console.log('suitView');
         this.activeSuit = this.getSuit(suitId);
       },
     },

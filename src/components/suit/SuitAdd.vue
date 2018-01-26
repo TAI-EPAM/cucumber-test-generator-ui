@@ -66,9 +66,7 @@
         this.$store.commit('addSuit', sendData);
         AxiosClient.post('/cucumber/suits/', sendData)
           .then((response) => {
-            console.log('POST');
             sendData.id = response.data;
-            console.log(sendData);
             this.resetData();
           })
           .catch(() => {
