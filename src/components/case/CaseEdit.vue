@@ -52,6 +52,9 @@
             if (this.onSubmit) {
               this.onSubmit(sendData, this.suitId, this.entity.id);
             }
+            this.$store.commit('updateCase', {
+              suitId: this.entity.id, caseId: this.entity.id, updateData: this.entity,
+            });
           })
           .catch(() => {
           });
