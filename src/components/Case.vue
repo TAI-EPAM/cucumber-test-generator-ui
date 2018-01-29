@@ -60,7 +60,7 @@
     },
     methods: {
       saveCase() {
-        this.$store.updateCase(this.$route.params.suitId, this.$route.params.caseId, this.localCase);
+        this.$store.commit('updateCase', { suitId: this.$route.params.suitId, caseId: this.$route.params.caseId, updateData: this.localCase });
         AxiosClient.put(`/cucumber/suits/${this.$route.params.suitId}/cases/${this.$route.params.caseId}`, this.localCase)
           .then((resp) => {
             console.warn(resp);
@@ -79,10 +79,10 @@
             onCancel() {
               this.$vuedals.close();
             },
-            onSubmit(updateData) {
+            onSubmit(updateData_) {
               this.$vuedals.close();
-              vm.localCase = updateData;
-              this.$store.updateCase(vm.suitId, vm.localCase.id, updateData);
+              vm.localCase = updateData_;
+              this.$store.commit('updateCase', { suitId: vm.suitId, caseId: vm.localCase.id, updateData: updateData_ });
             },
           },
         });
@@ -101,7 +101,7 @@
               AxiosClient.delete(`/cucumber/suits/${this.$route.params.suitId}
               /cases/${vm.localCase.id}`)
                 .then(() => {
-                  this.$store.removeCase(this.$route.params.suitId, vm.localCase.id);
+                  this.$store.commit('removeCase', { suitId: this.$route.params.suitId, caseId: vm.localCase.id });
                   this.$vuedals.close();
                 })
                 .catch(() => {

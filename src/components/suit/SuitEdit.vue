@@ -49,7 +49,7 @@
         delete sendData.cases;
         AxiosClient.put(`/cucumber/suits/${this.entity.id}`, sendData)
           .then(() => {
-            this.$store.updateSuit(this.entity.id, this.entity);
+            this.$store.commit('updateSuit', { suitId: this.entity.id, updateData: this.entity });
             if (this.onSubmit) {
               this.onSubmit();
             }

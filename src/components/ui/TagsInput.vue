@@ -22,7 +22,7 @@
     data() {
       return {
         localTarget: this.value,
-        tagsArray: this.$store.getTags(),
+        tagsArray: this.$store.getters.getTags,
       };
     },
     props: ['value'],

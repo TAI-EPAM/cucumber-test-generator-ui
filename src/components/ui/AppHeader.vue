@@ -27,21 +27,22 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import VButton from './EpamButton';
-
+  
+  
   export default {
     components: {
       VButton,
     },
-    data() {
-      return {
-        isAuth: this.$store.isAuth(),
-      };
+
+    computed: {
+      ...mapGetters(['isAuth']),
     },
+
     methods: {
       logout() {
-        this.$store.logout();
-        this.isAuth = false;
+        this.$store.commit('logout');
         this.$router.push(
           {
             path: '/',

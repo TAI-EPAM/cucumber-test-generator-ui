@@ -23,7 +23,7 @@
     </main>
 
     <aside v-if="$route.name != 'Dashboard' && $route.name != 'Login'">
-      <app-menu v-if="dataIsLoaded" :items="menuItems"></app-menu>
+      <app-menu v-if="dataIsLoaded"></app-menu>
     </aside>
 
     <app-footer></app-footer>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import AxiosClient from '@/utils/httpClient';
   import AppHeader from './components/ui/AppHeader';
   import AppFooter from './components/ui/AppFooter';
@@ -56,10 +57,9 @@
     methods: {
       fetchData() {
         if (this.$route.name === 'Login') return;
-        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.$store.getToken()}` } })
+        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.getToken}` } })
           .then((response) => {
-            this.$store.setSuits(response.data);
-            this.menuItems = this.$store.getSuits();
+            this.$store.commit('setSuits', { data: response.data });
             this.dataIsLoaded = true;
           })
           .catch((err) => {
@@ -67,13 +67,16 @@
           });
       },
     },
+    computed: {
+      ...mapGetters(['isAuth', 'getToken']),
+    },
     mounted() {
-      if (this.$store.isAuth()) {
+      if (this.isAuth) {
         this.fetchData();
       }
     },
     beforeUpdate() {
-      if (this.$store.isAuth() && !this.dataIsLoaded) {
+      if (this.isAuth && !this.dataIsLoaded) {
         this.fetchData();
       }
     },

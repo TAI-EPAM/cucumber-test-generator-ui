@@ -68,7 +68,7 @@
         AxiosClient.post(`/cucumber/suits/${this.suitId}/cases/`, sendData)
           .then((response) => {
             sendData.id = response.data;
-            this.$store.addCase(this.suitId, sendData);
+            this.$store.commit('addCase', { suitId: this.suitId, data: sendData });
             this.resetData();
             if (this.onSubmit) {
               this.onSubmit(sendData);

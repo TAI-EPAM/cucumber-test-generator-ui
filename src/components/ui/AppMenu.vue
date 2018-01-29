@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import EpamButton from './EpamButton';
   import SuitAdd from '../suit/SuitAdd';
   import SuitEdit from '../suit/SuitEdit';
@@ -36,7 +37,7 @@
   import Confirmation from '../Confimation';
   import AxiosClient from '../../utils/httpClient';
   import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
-
+  
   export default {
     components: {
       EpamButton,
@@ -89,7 +90,7 @@
           title: 'Edit Suit',
           component: SuitEdit,
           props: {
-            value: this.$store.getSuit(suitId),
+            value: this.getSuit(suitId),
             onCancel() {
               this.$vuedals.close();
             },
@@ -118,7 +119,7 @@
             onSubmit() {
               AxiosClient.delete(`/cucumber/suits/${suitId}`)
                 .then(() => {
-                  this.$store.removeSuit(suitId);
+                  this.$store.commit('removeSuit', suitId);
                   this.$vuedals.close();
                 })
                 .catch(() => {
@@ -131,10 +132,13 @@
     mounted() {
       UUI.Sidebar.init({ open: false });
     },
-    props: {
-      items: {
-        type: Array,
-      },
+    computed: {
+      ...mapGetters(
+        {
+          items: 'getSuits',
+          getSuit: 'getSuit',
+        },
+      ),
     },
   };
 </script>

@@ -23,7 +23,7 @@
     },
     methods: {
       getCaseFromStore(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        this.localCase = this.$store.getCase(suitId, caseId);
+        this.localCase = this.$store.getters.getCase(suitId, caseId);
       },
     },
     mounted() {
