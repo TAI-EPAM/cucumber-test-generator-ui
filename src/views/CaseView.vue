@@ -2,6 +2,9 @@
   <section class="case-view">
     <div v-if="$route.params.caseId">
       <case v-model="localCase" v-if="localCase" />
+      <keep-alive v-if="localCase">
+          <case-history/>
+      </keep-alive>
     </div>
     <div v-else>
       Nothing
@@ -11,10 +14,12 @@
 
 <script>
   import Case from '@/components/Case';
+  import CaseHistory from '@/components/case/CaseHistory';
 
   export default {
     components: {
       Case,
+      CaseHistory,
     },
     data() {
       return {
