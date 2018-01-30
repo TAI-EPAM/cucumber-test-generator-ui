@@ -1,29 +1,29 @@
 <template>
   <section>
-    <table v-if="commit" class="uui-table treegrid">
-        <tbody>
-            <tr @click="changeView" class="treegrid-parent" data-grid-level="1">
-                    <td>
-                        <span v-if="!isOpen" class="treegrid-caret fa fa-angle-right"></span>
-                        <span v-if="isOpen" class="treegrid-caret fa fa-angle-down"></span>
+    <div v-if="commit">
+            <div @click="changeView" class="commit-title" data-grid-level="1">
+                        <span v-if="!isOpen" class="fa fa-caret-right fa-lg caret-gray"></span>
+                        <span v-if="isOpen" class="fa fa-caret-down fa-lg caret-gray"></span>
                         {{ commit.updatedDate }}
                         <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case
-                   </td>
-            </tr>
-              <tr v-if="isOpen" class="treegrid-child" data-grid-level="2">
-                    <td class="row-title">Old Value</td>
-                    <td class="row-title">New Value</td>                   
-              </tr>
-              <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
+            </div>
+            <table class="uui-table treegrid">
+              <tbody>
+                <tr v-if="isOpen">
+                      <td class="row-title">Old Value</td>
+                      <td class="row-title">New Value</td>                   
+                </tr>
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
                     <td>{{ item.oldValue || '-'}}</td>
                     <td>{{ item.newValue || '-'}}</td>                   
-               </tr>
-               <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
+                </tr>
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
                     <td>{{ item.oldValue.description || '-'}}</td>
                     <td>{{ item.newValue.description || '-'}}</td>                   
-              </tr>
-        </tbody>
+                </tr>
+           </tbody>
     </table>
+    </div>
   </section>
 </template>
 
@@ -61,5 +61,18 @@ td.row-title
 {
     font-weight: bold;
     color: @orange;
+}
+.commit-title
+{
+    padding: 10px 20px;
+    background-color: @gray_bg_dark;
+}
+.caret-gray
+{
+    color: @gray;
+}
+span.fa
+{
+    margin-right: 5px;
 }
 </style>
