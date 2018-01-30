@@ -1,7 +1,7 @@
 <template>
   <section>
     <div v-if="commit">
-        <div @click="changeView" class="commit-title" data-grid-level="1">
+        <div @click="changeView" class="commit-title">
                         <span class="fa fa-lg caret-gray" v-bind:class="isOpen?'fa-caret-down':'fa-caret-right'"></span>
                         {{ commit.updatedDate }}
                         <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case:
@@ -78,7 +78,13 @@ span.fa
 {
     display: none;
 }
-tbody > tr > td {
+table.uui-table.treegrid > tbody > tr > td
+{
     width: 50%;
+}
+div.commit-title,
+table.uui-table.treegrid > tbody > tr > td
+{
+    padding: 10px 30px;
 }
 </style>
