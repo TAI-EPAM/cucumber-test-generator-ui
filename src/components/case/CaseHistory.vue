@@ -6,22 +6,30 @@
          <div class="case-history-window">   
             <div class="case-history-header">
                 <h3 class="history-title white">HISTORY</h3>
-                <epam-button @click="changeView" class="orange">X</i></epam-button>
-             </div>
-          </div>
+                <epam-button @click="changeView" class="orange"><span class="fa fa-lg fa-times"></span></epam-button>
+            </div>
+            <div v-if="commits">   
+              <div v-for="item in commits">
+                <case-commit-item :caseName="caseName" :commit="item"/>
+              </div>
+            </div>
+            <div v-else>No commits yet</div>
         </div>
       </div>
+    </div>
   </section>
 </template>
 
 
 <script>
-  import AxiosClient from '../../utils/httpClient';
+
   import EpamButton from '../ui/EpamButton';
+  import CaseCommitItem from './CaseCommitItem';
 
   export default {
     components: {
       EpamButton,
+      CaseCommitItem,
     },
     data() {
       return {
@@ -32,31 +40,21 @@
       changeView() {
         this.isOpen = !this.isOpen;
       },
-      fetchData() {
-        AxiosClient.get(`/cucumber/suits/${this.suitId}/cases/${this.caseId}/versions`, { headers: { authorization: `${this.getToken}` } })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((err) => {
-            console.warn(err);
-          });
-      },
     },
     mounted() {
     },
-    update() {
+    updated() {
     },
     watch: {
     },
-    props: ['caseId', 'suitId'],
     name: 'case-history',
+    props: ['caseName', 'commits'],
   };
 </script>
 
 <style lang="less" scoped>
 @import "../../assets/vendors/epam-ui/less/uui-core.less";
 @import "../../assets/vendors/epam-ui/less/uui-form-elements.less";
-
   .case-history-button
   {
     position: fixed;
