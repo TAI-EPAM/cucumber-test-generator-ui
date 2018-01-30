@@ -2,8 +2,7 @@
   <section>
     <div v-if="commit">
             <div @click="changeView" class="commit-title" data-grid-level="1">
-                        <span v-if="!isOpen" class="fa fa-caret-right fa-lg caret-gray"></span>
-                        <span v-if="isOpen" class="fa fa-caret-down fa-lg caret-gray"></span>
+                        <span class="fa fa-lg caret-gray" v-bind:class="isOpen?'fa-caret-down':'fa-caret-right'"></span>
                         {{ commit.updatedDate }}
                         <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case
             </div>
