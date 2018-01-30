@@ -51,15 +51,19 @@
     },
     computed: {
       commitTitle() {
-        if (this.commit.propertyDifferences.length === 1 && this.commit.propertyDifferences[0].propertyName === 'status') {
+        if (this.changedStatusOnly) {
           return ` change status of <b>'${this.caseName}'</b> to ${this.commit.propertyDifferences[0].newValue}`;
         }
         return ` made changes in <b>'${this.caseName}'</b> case:`;
       },
+      changedStatusOnly() {
+        return this.commit.propertyDifferences.length === 1 && this.commit.propertyDifferences[0].propertyName === 'status';
+      },
       isShownArrow() {
         return {
-          'fa-caret-down': this.isOpen,
-          'fa-caret-right': !this.isOpen,
+          'fa-caret-down': this.isOpen && !this.changedStatusOnly,
+          'fa-caret-right': !this.isOpen && !this.changedStatusOnly,
+          '': this.changedStatusOnly,
         };
       },
     },
