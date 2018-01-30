@@ -1,16 +1,16 @@
 <template>
   <section>
     <div v-if="commit">
-            <div @click="changeView" class="commit-title" data-grid-level="1">
+        <div @click="changeView" class="commit-title" data-grid-level="1">
                         <span class="fa fa-lg caret-gray" v-bind:class="isOpen?'fa-caret-down':'fa-caret-right'"></span>
                         {{ commit.updatedDate }}
                         <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case:
-            </div>
-            <table v-bind:class="isOpen?'':'treegrid-hide'" class="uui-table treegrid">
-              <tbody>
+        </div>
+        <table v-bind:class="isOpen?'':'treegrid-hide'" class="uui-table treegrid">
+            <tbody>
                 <tr >
-                      <td class="row-title">Old Value</td>
-                      <td class="row-title">New Value</td>                   
+                  <td class="row-title">Old Value</td>
+                  <td class="row-title">New Value</td>                   
                 </tr>
                 <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')">
                     <td>{{ item.oldValue || '-'}}</td>
@@ -20,8 +20,8 @@
                     <td>{{ item.oldValue.description || '-'}}</td>
                     <td>{{ item.newValue.description || '-'}}</td>                   
                 </tr>
-           </tbody>
-    </table>
+            </tbody>
+        </table>
     </div>
   </section>
 </template>
@@ -77,5 +77,8 @@ span.fa
 .treegrid-hide
 {
     display: none;
+}
+tbody > tr > td {
+    width: 50%;
 }
 </style>
