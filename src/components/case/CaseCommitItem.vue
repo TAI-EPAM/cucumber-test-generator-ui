@@ -4,19 +4,19 @@
             <div @click="changeView" class="commit-title" data-grid-level="1">
                         <span class="fa fa-lg caret-gray" v-bind:class="isOpen?'fa-caret-down':'fa-caret-right'"></span>
                         {{ commit.updatedDate }}
-                        <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case
+                        <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case:
             </div>
-            <table class="uui-table treegrid">
+            <table v-bind:class="isOpen?'':'treegrid-hide'" class="uui-table treegrid">
               <tbody>
-                <tr v-if="isOpen">
+                <tr >
                       <td class="row-title">Old Value</td>
                       <td class="row-title">New Value</td>                   
                 </tr>
-                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')">
                     <td>{{ item.oldValue || '-'}}</td>
                     <td>{{ item.newValue || '-'}}</td>                   
                 </tr>
-                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')">
                     <td>{{ item.oldValue.description || '-'}}</td>
                     <td>{{ item.newValue.description || '-'}}</td>                   
                 </tr>
@@ -73,5 +73,9 @@ td.row-title
 span.fa
 {
     margin-right: 5px;
+}
+.treegrid-hide
+{
+    display: none;
 }
 </style>
