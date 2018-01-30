@@ -10,7 +10,7 @@
             </div>
             <div v-if="commits">   
               <div v-for="item in commits">
-                <case-commit-item :caseName="caseName" :commit="item"/>
+                <case-commit-item v-if="!isCreatedCommit(item)" :caseName="caseName" :commit="item"/>
               </div>
             </div>
             <div v-else>No commits yet</div>
@@ -22,7 +22,7 @@
 
 
 <script>
-
+  import equal from 'array-equal';
   import EpamButton from '../ui/EpamButton';
   import CaseCommitItem from './CaseCommitItem';
 
@@ -39,6 +39,21 @@
     methods: {
       changeView() {
         this.isOpen = !this.isOpen;
+      },
+      isCreatedCommit(commit) {
+        const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
+        const oldValues = [];
+        const existAttributes = commit.propertyDifferences.map((el) => {
+          oldValues.push(el.oldValue);
+          return el.propertyName;
+        });
+        console.log(existAttributes);
+        console.log(oldValues);
+        if (oldValues.find(el => el != null) || !equal(attributes, existAttributes)) {
+          console.log('OOPS');
+          return false;
+        }
+        return true;
       },
     },
     mounted() {
