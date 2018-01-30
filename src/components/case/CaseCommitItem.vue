@@ -2,9 +2,10 @@
   <section>
     <div v-if="commit">
         <div @click="changeView" class="commit-title">
-                        <span class="fa fa-lg caret-gray" v-bind:class="isOpen?'fa-caret-down':'fa-caret-right'"></span>
+                        <span class="fa fa-lg caret-gray" v-bind:class="isShownArrow"></span>
                         {{ commit.updatedDate }}
-                        <b>{{ commit.author}}</b> made changes in '{{ caseName }}' case:
+                        <b>{{ commit.author}}</b>
+                        <span v-html="commitTitle"></span>
         </div>
         <table v-bind:class="isOpen?'':'treegrid-hide'" class="uui-table treegrid">
             <tbody>
@@ -47,6 +48,20 @@
     updated() {
     },
     watch: {
+    },
+    computed: {
+      commitTitle() {
+        if (this.commit.propertyDifferences.length === 1 && this.commit.propertyDifferences[0].propertyName === 'status') {
+          return ` change status of <b>'${this.caseName}'</b> to ${this.commit.propertyDifferences[0].newValue}`;
+        }
+        return ` made changes in <b>'${this.caseName}'</b> case:`;
+      },
+      isShownArrow() {
+        return {
+          'fa-caret-down': this.isOpen,
+          'fa-caret-right': !this.isOpen,
+        };
+      },
     },
     name: 'case-commit-item',
     props: ['caseName', 'commit'],
