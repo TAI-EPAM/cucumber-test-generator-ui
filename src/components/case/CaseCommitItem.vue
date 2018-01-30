@@ -14,10 +14,14 @@
                     <td class="row-title">Old Value</td>
                     <td class="row-title">New Value</td>                   
               </tr>
-                    <tr v-for="item in commit.propertyDifferences" v-if="isOpen && item.propertyName !=='steps'" class="treegrid-child " data-grid-level="2">
-                      <td>{{ item.oldValue || '-'}}</td>
-                      <td>{{ item.newValue || '-'}}</td>                   
-                    </tr>
+              <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
+                    <td>{{ item.oldValue || '-'}}</td>
+                    <td>{{ item.newValue || '-'}}</td>                   
+               </tr>
+               <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')" v-if="isOpen" class="treegrid-child " data-grid-level="2">
+                    <td>{{ item.oldValue.description || '-'}}</td>
+                    <td>{{ item.newValue.description || '-'}}</td>                   
+              </tr>
         </tbody>
     </table>
   </section>

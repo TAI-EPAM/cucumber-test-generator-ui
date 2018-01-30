@@ -31,7 +31,14 @@
     },
     methods: {
       parseAttributesFromStr(str) {
-        if (!str) return {};
+        if (!str) {
+          return {
+            id: '',
+            rowNumber: '',
+            description: '',
+            type: '',
+          };
+        }
         const result = str.match(/=(.*?)[,}]/ig).map(el => el.slice(1, -1)) || [];
         console.log(result);
         return {
