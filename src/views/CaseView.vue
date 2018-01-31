@@ -3,7 +3,7 @@
     <div v-if="$route.params.caseId">
       <case v-model="localCase" v-if="localCase" />
       <keep-alive v-if="localCase">
-          <case-history :case-name="localCase.name" :commits="commits"/>
+          <case-history :case-name="localCase.name" :commits="commits.filter(el => !isCreatedCommit(el))"/>
       </keep-alive>
     </div>
     <div v-else>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+  import equal from 'array-equal';
   import { mapGetters } from 'vuex';
   import Case from '@/components/Case';
   import CaseHistory from '@/components/case/CaseHistory';
@@ -70,6 +71,21 @@
           .then(resp => resp.map(commit => this.convertSteps(commit)))
           .then((res) => { this.commits = res; })
           .catch((err) => { console.warn(err); });
+      },
+      isCreatedCommit(commit) {
+        const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
+        const oldValues = [];
+        const existAttributes = commit.propertyDifferences.map((el) => {
+          oldValues.push(el.oldValue);
+          return el.propertyName;
+        });
+        console.log(existAttributes);
+        console.log(oldValues);
+        if (oldValues.find(el => el != null) || !equal(attributes, existAttributes)) {
+          console.log('OOPS');
+          return false;
+        }
+        return true;
       },
     },
     mounted() {

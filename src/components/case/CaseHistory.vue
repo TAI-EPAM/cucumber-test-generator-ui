@@ -8,12 +8,14 @@
                 <h3 class="history-title white">HISTORY</h3>
                 <epam-button @click="changeView" class="orange"><span class="fa fa-lg fa-times"></span></epam-button>
             </div>
-            <div v-if="commits">   
+            <div v-if="commits && commits.length!=0">   
               <div v-for="item in commits">
-                <case-commit-item v-if="!isCreatedCommit(item)" :caseName="caseName" :commit="item"/>
+                <case-commit-item  :caseName="caseName" :commit="item"/>
               </div>
             </div>
-            <div v-else>No commits yet</div>
+            <div v-else >
+               <p class="no-commits-message">No commits yet</p>
+            </div>
         </div>
       </div>
     </div>
@@ -22,7 +24,6 @@
 
 
 <script>
-  import equal from 'array-equal';
   import EpamButton from '../ui/EpamButton';
   import CaseCommitItem from './CaseCommitItem';
 
@@ -39,21 +40,6 @@
     methods: {
       changeView() {
         this.isOpen = !this.isOpen;
-      },
-      isCreatedCommit(commit) {
-        const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
-        const oldValues = [];
-        const existAttributes = commit.propertyDifferences.map((el) => {
-          oldValues.push(el.oldValue);
-          return el.propertyName;
-        });
-        console.log(existAttributes);
-        console.log(oldValues);
-        if (oldValues.find(el => el != null) || !equal(attributes, existAttributes)) {
-          console.log('OOPS');
-          return false;
-        }
-        return true;
       },
     },
     mounted() {
@@ -106,5 +92,12 @@
   left: 0;
   bottom: 0;
   z-index: 10500;
+  }
+
+  .no-commits-message
+  {
+    margin: 30px 30px;
+    font-style: italic;
+    font-size: 20px; 
   }
 </style>
