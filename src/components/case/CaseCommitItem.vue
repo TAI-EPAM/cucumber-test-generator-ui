@@ -104,6 +104,7 @@ table.uui-table.treegrid > tbody > tr > td
 div.commit-title,
 table.uui-table.treegrid > tbody > tr > td
 {
-    padding: 10px 30px;
+    padding: 7px 30px;
+    font-size: 15px;
 }
 </style>
