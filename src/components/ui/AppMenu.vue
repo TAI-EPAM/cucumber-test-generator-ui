@@ -117,7 +117,7 @@
               this.$vuedals.close();
             },
             onSubmit() {
-              AxiosClient.delete(`/cucumber/suits/${suitId}`)
+              AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}`)
                 .then(() => {
                   this.$store.commit('removeSuit', suitId);
                   this.$vuedals.close();

@@ -1,5 +1,5 @@
 <template>
-
+<div v-if="steps">
   <div class="uui-timeline" style="margin-top: 40px">
     <ul class="timeline-wrapper">
       <li class="timeline-body">
@@ -65,7 +65,7 @@
     </ul>
   </div>
 
-
+</div>
 </template>
 
 <script>

@@ -21,6 +21,7 @@
 <script>
   import TagsComponent from '../ui/TagsInput';
   import AxiosClient from '../../utils/httpClient';
+  import PROJECT_ID from '../../utils/projectID';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
 
@@ -47,7 +48,7 @@
       save() {
         const sendData = Object.assign({}, this.entity);
         delete sendData.cases;
-        AxiosClient.put(`/cucumber/suits/${this.entity.id}`, sendData)
+        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${this.entity.id}`, sendData)
           .then(() => {
             this.$store.commit('updateSuit', { suitId: this.entity.id, updateData: this.entity });
             if (this.onSubmit) {

@@ -22,6 +22,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import AxiosClient from '../../utils/httpClient';
+  import PROJECT_ID from '../../utils/projectID';
   import TagsComponent from '../ui/TagsInput';
 
   export default {
@@ -56,6 +57,7 @@
           description: null,
           name: null,
           priority: 1,
+          steps: [],
           tags: [],
           status: 'NOT_DONE',
         });

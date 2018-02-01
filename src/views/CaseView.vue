@@ -18,6 +18,7 @@
   import Case from '@/components/Case';
   import CaseHistory from '@/components/case/CaseHistory';
   import AxiosClient from '../utils/httpClient';
+  import PROJECT_ID from '../utils/projectID';
 
   export default {
     components: {
@@ -41,7 +42,6 @@
           };
         }
         const result = str.match(/=(.*?)[,}]/ig).map(el => el.slice(1, -1)) || [];
-        console.log(result);
         return {
           id: +result[0],
           rowNumber: +result[1],
@@ -66,7 +66,7 @@
         this.localCase = this.$store.getters.getCase(suitId, caseId);
       },
       fetchCommits(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        AxiosClient.get(`/cucumber/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `${this.getToken}` } })
+        AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `${this.getToken}` } })
           .then(response => response.data)
           .then(resp => resp.map(commit => this.convertSteps(commit)))
           .then((res) => { this.commits = res; })
@@ -79,10 +79,7 @@
           oldValues.push(el.oldValue);
           return el.propertyName;
         });
-        console.log(existAttributes);
-        console.log(oldValues);
         if (oldValues.find(el => el != null) || !equal(attributes, existAttributes)) {
-          console.log('OOPS');
           return false;
         }
         return true;

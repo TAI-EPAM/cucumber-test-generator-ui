@@ -20,6 +20,7 @@
 
 <script>
   import AxiosClient from '../../utils/httpClient';
+  import PROJECT_ID from '../../utils/projectID';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
