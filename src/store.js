@@ -23,7 +23,8 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    getSuits: state => state.activeProject.suits,
+    getSuits: state => state.suits,
+    getCountSuits: state => state.suits.length,
     getSuit: state => (suitId) => {
       if (suitId) {
         return state.activeProject.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
@@ -109,9 +110,8 @@ const store = new Vuex.Store({
       Object.assign(target, payload.updateData);
     },
     removeCase(state, payload) {
-      const suitItem = this.getSuit(payload.suitId);
-      const caseItem = this.getCase(payload.suitId, payload.caseId);
-      suitItem.cases.splice(suitItem.cases.indexOf(caseItem), 1);
+      const suitItem = state.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+      suitItem.cases = suitItem.cases.filter(item => item.id !== payload.caseId);
     },
     //* **************TAGS******************** */
     createTags(state) {
