@@ -94,8 +94,8 @@ const store = new Vuex.Store({
     },
     updateSuit(state, payload) {
       const target = state.suits.filter(suit =>
-        suit.id === parseInt(payload.suitId, 0))[0];
-      Object.assign(target, payload.updateData);
+        suit.id === payload.id)[0];
+      Object.assign(target, payload);
     },
     removeSuit(state, payload) {
       console.log(payload.suitId);
@@ -172,6 +172,7 @@ const store = new Vuex.Store({
           console.warn(err);
         });
     },
+    //* ************SUITS***********************/
     getSuitsAsync({ commit, state }) {
       console.log(router);
       if (router.history.current.name === 'Login') return;
@@ -205,6 +206,18 @@ const store = new Vuex.Store({
         AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${id}`)
           .then(() => {
             commit('removeSuit', { suitId: id });
+            resolve();
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
+      });
+    },
+    editSuitAsync({ commit }, data) {
+      return new Promise((resolve) => {
+        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${data.id}`, data)
+          .then(() => {
+            commit('updateSuit', data);
             resolve();
           })
           .catch((err) => {
