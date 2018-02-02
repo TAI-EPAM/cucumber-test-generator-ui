@@ -23,8 +23,6 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import AxiosClient from '../../utils/httpClient';
-  import PROJECT_ID from '../../utils/projectID';
 
   export default {
     components: {
@@ -68,14 +66,8 @@
         const sendData = Object.assign({}, this.entity);
         const projectId = this.$route.params.projectId;
         sendData.rowNumber = this.getCountSuits + 1;
-        AxiosClient.post(`/cucumber/projects/${projectId}/suits/`, sendData)
-          .then((response) => {
-            sendData.id = response.data;
-            this.$store.commit('addSuit', sendData);
-            this.resetData();
-          })
-          .catch(() => {
-          });
+        this.$store.dispatch('addSuitAsync', sendData)
+        .then(() => { this.resetData(); });
       },
     },
     mounted() {

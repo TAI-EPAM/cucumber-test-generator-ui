@@ -186,6 +186,20 @@ const store = new Vuex.Store({
             console.warn(err);
           });
     },
+    addSuitAsync({ commit }, data) {
+      return new Promise((resolve) => {
+        AxiosClient.post(`/cucumber/projects/${PROJECT_ID}/suits/`, data)
+        .then((response) => {
+          const sendData = data;
+          sendData.id = response.data;
+          commit('addSuit', sendData);
+          resolve();
+        })
+        .catch((err) => {
+          console.warn(err);
+        });
+      });
+    },
   },
 });
 
