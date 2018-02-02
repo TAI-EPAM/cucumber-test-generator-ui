@@ -21,8 +21,6 @@
 <script>
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
-  import AxiosClient from '../../utils/httpClient';
-  import PROJECT_ID from '../../utils/projectID';
   import TagsComponent from '../ui/TagsInput';
 
   export default {
@@ -64,21 +62,15 @@
         if (this.onCancel) {
           this.onCancel();
         }
+        if (this.onSubmit) {
+          this.onSubmit();
+        }
       },
       sendData() {
-        const sendData = Object.assign({}, this.entity);
-        const projectId = this.$route.params.projectId;
-        AxiosClient.post(`/cucumber/projects/${projectId}/suits/${this.suitId}/cases/`, sendData)
-          .then((response) => {
-            sendData.id = response.data;
-            this.$store.commit('addCase', { suitId: this.suitId, data: sendData });
-            this.resetData();
-            if (this.onSubmit) {
-              this.onSubmit(sendData);
-            }
-          })
-          .catch(() => {
-          });
+        this.$store.dispatch('addCaseAsync', { suitId: this.suitId, data: this.entity })
+        .then(() => {
+          this.resetData();
+        });
       },
     },
     mounted() {

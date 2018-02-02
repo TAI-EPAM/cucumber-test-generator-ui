@@ -230,6 +230,19 @@ const store = new Vuex.Store({
       return AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}/cases/${payload.caseId}/versions`, { headers: { authorization: state.auth.token } })
             .catch((err) => { console.warn(err); });
     },
+    //* *************CASES******************** */
+    addCaseAsync({ commit }, payload) {
+      const sendData = Object.assign({}, payload.data);
+      return new Promise((resolve) => {
+        AxiosClient.post(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}/cases/`, payload.data)
+          .then((response) => {
+            sendData.id = response.data;
+            commit('addCase', { suitId: payload.suitId, data: sendData });
+            resolve();
+          })
+          .catch((err) => { console.warn(err); });
+      });
+    },
   },
 });
 
