@@ -35,8 +35,6 @@
   import SuitEdit from '../suit/SuitEdit';
   import CaseAdd from '../case/CaseAdd';
   import Confirmation from '../Confimation';
-  import AxiosClient from '../../utils/httpClient';
-  // import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
 
   export default {
     components: {
@@ -117,13 +115,8 @@
               this.$vuedals.close();
             },
             onSubmit() {
-              AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}`)
-                .then(() => {
-                  this.$store.commit('removeSuit', suitId);
-                  this.$vuedals.close();
-                })
-                .catch(() => {
-                });
+              this.$store.dispatch('deleteSuitAsync', suitId)
+                .then(() => { this.$vuedals.close(); });
             },
           },
         });

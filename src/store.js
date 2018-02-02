@@ -94,13 +94,13 @@ const store = new Vuex.Store({
     },
     updateSuit(state, payload) {
       const target = state.suits.filter(suit =>
-             suit.id === parseInt(payload.suitId, 0))[0];
+        suit.id === parseInt(payload.suitId, 0))[0];
       Object.assign(target, payload.updateData);
     },
     removeSuit(state, payload) {
+      console.log(payload.suitId);
       const st = state;
-      const suitItem = state.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
-      st.suits.splice(state.suits.indexOf(suitItem), 1);
+      st.suits = state.suits.filter(suit => suit.id !== payload.suitId);
     },
     //* *************CASES******************** */
     addCase(state, payload) {
@@ -155,49 +155,61 @@ const store = new Vuex.Store({
     loginAsync({ commit }, entity) {
       const query = router.history.current.query;
       AxiosClient.post('/cucumber/login', entity)
-          .then((resp) => {
-            if (resp.data.token) {
-              commit('setToken', { token: resp.data.token });
-              Vue.ls.set('token', resp.data.token);
-              Vue.ls.set('isAuth', 'true');
-            }
-            if (query && query.redirect) {
-              router.push(
-                {
-                  path: query.redirect,
-                });
-            }
-          })
-          .catch((err) => {
-            console.warn(err);
-          });
+        .then((resp) => {
+          if (resp.data.token) {
+            commit('setToken', { token: resp.data.token });
+            Vue.ls.set('token', resp.data.token);
+            Vue.ls.set('isAuth', 'true');
+          }
+          if (query && query.redirect) {
+            router.push(
+              {
+                path: query.redirect,
+              });
+          }
+        })
+        .catch((err) => {
+          console.warn(err);
+        });
     },
     getSuitsAsync({ commit, state }) {
       console.log(router);
       if (router.history.current.name === 'Login') return;
       AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/`, { headers: { authorization: state.auth.token } })
-          .then((response) => {
-            commit('setSuits', { data: response.data });
-          })
-          .then(() => {
-            commit('changeLoadingStatus', { isLoad: true });
-          })
-          .catch((err) => {
-            console.warn(err);
-          });
-    },
-    addSuitAsync({ commit }, data) {
-      return new Promise((resolve) => {
-        AxiosClient.post(`/cucumber/projects/${PROJECT_ID}/suits/`, data)
         .then((response) => {
-          const sendData = data;
-          sendData.id = response.data;
-          commit('addSuit', sendData);
-          resolve();
+          commit('setSuits', { data: response.data });
+        })
+        .then(() => {
+          commit('changeLoadingStatus', { isLoad: true });
         })
         .catch((err) => {
           console.warn(err);
         });
+    },
+    addSuitAsync({ commit }, data) {
+      return new Promise((resolve) => {
+        AxiosClient.post(`/cucumber/projects/${PROJECT_ID}/suits/`, data)
+          .then((response) => {
+            const sendData = data;
+            sendData.id = response.data;
+            commit('addSuit', sendData);
+            resolve();
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
+      });
+    },
+    deleteSuitAsync({ commit }, id) {
+      return new Promise((resolve) => {
+        AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${id}`)
+          .then(() => {
+            commit('removeSuit', { suitId: id });
+            resolve();
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
       });
     },
   },
