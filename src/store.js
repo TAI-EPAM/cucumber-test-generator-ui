@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import AxiosClient from '@/utils/httpClient';
+import router from './router/index';
 
 // Vue.use(VueLocalStorage);
 Vue.use(Vuex);
@@ -143,7 +145,26 @@ const store = new Vuex.Store({
   },
 
   actions: {
-
+    loginAsync({ commit }, entity) {
+      const query = router.history.current.query;
+      AxiosClient.post('/cucumber/login', entity)
+          .then((resp) => {
+            if (resp.data.token) {
+              commit('setToken', { token: resp.data.token });
+              Vue.ls.set('token', resp.data.token);
+              Vue.ls.set('isAuth', 'true');
+            }
+            if (query && query.redirect) {
+              router.push(
+                {
+                  path: query.redirect,
+                });
+            }
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
+    },
   },
 });
 

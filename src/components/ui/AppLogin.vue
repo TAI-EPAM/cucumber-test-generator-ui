@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import AxiosClient from '../../utils/httpClient';
+  import { mapActions } from 'vuex';
   import VButton from './EpamButton';
 
   export default {
@@ -39,27 +39,9 @@
       };
     },
     methods: {
-      login() {
-        AxiosClient.post('/cucumber/login', this.entity)
-          .then((resp) => {
-            if (resp.data.token) {
-              this.$store.commit('setToken', { token: resp.data.token });
-              this.$ls.set('token', resp.data.token);
-              this.$ls.set('isAuth', 'true');
-            }
-            if (this.$route.query && this.$route.query.redirect) {
-              this.$router.push(
-                {
-                  path: this.$route.query.redirect,
-                });
-            } else {
-              this.$router.push({ name: 'Dashboard' });
-            }
-          })
-          .catch(() => {
-
-          });
-      },
+      ...mapActions({
+        login: 'loginAsync',
+      }),
       reset() {
         this.entity = {
           email: null,
