@@ -25,7 +25,7 @@
       },
     },
     computed: {
-      ...mapGetters(['isAuth', 'getToken']),
+      ...mapGetters(['isAuth', 'isLoaded']),
     },
     mounted() {
     },

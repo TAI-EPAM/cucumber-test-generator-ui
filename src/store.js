@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import PROJECT_ID from '@/utils/projectID';
 import AxiosClient from '@/utils/httpClient';
 import router from './router/index';
+
 
 // Vue.use(VueLocalStorage);
 Vue.use(Vuex);
@@ -38,6 +40,7 @@ const store = new Vuex.Store({
       return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
     },
     isAuth: state => state.auth.isAuth,
+    isLoaded: state => state.dataIsLoaded,
     getToken: (state, getters) => getters.isAuth && state.auth.token,
     getTags: state => state.tags,
     getProjects: state => state.projects,
@@ -52,6 +55,10 @@ const store = new Vuex.Store({
   },
 
   mutations: {
+    changeLoadingStatus(state, payload) {
+      const st = state;
+      st.dataIsLoaded = payload.isLoad;
+    },
     //* *****************AUTH*********************/
     logout(state) {
       const st = state;
@@ -160,6 +167,20 @@ const store = new Vuex.Store({
                   path: query.redirect,
                 });
             }
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
+    },
+    getSuitsAsync({ commit, state }) {
+      console.log(router);
+      if (router.history.current.name === 'Login') return;
+      AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/`, { headers: { authorization: state.auth.token } })
+          .then((response) => {
+            commit('setSuits', { data: response.data });
+          })
+          .then(() => {
+            commit('changeLoadingStatus', { isLoad: true });
           })
           .catch((err) => {
             console.warn(err);
