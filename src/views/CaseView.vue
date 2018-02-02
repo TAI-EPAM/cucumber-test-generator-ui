@@ -17,8 +17,6 @@
   import { mapGetters } from 'vuex';
   import Case from '@/components/Case';
   import CaseHistory from '@/components/case/CaseHistory';
-  import AxiosClient from '../utils/httpClient';
-  import PROJECT_ID from '../utils/projectID';
 
   export default {
     components: {
@@ -66,11 +64,9 @@
         this.localCase = this.$store.getters.getCase(suitId, caseId);
       },
       fetchCommits(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `${this.getToken}` } })
-          .then(response => response.data)
-          .then(resp => resp.map(commit => this.convertSteps(commit)))
-          .then((res) => { this.commits = res; })
-          .catch((err) => { console.warn(err); });
+        this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId })
+          .then(resp => resp.data.map(commit => this.convertSteps(commit)))
+          .then((res) => { this.commits = res; });
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];

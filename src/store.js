@@ -225,6 +225,11 @@ const store = new Vuex.Store({
           });
       });
     },
+    //* *************HISTORY******************** */
+    getCaseHistoryAsync({ state }, payload) {
+      return AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}/cases/${payload.caseId}/versions`, { headers: { authorization: state.auth.token } })
+            .catch((err) => { console.warn(err); });
+    },
   },
 });
 

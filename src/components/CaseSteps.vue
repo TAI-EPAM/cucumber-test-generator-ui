@@ -70,7 +70,6 @@
 
 <script>
   import draggable from 'vuedraggable';
-  // import AxiosClient from '../utils/httpClient';
   import EpamButton from './ui/EpamButton';
 
   export default {
