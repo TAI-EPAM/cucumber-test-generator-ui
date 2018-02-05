@@ -88,7 +88,6 @@
       }
     },
     updated() {
-
     },
     computed: {
       ...mapGetters(['isAuth', 'getToken']),
@@ -96,8 +95,10 @@
     watch: {
       // eslint-disable-next-line object-shorthand
       '$route'(n) {
-        this.getCaseFromStore(n.params.suitId, n.params.caseId);
-        this.fetchCommits(n.params.suitId, n.params.caseId);
+        if (n.params.suitId && n.params.caseId) {
+          this.getCaseFromStore(n.params.suitId, n.params.caseId);
+          this.fetchCommits(n.params.suitId, n.params.caseId);
+        }
       },
       localCase: {
         handler(n) {
