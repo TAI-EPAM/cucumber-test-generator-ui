@@ -83,14 +83,11 @@ Choose case
               this.$vuedals.close();
             },
             onSubmit() {
-              AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${this.$route.params.suitId}
-              /cases/${vm.localCase.id}`)
-                .then(() => {
-                  this.$store.commit('removeCase', { suitId: this.$route.params.suitId, caseId: vm.localCase.id });
-                  this.$vuedals.close();
-                })
-                .catch(() => {
-                });
+              this.$store.dispatch('deleteCaseAsync', { suitId: this.$route.params.suitId, caseId: vm.localCase.id })
+               .then(() => {
+                 this.$router.push({ path: '/suits/' });
+                 this.$vuedals.close();
+               });
             },
           },
         });

@@ -37,7 +37,10 @@ const store = new Vuex.Store({
     },
     getCase: (state, getters) => (suitId, caseId) => {
       const suit = getters.getSuit(suitId);
-      return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
+      if (suit) {
+        return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
+      }
+      return false;
     },
     isAuth: state => state.auth.isAuth,
     isLoaded: state => state.dataIsLoaded,
@@ -238,6 +241,17 @@ const store = new Vuex.Store({
           .then((response) => {
             sendData.id = response.data;
             commit('addCase', { suitId: payload.suitId, data: sendData });
+            resolve();
+          })
+          .catch((err) => { console.warn(err); });
+      });
+    },
+    deleteCaseAsync({ commit }, payload) {
+      return new Promise((resolve) => {
+        AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}
+              /cases/${payload.caseId}`)
+          .then(() => {
+            commit('removeCase', { suitId: payload.suitId, caseId: payload.caseId });
             resolve();
           })
           .catch((err) => { console.warn(err); });
