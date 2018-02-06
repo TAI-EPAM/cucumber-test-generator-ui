@@ -117,9 +117,11 @@ const store = new Vuex.Store({
       }
     },
 
-    updateCase(state, payload) {
-      const target = this.getCase(payload.suitId, payload.caseId);
-      Object.assign(target, payload.updateData);
+    updateCase(state, { suitId, caseId, updateData }) {
+      const targetSuit = state.suits.filter(suit => +suit.id === +suitId)[0];
+      console.log(targetSuit);
+      const targetCase = targetSuit.cases.filter(item => +item.id === +caseId)[0];
+      Object.assign(targetCase, updateData);
     },
     removeCase(state, payload) {
       const suitItem = state.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
@@ -218,9 +220,9 @@ const store = new Vuex.Store({
     },
     editSuitAsync({ commit }, data) {
       return new Promise((resolve) => {
-        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${data.id}`, data)
+        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${data.id}`, data.updateData)
           .then(() => {
-            commit('updateSuit', data);
+            commit('updateSuit', data.updateData);
             resolve();
           })
           .catch((err) => {
@@ -241,6 +243,18 @@ const store = new Vuex.Store({
           .then((response) => {
             sendData.id = response.data;
             commit('addCase', { suitId: payload.suitId, data: sendData });
+            resolve();
+          })
+          .catch((err) => { console.warn(err); });
+      });
+    },
+    updateCaseAsync({ commit }, { suitId, caseId, updateData }) {
+      console.log(suitId);
+      const sendData = Object.assign({}, updateData);
+      return new Promise((resolve) => {
+        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}`, sendData)
+          .then(() => {
+            commit('updateCase', { suitId, caseId, updateData: sendData });
             resolve();
           })
           .catch((err) => { console.warn(err); });

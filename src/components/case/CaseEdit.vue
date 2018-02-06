@@ -19,8 +19,6 @@
 </template>
 
 <script>
-  import AxiosClient from '../../utils/httpClient';
-  import PROJECT_ID from '../../utils/projectID';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
@@ -46,21 +44,16 @@
     },
     methods: {
       save() {
-        const sendData = Object.assign({}, this.entity);
-        const projectId = this.$route.params.projectId;
+        const sendData = {};
+        Object.assign(sendData, this.entity);
         sendData.action = 'CREATE';
-        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${this.suitId}/cases/${this.entity.id}`, sendData)
-          .then(() => {
-            if (this.onSubmit) {
-              this.onSubmit(sendData, this.suitId, this.entity.id);
-            }
-            this.$store.commit('updateCase', {
-              suitId: this.entity.id, caseId: this.entity.id, updateData: this.entity,
+        console.log(sendData);
+        this.$store.dispatch('updateCaseAsync', { suitId: this.suitId, caseId: this.entity.id, updateData: sendData })
+            .then(() => {
+              if (this.onSubmit) {
+                this.onSubmit();
+              }
             });
-          })
-          .catch(() => {
-          });
-        // this.$emit('input', this.suit);
       },
       reset() {
         this.entity = JSON.parse(JSON.stringify(this.value));

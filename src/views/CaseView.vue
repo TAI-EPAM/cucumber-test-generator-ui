@@ -1,7 +1,7 @@
 <template>
   <section class="case-view">
     <div v-if="$route.params.caseId">
-      <case v-model="localCase" v-if="localCase" />
+      <case :local-case="localCase"/>
       <keep-alive v-if="localCase">
           <case-history :case-name="localCase.name" :commits="commits.filter(el => !isCreatedCommit(el))"/>
       </keep-alive>
@@ -61,7 +61,7 @@
         return c;
       },
       getCaseFromStore(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        this.localCase = this.$store.getters.getCase(suitId, caseId);
+        this.localCase = this.getCase(suitId, caseId);
       },
       fetchCommits(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
         this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId })
@@ -87,10 +87,8 @@
         this.fetchCommits();
       }
     },
-    updated() {
-    },
     computed: {
-      ...mapGetters(['isAuth', 'getToken']),
+      ...mapGetters(['isAuth', 'getToken', 'getCase']),
     },
     watch: {
       // eslint-disable-next-line object-shorthand
@@ -99,12 +97,6 @@
           this.getCaseFromStore(n.params.suitId, n.params.caseId);
           this.fetchCommits(n.params.suitId, n.params.caseId);
         }
-      },
-      localCase: {
-        handler(n) {
-          this.localCase = n;
-        },
-        deep: true,
       },
     },
     name: 'CaseView',

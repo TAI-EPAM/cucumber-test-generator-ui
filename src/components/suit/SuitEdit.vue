@@ -44,7 +44,8 @@
     },
     methods: {
       save() {
-        const sendData = Object.assign({}, this.entity);
+        const sendData = {};
+        Object.assign(sendData, this.entity);
         delete sendData.cases;
         this.$store.dispatch('editSuitAsync', this.entity)
           .then(() => {

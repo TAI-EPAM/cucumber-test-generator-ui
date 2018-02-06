@@ -20,11 +20,6 @@
     <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
     <epam-button markup="large" class="lime-green" @click="saveCase">Save Tests</epam-button>
     <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
-
-    <div class="debug">
-      {{ localCase.description }}
-      <p>dirty: {{ isDirty }}</p>
-    </div>
 </div>
 <div v-else>
 Choose case
@@ -33,6 +28,7 @@ Choose case
 </template>
 
 <script>
+  import EpamButton from './ui/EpamButton';
   import CaseSteps from './CaseSteps';
   export default {
     components: {
@@ -45,16 +41,9 @@ Choose case
     },
     methods: {
       saveCase() {
-        this.$store.commit('updateCase', { suitId: this.$route.params.suitId, caseId: this.$route.params.caseId, updateData: this.localCase });
-        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${this.$route.params.suitId}/cases/${this.$route.params.caseId}`, this.localCase)
-          .then((resp) => {
-            console.warn(resp);
-          })
-          .catch(() => {
-          });
+        this.$store.dispatch('updateCaseAsync', { suitId: this.$route.params.suitId, caseId: this.$route.params.caseId, updateData: this.localCase });
       },
       editCase() {
-        const vm = this;
         this.$vuedals.open({
           title: 'Edit Case',
           component: CaseEdit,
@@ -64,10 +53,8 @@ Choose case
             onCancel() {
               this.$vuedals.close();
             },
-            onSubmit(updateData_) {
+            onSubmit() {
               this.$vuedals.close();
-              vm.localCase = updateData_;
-              this.$store.commit('updateCase', { suitId: vm.suitId, caseId: vm.localCase.id, updateData: updateData_ });
             },
           },
         });
