@@ -47,13 +47,15 @@
         const sendData = {};
         Object.assign(sendData, this.entity);
         sendData.action = 'CREATE';
-        console.log(sendData);
         this.$store.dispatch('updateCaseAsync', { suitId: this.suitId, caseId: this.entity.id, updateData: sendData })
-            .then(() => {
-              if (this.onSubmit) {
-                this.onSubmit();
-              }
-            });
+          .then(() => {
+            this.$store.dispatch('getCaseHistoryAsync', { suitId: this.suitId, caseId: this.entity.id });
+          })
+          .then(() => {
+            if (this.onSubmit) {
+              this.onSubmit();
+            }
+          });
       },
       reset() {
         this.entity = JSON.parse(JSON.stringify(this.value));

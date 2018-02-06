@@ -103,7 +103,6 @@ const store = new Vuex.Store({
       Object.assign(target, payload);
     },
     removeSuit(state, payload) {
-      console.log(payload.suitId);
       const st = state;
       st.suits = state.suits.filter(suit => suit.id !== payload.suitId);
     },
@@ -120,7 +119,6 @@ const store = new Vuex.Store({
     },
     updateCase(state, { suitId, caseId, updateData }) {
       const targetSuit = state.suits.filter(suit => +suit.id === +suitId)[0];
-      console.log(targetSuit);
       const targetCase = targetSuit.cases.filter(item => +item.id === +caseId)[0];
       Object.assign(targetCase, updateData);
     },
@@ -130,7 +128,6 @@ const store = new Vuex.Store({
     },
     //* **************HISTORY********************/
     setHistory(state, data) {
-      console.log('COMMIT');
       const st = state;
       st.currentCommits = data;
     },
@@ -186,7 +183,6 @@ const store = new Vuex.Store({
     },
     //* ************SUITS***********************/
     getSuitsAsync({ commit, state }) {
-      console.log(router);
       if (router.history.current.name === 'Login') return;
       AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/`, { headers: { authorization: state.auth.token } })
         .then((response) => {
@@ -239,13 +235,15 @@ const store = new Vuex.Store({
     },
     //* *************HISTORY******************** */
     getCaseHistoryAsync({ state, commit }, { suitId, caseId }) {
-      console.log('getCaseHistoryAsync');
-      AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
-            .then(resp => resp.data.map(item => convertSteps(item)))
-            .then((data) => {
-              commit('setHistory', data);
-            })
-            .catch((err) => { console.warn(err); });
+      return new Promise((resolve) => {
+        AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
+          .then(resp => resp.data.map(item => convertSteps(item)))
+          .then((data) => {
+            commit('setHistory', data);
+            resolve();
+          })
+          .catch((err) => { console.warn(err); });
+      });
     },
     //* *************CASES******************** */
     addCaseAsync({ commit }, payload) {
@@ -261,7 +259,6 @@ const store = new Vuex.Store({
       });
     },
     updateCaseAsync({ commit }, { suitId, caseId, updateData }) {
-      console.log(suitId);
       const sendData = Object.assign({}, updateData);
       return new Promise((resolve) => {
         AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}`, sendData)
@@ -278,6 +275,7 @@ const store = new Vuex.Store({
               /cases/${payload.caseId}`)
           .then(() => {
             commit('removeCase', { suitId: payload.suitId, caseId: payload.caseId });
+            commit('setHistory', []);
             resolve();
           })
           .catch((err) => { console.warn(err); });

@@ -4,11 +4,11 @@
       <case :local-case="localCase"/>
 
       <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
-      <epam-button markup="large" class="lime-green" @click="saveCase">Save Tests</epam-button>
+      <epam-button markup="large" class="lime-green">Save Tests</epam-button>
       <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
       <keep-alive v-if="localCase">
-          <case-history :case-name="localCase.name" :commits="commits"/>
+          <case-history :case-name="localCase.name" :commits="this.getCurrentCommits"/>
       </keep-alive>
     </div>
     <div v-else>
@@ -36,13 +36,9 @@
     data() {
       return {
         localCase: null,
-        commits: [],
       };
     },
     methods: {
-      saveCase() {
-        this.$store.dispatch('updateCaseAsync', { suitId: this.$route.params.suitId, caseId: this.$route.params.caseId, updateData: this.localCase });
-      },
       editCase() {
         this.$vuedals.open({
           title: 'Edit Case',
@@ -80,10 +76,10 @@
         });
       },
       getData(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId });
-        this.localCase = this.getCase(suitId, caseId);
-        console.log(this.getCurrentCommits);
-        this.commits = this.getCurrentCommits;
+        this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId })
+          .then(() => {
+            this.localCase = this.getCase(suitId, caseId);
+          });
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
@@ -99,7 +95,6 @@
       },
     },
     mounted() {
-      console.log(this.$store.getters);
       if (this.$route.params.suitId && this.$route.params.caseId) {
         this.getData();
       }
