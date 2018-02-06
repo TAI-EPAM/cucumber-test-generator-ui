@@ -49,10 +49,9 @@
           .then((response) => {
             this.$store.commit('setProjects', { data: response.data });
             this.dataIsLoaded = true;
-            console.warn(this.getActiveProject);
           })
-          .catch((err) => {
-            console.warn(err);
+          .catch(() => {
+
           });
       },
     },
@@ -60,10 +59,6 @@
       this.fetchProjects();
     },
     updated() {
-    },
-    beforeRouteUpdate(to, from, next) {
-      console.warn('1111');
-      next();
     },
     name: 'DefaultView',
   };

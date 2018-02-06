@@ -34,8 +34,8 @@
             this.entity = response.data;
             this.$store.commit('setActiveProject', { data: response.data });
           })
-          .catch((err) => {
-            console.warn(err);
+          .catch(() => {
+
           });
       },
     },

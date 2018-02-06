@@ -66,7 +66,7 @@
       },
     },
     mounted() {
-      console.warn(this.value);
+
     },
     update() {
     },

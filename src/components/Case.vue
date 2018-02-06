@@ -62,8 +62,8 @@
       saveCase() {
         this.$store.commit('updateCase', { suitId: this.$route.params.suitId, caseId: this.$route.params.caseId, updateData: this.localCase });
         AxiosClient.put(`/cucumber/suits/${this.$route.params.suitId}/cases/${this.$route.params.caseId}`, this.localCase)
-          .then((resp) => {
-            console.warn(resp);
+          .then(() => {
+            // console.warn(resp);
           })
           .catch(() => {
           });

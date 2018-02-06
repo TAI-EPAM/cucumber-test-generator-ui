@@ -43,8 +43,8 @@
               this.$router.push({ name: 'Dashboard' });
             }
           })
-          .catch((err) => {
-            console.warn(err);
+          .catch(() => {
+
           });
       },
       reset() {
