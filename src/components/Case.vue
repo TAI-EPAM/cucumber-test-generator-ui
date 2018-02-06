@@ -17,9 +17,6 @@
     <!-- Steps-->
     <!--<case-steps v-model="localCase.steps"></case-steps>-->
 
-    <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
-    <epam-button markup="large" class="lime-green" @click="saveCase">Save Tests</epam-button>
-    <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 </div>
 <div v-else>
 Choose case
@@ -28,7 +25,6 @@ Choose case
 </template>
 
 <script>
-  import EpamButton from './ui/EpamButton';
   import CaseSteps from './CaseSteps';
   export default {
     components: {
@@ -40,45 +36,6 @@ Choose case
       return {};
     },
     methods: {
-      saveCase() {
-        this.$store.dispatch('updateCaseAsync', { suitId: this.$route.params.suitId, caseId: this.$route.params.caseId, updateData: this.localCase });
-      },
-      editCase() {
-        this.$vuedals.open({
-          title: 'Edit Case',
-          component: CaseEdit,
-          props: {
-            value: this.localCase,
-            suitId: this.$route.params.suitId,
-            onCancel() {
-              this.$vuedals.close();
-            },
-            onSubmit() {
-              this.$vuedals.close();
-            },
-          },
-        });
-      },
-      removeCase() {
-        const vm = this;
-        this.$vuedals.open({
-          title: 'Delete Case',
-          component: Confirmation,
-          props: {
-            suitId: this.$route.params.suitId,
-            onCancel() {
-              this.$vuedals.close();
-            },
-            onSubmit() {
-              this.$store.dispatch('deleteCaseAsync', { suitId: this.$route.params.suitId, caseId: vm.localCase.id })
-               .then(() => {
-                 this.$router.push({ path: '/suits/' });
-                 this.$vuedals.close();
-               });
-            },
-          },
-        });
-      },
     },
     props: ['localCase'],
     name: 'Case',
