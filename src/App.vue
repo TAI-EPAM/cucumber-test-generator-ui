@@ -1,84 +1,37 @@
 <template>
-  <div class="wrapper" id="app">
-    <keep-alive>
-      <app-header />
-    </keep-alive>
-
-    <main class="uui-main-container" v-if="$route.name === 'Login'">
-      <div class="app-wrapper">
-        <app-login />
-      </div>
-    </main>
-    <main class="uui-main-container" v-else-if="$route.name === 'Dashboard'">
-      <div class="app-wrapper">
-          <router-view />
-      </div>
-    </main>
-    <main class="uui-main-container" v-else>
-      <div class="app-wrapper">
-        <keep-alive>
-          <router-view v-if="dataIsLoaded"/>
-        </keep-alive>
-      </div>
-    </main>
-
-    <aside v-if="$route.name != 'Dashboard' && $route.name != 'Login'">
-      <app-menu v-if="dataIsLoaded"></app-menu>
-    </aside>
-
-    <app-footer></app-footer>
-    <vuedal></vuedal>
-  </div>
+    <component v-bind:is="viewSelector()"/>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import AxiosClient from '@/utils/httpClient';
-  import AppHeader from './components/ui/AppHeader';
-  import AppFooter from './components/ui/AppFooter';
-  import AppMenu from './components/ui/AppMenu';
-  import { Component as Vuedal } from './components/ui/popoup-vuedals';
   import AppLogin from './components/ui/AppLogin';
+  import DefaultView from './views/DefaultView';
 
   export default {
     components: {
       AppLogin,
-      AppMenu,
-      AppHeader,
-      AppFooter,
-      Vuedal,
+      DefaultView,
     },
     data() {
       return {
         dataIsLoaded: false,
         menuItems: [],
+        currentView: 'AppLogin',
       };
     },
     methods: {
-      fetchData() {
-        if (this.$route.name === 'Login') return;
-        AxiosClient.get('/cucumber/suits/', { headers: { authorization: `${this.getToken}` } })
-          .then((response) => {
-            this.$store.commit('setSuits', { data: response.data });
-            this.dataIsLoaded = true;
-          })
-          .catch((err) => {
-            console.warn(err);
-          });
+      viewSelector() {
+        return this.isAuth ? 'DefaultView' : 'AppLogin';
       },
     },
     computed: {
       ...mapGetters(['isAuth', 'getToken']),
     },
     mounted() {
-      if (this.isAuth) {
-        this.fetchData();
-      }
+    },
+    update() {
     },
     beforeUpdate() {
-      if (this.isAuth && !this.dataIsLoaded) {
-        this.fetchData();
-      }
     },
     name: 'app',
   };

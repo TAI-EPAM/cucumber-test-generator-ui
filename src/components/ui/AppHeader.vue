@@ -4,23 +4,26 @@
       <nav>
         <div class="uui-responsive-header">
           <div class="responsive-header">
-            <a href="#" class="responsive-brand-logo">
+            <router-link to="/" class="responsive-brand-logo">
               <span class="title">BDD Generator</span>
-            </a>
+            </router-link>
           </div>
         </div>
-        <div class="uui-toggle-box">
+        <!--div class="uui-toggle-box">
           <span></span>
           <span></span>
           <span></span>
-        </div>
-        <a href="#" class="brand-logo">
+        </div-->
+        <router-link to="/" class="brand-logo">
           BDD Generator
-        </a>
+        </router-link>
       </nav>
-      <v-button markup="blue">edit step suggestions</v-button>
-      <div class="user-info">
-        <a @click="logout" v-if="isAuth">Logout</a>
+      <div class="uui-header-right">
+        <project-selector v-if="isAuth" />
+        <v-button markup="blue">edit step suggestions</v-button>
+        <div class="user-info">
+          <a @click="logout" v-if="isAuth">Logout</a>
+        </div>
       </div>
     </div>
   </header>
@@ -29,11 +32,12 @@
 <script>
   import { mapGetters } from 'vuex';
   import VButton from './EpamButton';
-  
-  
+  import ProjectSelector from './ProjectSelector';
+
   export default {
     components: {
       VButton,
+      ProjectSelector,
     },
 
     computed: {
@@ -54,6 +58,7 @@
 </script>
 
 <style lang="less" scoped>
+
   header button {
     float: right;
     margin: 12px 12px 0 0;
@@ -67,6 +72,13 @@
       display: inline-block;
       margin: 20px 0 0 0;
     }
+  }
+  header .uui-header-right {
+    float: right;
+  }
+
+  header nav {
+    width: 200px;
   }
 
 </style>

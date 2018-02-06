@@ -7,20 +7,26 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     debug: false,
+    projects: [],
     suits: [],
-    tags: null,
+    tags: [],
     auth: {
       isAuth: Vue.ls.get('isAuth', false),
       token: Vue.ls.get('token', null),
       user: null,
     },
+    ui: {
+      menuIsOpen: false,
+      suitsLoad: false,
+    },
+    activeProject: null,
   },
 
   getters: {
-    getSuits: state => state.suits,
+    getSuits: state => state.activeProject.suits,
     getSuit: state => (suitId) => {
       if (suitId) {
-        return state.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
+        return state.activeProject.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
       }
       return false;
     },
@@ -31,6 +37,15 @@ const store = new Vuex.Store({
     isAuth: state => state.auth.isAuth,
     getToken: (state, getters) => getters.isAuth && state.auth.token,
     getTags: state => state.tags,
+    getProjects: state => state.projects,
+    getProject: state => (entityId) => {
+      if (entityId) {
+        return state.projects.filter(entity => entity.id === parseInt(entityId, 0))[0];
+      }
+      return false;
+    },
+    getUI: state => state.ui,
+    getActiveProject: state => state.activeProject,
   },
 
   mutations: {
@@ -65,7 +80,7 @@ const store = new Vuex.Store({
 
     addSuit(state, payload) {
       const st = state;
-      st.suits.push(payload);
+      st.activeProject.suits.push(payload);
     },
     updateSuit(state, payload) {
       const target = state.suits.filter(suit =>
@@ -79,7 +94,9 @@ const store = new Vuex.Store({
     },
     //* *************CASES******************** */
     addCase(state, payload) {
-      const suitItem = state.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+      const suitItem = state.activeProject.suits.filter(
+        suit => suit.id === parseInt(payload.suitId, 0))[0];
+      // Refactor this through object assign!!!
       if (suitItem.cases) {
         suitItem.cases.push(payload.data);
       } else {
@@ -99,17 +116,30 @@ const store = new Vuex.Store({
     //* **************TAGS******************** */
     createTags(state) {
       const tagsSet = new Set();
-      state.suits.forEach((suit) => {
+      const st = state;
+      state.activeProject.suits.forEach((suit) => {
         if (suit.tags) {
           suit.tags.forEach((tag) => {
             tagsSet.add(tag);
           });
         }
       });
-      const st = state;
       st.tags = Array.from(tagsSet);
     },
-
+    //* ************ PROJECTS ********** */
+    setProjects(state, payload) {
+      const st = state;
+      st.projects = payload.data;
+    },
+    setActiveProject(state, payload) {
+      const st = state;
+      st.activeProject = payload.data;
+    },
+    //* ****** UI ****** */
+    setMenuIsOpen(state, v) {
+      const st = state;
+      st.ui.menuIsOpen = v;
+    },
   },
 
   actions: {

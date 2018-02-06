@@ -39,6 +39,8 @@
                 {
                   path: this.$route.query.redirect,
                 });
+            } else {
+              this.$router.push({ name: 'Dashboard' });
             }
           })
           .catch((err) => {

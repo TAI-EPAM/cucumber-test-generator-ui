@@ -3,11 +3,11 @@
   <div class="uui-side-bar">
     <ul class="sidebar-menu">
       <li v-for="suit in items" class="sub-menu">
-        <a href="#">
+        <a>
           <div class="fa fa-angle-down arrow" />
           <span>{{suit.name}}</span>
         </a>
-        <ul class="sub">
+        <ul class="sub" style="display: block">
           <li v-for="item in suit.cases">
             <router-link :to="{ name: 'caseView', params: { suitId: suit.id, caseId: item.id }}">
               <input type="checkbox" />
@@ -36,8 +36,8 @@
   import CaseAdd from '../case/CaseAdd';
   import Confirmation from '../Confimation';
   import AxiosClient from '../../utils/httpClient';
-  import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
-  
+  // import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
+
   export default {
     components: {
       EpamButton,
@@ -130,13 +130,14 @@
       },
     },
     mounted() {
-      UUI.Sidebar.init({ open: false });
+      // UUI.Sidebar.init({ open: false });
     },
     computed: {
       ...mapGetters(
         {
           items: 'getSuits',
           getSuit: 'getSuit',
+          activeProject: 'getActiveProject',
         },
       ),
     },
@@ -144,11 +145,13 @@
 </script>
 
 <style scoped>
-  aside .uui-side-bar {
+  .uui-side-bar {
+    top: 0;
     width: 340px;
+    display: block;
   }
 
-  aside .uui-side-bar ul > li.sub-menu .sub > li > a span {
+  .uui-side-bar ul > li.sub-menu .sub > li > a span {
     padding-left: 10px;
   }
 

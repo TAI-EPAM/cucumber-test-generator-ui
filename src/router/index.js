@@ -4,6 +4,7 @@ import SuitsView from '@/views/SuitsView';
 import CaseView from '@/views/CaseView';
 import DashboardView from '@/views/DashboardView';
 import StepsSuggestions from '@/components/StepSuggestions';
+import ProjectView from '@/views/ProjectView';
 
 Vue.use(Router);
 
@@ -13,35 +14,30 @@ const router = new Router({
       path: '/',
       name: 'Dashboard',
       component: DashboardView,
+      meta: { requiresAuth: true },
     },
     {
-      path: '/suits/',
+      path: '/projects/:projectId',
+      name: 'Project',
+      component: ProjectView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/projects/:projectId/suits/:suitId',
       name: 'suitView',
       component: SuitsView,
       meta: { requiresAuth: true },
     },
     {
-      path: '/suits/:suitId',
-      name: 'suitEdit',
-      component: SuitsView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/suits/add',
-      name: 'suitAdd',
-      component: SuitsView,
+      path: '/projects/:projectId/suits/:suitId/case/:caseId',
+      name: 'caseView',
+      component: CaseView,
       meta: { requiresAuth: true },
     },
     {
       path: '/steps',
       name: 'steps',
       component: StepsSuggestions,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/suits/:suitId/case/:caseId',
-      name: 'caseView',
-      component: CaseView,
       meta: { requiresAuth: true },
     },
     {

@@ -20,6 +20,7 @@
     methods: {
     },
     mounted() {
+      this.$store.commit('setMenuIsOpen', false);
     },
     updated() {
     },

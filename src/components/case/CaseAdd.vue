@@ -65,7 +65,8 @@
       },
       sendData() {
         const sendData = Object.assign({}, this.entity);
-        AxiosClient.post(`/cucumber/suits/${this.suitId}/cases/`, sendData)
+        const projectId = this.$route.params.projectId;
+        AxiosClient.post(`/cucumber/projects/${projectId}/suits/${this.suitId}/cases/`, sendData)
           .then((response) => {
             sendData.id = response.data;
             this.$store.commit('addCase', { suitId: this.suitId, data: sendData });

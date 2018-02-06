@@ -46,8 +46,9 @@
     methods: {
       save() {
         const sendData = Object.assign({}, this.entity);
+        const projectId = this.$route.params.projectId;
         sendData.action = 'CREATE';
-        AxiosClient.put(`/cucumber/suits/${this.suitId}/cases/${this.entity.id}`, sendData)
+        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${this.suitId}/cases/${this.entity.id}`, sendData)
           .then(() => {
             if (this.onSubmit) {
               this.onSubmit(sendData, this.suitId, this.entity.id);
