@@ -3,7 +3,7 @@
     <div v-if="$route.params.caseId">
       <case :local-case="localCase"/>
       <keep-alive v-if="localCase">
-          <case-history :case-name="localCase.name" :commits="commits.filter(el => !isCreatedCommit(el))"/>
+          <case-history :case-name="localCase.name" :commits="commits"/>
       </keep-alive>
     </div>
     <div v-else>
@@ -30,43 +30,11 @@
       };
     },
     methods: {
-      parseAttributesFromStr(str) {
-        if (!str) {
-          return {
-            id: '',
-            rowNumber: '',
-            description: '',
-            type: '',
-          };
-        }
-        const result = str.match(/=(.*?)[,}]/ig).map(el => el.slice(1, -1)) || [];
-        return {
-          id: +result[0],
-          rowNumber: +result[1],
-          description: result[2],
-          type: result[3],
-        };
-      },
-      convertSteps(commit) {
-        const c = commit;
-        c.propertyDifferences = c.propertyDifferences.map((item) => {
-          if (item.propertyName === 'steps') {
-            const i = item;
-            i.oldValue = this.parseAttributesFromStr(item.oldValue);
-            i.newValue = this.parseAttributesFromStr(item.newValue);
-            return i;
-          }
-          return item;
-        });
-        return c;
-      },
-      getCaseFromStore(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
+      getData(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
+        this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId });
         this.localCase = this.getCase(suitId, caseId);
-      },
-      fetchCommits(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId })
-          .then(resp => resp.data.map(commit => this.convertSteps(commit)))
-          .then((res) => { this.commits = res; });
+        console.log(this.getCurrentCommits);
+        this.commits = this.getCurrentCommits;
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
@@ -82,20 +50,19 @@
       },
     },
     mounted() {
+      console.log(this.$store.getters);
       if (this.$route.params.suitId && this.$route.params.caseId) {
-        this.getCaseFromStore();
-        this.fetchCommits();
+        this.getData();
       }
     },
     computed: {
-      ...mapGetters(['isAuth', 'getToken', 'getCase']),
+      ...mapGetters(['isAuth', 'getToken', 'getCase', 'getCurrentCommits']),
     },
     watch: {
       // eslint-disable-next-line object-shorthand
       '$route'(n) {
         if (n.params.suitId && n.params.caseId) {
-          this.getCaseFromStore(n.params.suitId, n.params.caseId);
-          this.fetchCommits(n.params.suitId, n.params.caseId);
+          this.getData(n.params.suitId, n.params.caseId);
         }
       },
     },

@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import PROJECT_ID from '@/utils/projectID';
 import AxiosClient from '@/utils/httpClient';
 import router from './router/index';
-
+import convertSteps from './convert';
 
 // Vue.use(VueLocalStorage);
 Vue.use(Vuex);
@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     debug: false,
     projects: [],
     suits: [],
+    currentCommits: [],
     tags: [],
     auth: {
       isAuth: Vue.ls.get('isAuth', false),
@@ -42,6 +43,7 @@ const store = new Vuex.Store({
       }
       return false;
     },
+    getCurrentCommits: state => state.currentCommits,
     isAuth: state => state.auth.isAuth,
     isLoaded: state => state.dataIsLoaded,
     getToken: (state, getters) => getters.isAuth && state.auth.token,
@@ -116,7 +118,6 @@ const store = new Vuex.Store({
         suitItem.cases = [payload.data];
       }
     },
-
     updateCase(state, { suitId, caseId, updateData }) {
       const targetSuit = state.suits.filter(suit => +suit.id === +suitId)[0];
       console.log(targetSuit);
@@ -126,6 +127,12 @@ const store = new Vuex.Store({
     removeCase(state, payload) {
       const suitItem = state.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
       suitItem.cases = suitItem.cases.filter(item => item.id !== payload.caseId);
+    },
+    //* **************HISTORY********************/
+    setHistory(state, data) {
+      console.log('COMMIT');
+      const st = state;
+      st.currentCommits = data;
     },
     //* **************TAGS******************** */
     createTags(state) {
@@ -231,8 +238,13 @@ const store = new Vuex.Store({
       });
     },
     //* *************HISTORY******************** */
-    getCaseHistoryAsync({ state }, payload) {
-      return AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}/cases/${payload.caseId}/versions`, { headers: { authorization: state.auth.token } })
+    getCaseHistoryAsync({ state, commit }, { suitId, caseId }) {
+      console.log('getCaseHistoryAsync');
+      AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
+            .then(resp => resp.data.map(item => convertSteps(item)))
+            .then((data) => {
+              commit('setHistory', data);
+            })
             .catch((err) => { console.warn(err); });
     },
     //* *************CASES******************** */
