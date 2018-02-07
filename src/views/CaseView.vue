@@ -8,7 +8,7 @@
       <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
       <keep-alive v-if="localCase">
-          <case-history :case-name="localCase.name" :commits="this.getCurrentCommits"/>
+          <case-history :case-name="localCase.name" :commits="this.getCommits"/>
       </keep-alive>
     </div>
     <div v-else>
@@ -45,6 +45,7 @@
           component: CaseEdit,
           props: {
             value: this.localCase,
+            projectId: this.$route.params.projectId,
             suitId: this.$route.params.suitId,
             onCancel() {
               this.$vuedals.close();
@@ -66,17 +67,19 @@
               this.$vuedals.close();
             },
             onSubmit() {
-              this.$store.dispatch('deleteCaseAsync', { suitId: this.$route.params.suitId, caseId: vm.localCase.id })
+              this.$store.dispatch('deleteCaseAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, caseId: vm.localCase.id })
                .then(() => {
-                 this.$router.push({ path: '/suits/' });
+                 this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
                  this.$vuedals.close();
                });
             },
           },
         });
       },
-      getData(suitId = this.$route.params.suitId, caseId = this.$route.params.caseId) {
-        this.$store.dispatch('getCaseHistoryAsync', { suitId, caseId })
+      getData(projectId = this.$route.params.projectId,
+        suitId = this.$route.params.suitId,
+        caseId = this.$route.params.caseId) {
+        this.$store.dispatch('getCaseHistoryAsync', { projectId, suitId, caseId })
           .then(() => {
             this.localCase = this.getCase(suitId, caseId);
           });
@@ -95,18 +98,25 @@
       },
     },
     mounted() {
-      if (this.$route.params.suitId && this.$route.params.caseId) {
+      if (this.$route.params.projectId &&
+           this.$route.params.suitId &&
+           this.$route.params.caseId) {
         this.getData();
       }
     },
     computed: {
-      ...mapGetters(['isAuth', 'getToken', 'getCase', 'getCurrentCommits']),
+      ...mapGetters({
+        isAuth: 'isAuth',
+        getToken: 'getToken',
+        getCase: 'getActiveCaseById',
+        getCommits: 'getCurrentCommits',
+      }),
     },
     watch: {
       // eslint-disable-next-line object-shorthand
       '$route'(n) {
-        if (n.params.suitId && n.params.caseId) {
-          this.getData(n.params.suitId, n.params.caseId);
+        if (n.params.projectId && n.params.suitId && n.params.caseId) {
+          this.getData(n.params.projectId, n.params.suitId, n.params.caseId);
         }
       },
     },

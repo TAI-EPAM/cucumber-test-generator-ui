@@ -67,7 +67,7 @@
         }
       },
       sendData() {
-        this.$store.dispatch('addCaseAsync', { suitId: this.suitId, data: this.entity })
+        this.$store.dispatch('addCaseAsync', { projectId: this.projectId, suitId: this.suitId, data: this.entity })
         .then(() => {
           this.resetData();
         });
@@ -76,11 +76,7 @@
     mounted() {
     },
     name: 'CaseAdd',
-    props: {
-      onCancel: Function,
-      onSubmit: Function,
-      suitId: Number,
-    },
+    props: ['projectId', 'suitId', 'onCancel', 'onSubmit'],
   };
 </script>
 

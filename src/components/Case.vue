@@ -26,6 +26,7 @@ Choose case
 
 <script>
   import CaseSteps from './CaseSteps';
+  
   export default {
     components: {
       CaseSteps,

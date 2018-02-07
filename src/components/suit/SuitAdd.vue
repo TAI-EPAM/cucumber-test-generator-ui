@@ -63,17 +63,17 @@
         }
       },
       sendData() {
-        const sendData = Object.assign({}, this.entity);
+        const data = Object.assign({}, this.entity);
         const projectId = this.$route.params.projectId;
-        sendData.rowNumber = this.getCountSuits + 1;
-        this.$store.dispatch('addSuitAsync', sendData)
+        data.rowNumber = this.getCountSuits + 1;
+        this.$store.dispatch('addSuitAsync', { projectId, data })
         .then(() => { this.resetData(); });
       },
     },
     mounted() {
     },
     computed: {
-      ...mapGetters(['getCountSuits']),
+      ...mapGetters({ getCountSuits: 'getCountActiveSuits' }),
     },
     name: 'suitAdd',
     props: {

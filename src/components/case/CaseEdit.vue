@@ -47,9 +47,9 @@
         const sendData = {};
         Object.assign(sendData, this.entity);
         sendData.action = 'CREATE';
-        this.$store.dispatch('updateCaseAsync', { suitId: this.suitId, caseId: this.entity.id, updateData: sendData })
+        this.$store.dispatch('updateCaseAsync', { projectId: this.projectId, suitId: this.suitId, caseId: this.entity.id, updateData: sendData })
           .then(() => {
-            this.$store.dispatch('getCaseHistoryAsync', { suitId: this.suitId, caseId: this.entity.id });
+            this.$store.dispatch('getCaseHistoryAsync', { projectId: this.projectId, suitId: this.suitId, caseId: this.entity.id });
           })
           .then(() => {
             if (this.onSubmit) {
@@ -70,7 +70,7 @@
     },
     watch: {
     },
-    props: ['value', 'suitId', 'onCancel', 'onSubmit'],
+    props: ['value', 'projectId', 'suitId', 'onCancel', 'onSubmit'],
     name: 'caseEdit',
   };
 </script>

@@ -63,6 +63,7 @@
               this.$vuedals.close();
             },
             suitId,
+            projectId: this.$route.params.projectId,
           },
         });
       },
@@ -115,8 +116,13 @@
               this.$vuedals.close();
             },
             onSubmit() {
-              this.$store.dispatch('deleteSuitAsync', suitId)
-                .then(() => { this.$vuedals.close(); });
+              this.$store.dispatch('deleteSuitAsync', { projectId: this.$route.params.projectId, suitId })
+                .then(() => {
+                  if (suitId === +this.$route.params.suitId) {
+                    this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
+                  }
+                  this.$vuedals.close();
+                });
             },
           },
         });
@@ -128,8 +134,8 @@
     computed: {
       ...mapGetters(
         {
-          items: 'getSuits',
-          getSuit: 'getSuit',
+          items: 'getActiveSuits',
+          getSuit: 'getActiveSuitById',
           activeProject: 'getActiveProject',
         },
       ),

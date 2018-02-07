@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import PROJECT_ID from '@/utils/projectID';
 import AxiosClient from '@/utils/httpClient';
 import router from './router/index';
 import convertSteps from './convert';
@@ -12,7 +11,6 @@ const store = new Vuex.Store({
   state: {
     debug: false,
     projects: [],
-    suits: [],
     currentCommits: [],
     tags: [],
     auth: {
@@ -28,28 +26,12 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    getSuits: state => state.suits,
-    getCountSuits: state => state.suits.length,
-    getSuit: state => (suitId) => {
-      if (suitId) {
-        return state.activeProject.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
-      }
-      return false;
-    },
-    getCase: (state, getters) => (suitId, caseId) => {
-      const suit = getters.getSuit(suitId);
-      if (suit) {
-        return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
-      }
-      return false;
-    },
-    getCurrentCommits: state => state.currentCommits,
     isAuth: state => state.auth.isAuth,
     isLoaded: state => state.dataIsLoaded,
     getToken: (state, getters) => getters.isAuth && state.auth.token,
     getTags: state => state.tags,
     getProjects: state => state.projects,
-    getProject: state => (entityId) => {
+    getProjectById: state => (entityId) => {
       if (entityId) {
         return state.projects.filter(entity => entity.id === parseInt(entityId, 0))[0];
       }
@@ -57,6 +39,22 @@ const store = new Vuex.Store({
     },
     getUI: state => state.ui,
     getActiveProject: state => state.activeProject,
+    getActiveSuits: state => state.activeProject.suits,
+    getCountActiveSuits: state => state.activeProject.suits.length,
+    getActiveSuitById: state => (suitId) => {
+      if (suitId) {
+        return state.activeProject.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
+      }
+      return false;
+    },
+    getActiveCaseById: (state, getters) => (suitId, caseId) => {
+      const suit = getters.getActiveSuitById(suitId);
+      if (suit) {
+        return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
+      }
+      return false;
+    },
+    getCurrentCommits: state => state.currentCommits,
   },
 
   mutations: {
@@ -77,10 +75,19 @@ const store = new Vuex.Store({
       st.auth.token = payload.token;
       st.auth.isAuth = true;
     },
+    //* ************ PROJECTS ********** */
+    setProjects(state, { data }) {
+      const st = state;
+      st.projects = data;
+    },
+    setActiveProject(state, payload) {
+      const st = state;
+      st.activeProject = payload.data;
+    },
     //* ************SUITS***********************/
     setSuits(state, payload) {
       const st = state;
-      st.suits = payload.data;
+      st.activeProject.suits = payload.data;
 
       const tagsSet = new Set();
       state.suits.forEach((suit) => {
@@ -92,25 +99,24 @@ const store = new Vuex.Store({
       });
       st.tags = Array.from(tagsSet);
     },
-
     addSuit(state, payload) {
       const st = state;
       st.activeProject.suits.push(payload);
     },
     updateSuit(state, payload) {
-      const target = state.suits.filter(suit =>
+      const target = state.activeProject.suits.filter(suit =>
         suit.id === payload.id)[0];
       Object.assign(target, payload);
     },
     removeSuit(state, payload) {
       const st = state;
-      st.suits = state.suits.filter(suit => suit.id !== payload.suitId);
+      st.activeProject.suits = state.activeProject.suits.filter(suit => suit.id !== payload.suitId);
     },
     //* *************CASES******************** */
     addCase(state, payload) {
       const suitItem = state.activeProject.suits.filter(
         suit => suit.id === parseInt(payload.suitId, 0))[0];
-      // Refactor this through object assign!!!
+       // Refactor this through object assign!!!
       if (suitItem.cases) {
         suitItem.cases.push(payload.data);
       } else {
@@ -118,12 +124,13 @@ const store = new Vuex.Store({
       }
     },
     updateCase(state, { suitId, caseId, updateData }) {
-      const targetSuit = state.suits.filter(suit => +suit.id === +suitId)[0];
+      const targetSuit = state.activeProject.suits.filter(suit => +suit.id === +suitId)[0];
       const targetCase = targetSuit.cases.filter(item => +item.id === +caseId)[0];
       Object.assign(targetCase, updateData);
     },
     removeCase(state, payload) {
-      const suitItem = state.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+      const suitItem = state.activeProject
+        .suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
       suitItem.cases = suitItem.cases.filter(item => item.id !== payload.caseId);
     },
     //* **************HISTORY********************/
@@ -143,15 +150,6 @@ const store = new Vuex.Store({
         }
       });
       st.tags = Array.from(tagsSet);
-    },
-    //* ************ PROJECTS ********** */
-    setProjects(state, payload) {
-      const st = state;
-      st.projects = payload.data;
-    },
-    setActiveProject(state, payload) {
-      const st = state;
-      st.activeProject = payload.data;
     },
     //* ****** UI ****** */
     setMenuIsOpen(state, v) {
@@ -177,108 +175,120 @@ const store = new Vuex.Store({
               });
           }
         })
-        .catch((err) => {
-          console.warn(err);
-        });
+        .catch(() => { });
+    },
+    //* *************PROJECTS*******************/
+    getProjectsAsync({ commit }) {
+      return new Promise((resolve) => {
+        AxiosClient.get('/cucumber/projects')
+          .then((response) => {
+            commit('setProjects', { data: response.data });
+            resolve();
+          })
+          .catch(() => { });
+      });
+    },
+    getProjectByIdAsync({ commit }, projectId) {
+      return new Promise((resolve) => {
+        AxiosClient.get(`/cucumber/projects/${projectId}`)
+          .then((response) => {
+            this.entity = response.data;
+            commit('setActiveProject', { data: response.data });
+            resolve();
+          })
+          .catch(() => { });
+      });
     },
     //* ************SUITS***********************/
-    getSuitsAsync({ commit, state }) {
+    getSuitsAsync({ commit, state }, { projectId }) {
       if (router.history.current.name === 'Login') return;
-      AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/`, { headers: { authorization: state.auth.token } })
+      AxiosClient.get(`/cucumber/projects/${projectId}/suits/`, { headers: { authorization: state.auth.token } })
         .then((response) => {
           commit('setSuits', { data: response.data });
         })
         .then(() => {
           commit('changeLoadingStatus', { isLoad: true });
         })
-        .catch((err) => {
-          console.warn(err);
-        });
+        .catch(() => { });
     },
-    addSuitAsync({ commit }, data) {
+    addSuitAsync({ commit }, { projectId, data }) {
       return new Promise((resolve) => {
-        AxiosClient.post(`/cucumber/projects/${PROJECT_ID}/suits/`, data)
+        AxiosClient.post(`/cucumber/projects/${projectId}/suits/`, data)
           .then((response) => {
             const sendData = data;
             sendData.id = response.data;
             commit('addSuit', sendData);
             resolve();
           })
-          .catch((err) => {
-            console.warn(err);
-          });
+          .catch(() => { });
       });
     },
-    deleteSuitAsync({ commit }, id) {
+    deleteSuitAsync({ commit }, { suitId, projectId }) {
       return new Promise((resolve) => {
-        AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${id}`)
+        AxiosClient.delete(`/cucumber/projects/${projectId}/suits/${suitId}`)
           .then(() => {
-            commit('removeSuit', { suitId: id });
+            commit('removeSuit', { suitId });
             resolve();
           })
-          .catch((err) => {
-            console.warn(err);
-          });
+          .catch(() => { });
       });
     },
-    editSuitAsync({ commit }, data) {
+    editSuitAsync({ commit }, { projectId, data }) {
       return new Promise((resolve) => {
-        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${data.id}`, data.updateData)
+        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${data.id}`, data.updateData)
           .then(() => {
             commit('updateSuit', data.updateData);
             resolve();
           })
-          .catch((err) => {
-            console.warn(err);
-          });
+          .catch(() => { });
       });
     },
     //* *************HISTORY******************** */
-    getCaseHistoryAsync({ state, commit }, { suitId, caseId }) {
+    getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
       return new Promise((resolve) => {
-        AxiosClient.get(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
+        AxiosClient.get(`/cucumber/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
           .then(resp => resp.data.map(item => convertSteps(item)))
           .then((data) => {
             commit('setHistory', data);
             resolve();
           })
-          .catch((err) => { console.warn(err); });
+          .catch(() => { });
       });
     },
     //* *************CASES******************** */
-    addCaseAsync({ commit }, payload) {
-      const sendData = Object.assign({}, payload.data);
+    addCaseAsync({ commit }, { projectId, suitId, data }) {
+      const sendData = Object.assign({}, data);
       return new Promise((resolve) => {
-        AxiosClient.post(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}/cases/`, payload.data)
+        AxiosClient.post(`/cucumber/projects/${projectId}/suits/${suitId}/cases/`, data)
           .then((response) => {
             sendData.id = response.data;
-            commit('addCase', { suitId: payload.suitId, data: sendData });
+            commit('addCase', { suitId, data: sendData });
             resolve();
           })
-          .catch((err) => { console.warn(err); });
+          .catch(() => { });
       });
     },
-    updateCaseAsync({ commit }, { suitId, caseId, updateData }) {
+    updateCaseAsync({ commit }, { projectId, suitId, caseId, updateData }) {
       const sendData = Object.assign({}, updateData);
       return new Promise((resolve) => {
-        AxiosClient.put(`/cucumber/projects/${PROJECT_ID}/suits/${suitId}/cases/${caseId}`, sendData)
+        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${suitId}/cases/${caseId}`, sendData)
           .then(() => {
             commit('updateCase', { suitId, caseId, updateData: sendData });
             resolve();
           })
-          .catch((err) => { console.warn(err); });
+          .catch(() => { });
       });
     },
-    deleteCaseAsync({ commit }, payload) {
+    deleteCaseAsync({ commit }, { projectId, suitId, caseId }) {
       return new Promise((resolve) => {
-        AxiosClient.delete(`/cucumber/projects/${PROJECT_ID}/suits/${payload.suitId}
-              /cases/${payload.caseId}`)
+        AxiosClient.delete(`/cucumber/projects/${projectId}/suits/${suitId}
+              /cases/${caseId}`)
           .then(() => {
-            commit('removeCase', { suitId: payload.suitId, caseId: payload.caseId });
+            commit('removeCase', { suitId, caseId });
             commit('setHistory', []);
             resolve();
           })
-          .catch((err) => { console.warn(err); });
+          .catch(() => { });
       });
     },
   },
