@@ -8,7 +8,7 @@
       <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
       <keep-alive v-if="localCase">
-          <case-history :case-name="localCase.name" :commits="this.getCommits"/>
+          <case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/>
       </keep-alive>
     </div>
     <div v-else>
