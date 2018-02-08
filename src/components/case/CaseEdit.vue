@@ -1,8 +1,16 @@
 <template>
   <section class="entity-add" v-if="entity">
     <div class="uui-form-wrapper">
-      <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Case Description" />
-      <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Case Tags" />
+     <input type="text" v-model="entity.name"
+          class="uui-form-element large"
+          placeholder="Case Name"
+          @input="$v.entity.name.$touch()"
+          :class="{ 'error': $v.entity.name.$error }"/>
+      <input type="text" v-model="entity.description"
+           class="uui-form-element large"
+           placeholder="Case Description"
+           @input="$v.entity.description.$touch()"
+           :class="{ 'error': $v.entity.description.$error }"/>
       <tags-component v-model="entity.tags"></tags-component>
       <div class="priority-component">
         <div class="title">Priority:</div>
@@ -13,7 +21,10 @@
     </div>
     <div class="form-buttons-holder">
       <epam-button @click="reset" class="large">Cancel</epam-button>
-      <epam-button @click="save" class="lime-green large">Save</epam-button>
+      <epam-button @click="save" 
+        class="uui-button large"
+        :class="buttonClass"
+        v-bind:disabled="$v.entity.$invalid">Update case</epam-button>
     </div>
   </section>
 </template>
@@ -22,6 +33,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
+  import mapValidations from '../../validator';
 
   export default {
     components: {
@@ -42,6 +54,7 @@
         origin: this.value,
       };
     },
+    ...mapValidations(),
     methods: {
       save() {
         const sendData = {};
@@ -69,6 +82,14 @@
     update() {
     },
     watch: {
+    },
+    computed: {
+      buttonClass() {
+        return {
+          disable: this.$v.entity.$invalid,
+          'lime-green': !this.$v.entity.$invalid,
+        };
+      },
     },
     props: ['value', 'projectId', 'suitId', 'onCancel', 'onSubmit'],
     name: 'caseEdit',
