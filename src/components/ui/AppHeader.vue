@@ -20,7 +20,12 @@
       </nav>
       <div class="uui-header-right">
         <project-selector v-if="isAuth" />
-        <v-button markup="blue">edit step suggestions</v-button>
+        <curtain
+          buttonClass="blue"
+          buttonText="edit step suggestions"
+          headerText="edit step suggestions"
+          :component="certainComponent">
+        </curtain>
         <div class="user-info">
           <a @click="logout" v-if="isAuth">Logout</a>
         </div>
@@ -33,15 +38,31 @@
   import { mapGetters } from 'vuex';
   import VButton from './EpamButton';
   import ProjectSelector from './ProjectSelector';
+  import Curtain from './Curtain';
+  import StepSuggestions from '../StepSuggestions';
 
   export default {
     components: {
       VButton,
       ProjectSelector,
+      Curtain,
+      StepSuggestions,
+    },
+
+    data() {
+      return {
+        certainComponent: {
+          component: StepSuggestions,
+          props: [],
+        },
+      };
     },
 
     computed: {
       ...mapGetters(['isAuth']),
+    },
+
+    mounted() {
     },
 
     methods: {
@@ -79,6 +100,14 @@
 
   header nav {
     width: 200px;
+  }
+</style>
+
+<style lang="less">
+
+  header .curtain-component {
+    float: right;
+    margin-top: 12px;
   }
 
 </style>

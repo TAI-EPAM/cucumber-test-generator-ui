@@ -8,7 +8,14 @@
       <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
       <keep-alive v-if="localCase">
-          <case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/>
+          <!--case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/-->
+          <curtain
+            buttonClass="case-history-button orange"
+            buttonText="Show history"
+            headerText="HISTORY"
+            headerMarkup="orange"
+            :component="getCertainComponent()">
+          ></curtain>
       </keep-alive>
     </div>
     <div v-else>
@@ -25,6 +32,7 @@
   import Confirmation from '@/components/Confimation';
   import EpamButton from '@/components/ui/EpamButton';
   import CaseEdit from '@/components/case/CaseEdit';
+  import Curtain from '@/components/ui/Curtain';
 
   export default {
     components: {
@@ -32,6 +40,7 @@
       CaseHistory,
       EpamButton,
       CaseEdit,
+      Curtain,
     },
     data() {
       return {
@@ -96,6 +105,15 @@
         }
         return true;
       },
+      getCertainComponent() {
+        return {
+          component: CaseHistory,
+          props: [
+            { caseName: this.localCase.name },
+            { commits: this.getCommits.filter(el => !this.isCreatedCommit(el)) },
+          ],
+        };
+      },
     },
     mounted() {
       if (this.$route.params.projectId &&
@@ -128,4 +146,14 @@
   .case-view {
 
   }
+</style>
+
+<style lang="less">
+  .case-history-button {
+    position: fixed;
+    top: 200px;
+    right: -45px;
+    transform: rotate(-90deg);
+  }
+
 </style>
