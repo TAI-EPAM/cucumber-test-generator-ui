@@ -60,7 +60,8 @@
         const sendData = {};
         Object.assign(sendData, this.entity);
         delete sendData.cases;
-        this.$store.dispatch('editSuitAsync', this.entity)
+        console.log(this.entity);
+        this.$store.dispatch('editSuitAsync', { projectId: this.projectId, suitId: this.entity.id, updateData: sendData })
           .then(() => {
             if (this.onSubmit) {
               this.onSubmit();
@@ -75,7 +76,7 @@
       },
     },
     mounted() {
-      console.log(this.$v);
+      console.log(this.entity);
     },
     update() {
     },
@@ -92,7 +93,7 @@
         };
       },
     },
-    props: ['value', 'onCancel', 'onSubmit'],
+    props: ['projectId', 'value', 'onCancel', 'onSubmit'],
     name: 'SuitEdit',
   };
 </script>
