@@ -31,10 +31,10 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { required, maxLength } from 'vuelidate/lib/validators';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
+  import mapValidations from '../../validator';
 
   export default {
     components: {
@@ -61,20 +61,7 @@
         ],
       };
     },
-    validations: {
-      entity: {
-        name: {
-          required,
-          maxLength: maxLength(250),
-        },
-        description: {
-          maxLength: maxLength(250),
-        },
-        priority: {
-          required,
-        },
-      },
-    },
+    ...mapValidations(),
     methods: {
       resetData() {
         Object.assign(this.entity, {
