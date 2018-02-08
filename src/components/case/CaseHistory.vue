@@ -4,6 +4,9 @@
       <case-commit-item  :caseName="caseName" :commit="item"/>
     </div>
   </div>
+  <div v-else >
+    <p class="no-commits-message">No commits yet</p>
+  </div>
 </template>
 
 
