@@ -21,7 +21,6 @@
 <script>
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
-  import AxiosClient from '../../utils/httpClient';
   import TagsComponent from '../ui/TagsInput';
 
   export default {
@@ -56,37 +55,28 @@
           description: null,
           name: null,
           priority: 1,
+          steps: [],
           tags: [],
           status: 'NOT_DONE',
         });
         if (this.onCancel) {
           this.onCancel();
         }
+        if (this.onSubmit) {
+          this.onSubmit();
+        }
       },
       sendData() {
-        const sendData = Object.assign({}, this.entity);
-        const projectId = this.$route.params.projectId;
-        AxiosClient.post(`/cucumber/projects/${projectId}/suits/${this.suitId}/cases/`, sendData)
-          .then((response) => {
-            sendData.id = response.data;
-            this.$store.commit('addCase', { suitId: this.suitId, data: sendData });
-            this.resetData();
-            if (this.onSubmit) {
-              this.onSubmit(sendData);
-            }
-          })
-          .catch(() => {
-          });
+        this.$store.dispatch('addCaseAsync', { projectId: this.projectId, suitId: this.suitId, data: this.entity })
+        .then(() => {
+          this.resetData();
+        });
       },
     },
     mounted() {
     },
     name: 'CaseAdd',
-    props: {
-      onCancel: Function,
-      onSubmit: Function,
-      suitId: Number,
-    },
+    props: ['projectId', 'suitId', 'onCancel', 'onSubmit'],
   };
 </script>
 

@@ -1,51 +1,50 @@
 <template>
-  <section class="project-view" v-if="entity">
-    <h2>{{entity.name}}</h2>
-    <p><span>active: {{entity.active}}</span></p>
-    <p>{{entity.description}}</p>
+  <section class="project-view" v-if="localProject">
+    <h2>{{localProject.name}}</h2>
+    <p><span>active: {{localProject.active}}</span></p>
+    <p>{{localProject.description}}</p>
   </section>
 </template>
 
 <script>
-  import AxiosClient from '../utils/httpClient';
+  import { mapGetters } from 'vuex';
 
   export default {
     components: {
     },
     data() {
       return {
-        entity: null,
+        localProject: null,
       };
     },
-    beforeRouteEnter(to, from, next) {
-      next((vm) => {
-        vm.getProjectById(to.params.projectId);
-      });
-    },
-    beforeRouteUpdate(to, from, next) {
-      this.entity = null;
-      this.getProjectById(to.params.projectId);
-      next();
-    },
     methods: {
-      getProjectById(projectId = this.$route.params.projectId) {
-        AxiosClient.get(`/cucumber/projects/${projectId}`)
-          .then((response) => {
-            this.entity = response.data;
-            this.$store.commit('setActiveProject', { data: response.data });
-          })
-          .catch(() => {
-
+      getData(projectId = this.$route.params.projectId) {
+        this.$store.dispatch('getProjectByIdAsync', projectId)
+          .then(() => {
+            this.localProject = this.getActiveProject;
           });
       },
     },
     mounted() {
+      const projectId = this.$route.params.projectId;
+      if (projectId) {
+        this.getData(projectId);
+      }
       this.$store.commit('setMenuIsOpen', true);
     },
     updated() {
 
     },
+    computed: {
+      ...mapGetters(['getActiveProject']),
+    },
     watch: {
+      // eslint-disable-next-line object-shorthand
+      '$route'(n) {
+        if (n.params.projectId) {
+          this.getData(n.params.projectId);
+        }
+      },
     },
     name: 'ProjectView',
   };

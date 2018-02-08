@@ -19,7 +19,6 @@
 </template>
 
 <script>
-  import AxiosClient from '../../utils/httpClient';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
@@ -45,21 +44,18 @@
     },
     methods: {
       save() {
-        const sendData = Object.assign({}, this.entity);
-        const projectId = this.$route.params.projectId;
+        const sendData = {};
+        Object.assign(sendData, this.entity);
         sendData.action = 'CREATE';
-        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${this.suitId}/cases/${this.entity.id}`, sendData)
+        this.$store.dispatch('updateCaseAsync', { projectId: this.projectId, suitId: this.suitId, caseId: this.entity.id, updateData: sendData })
+          .then(() => {
+            this.$store.dispatch('getCaseHistoryAsync', { projectId: this.projectId, suitId: this.suitId, caseId: this.entity.id });
+          })
           .then(() => {
             if (this.onSubmit) {
-              this.onSubmit(sendData, this.suitId, this.entity.id);
+              this.onSubmit();
             }
-            this.$store.commit('updateCase', {
-              suitId: this.entity.id, caseId: this.entity.id, updateData: this.entity,
-            });
-          })
-          .catch(() => {
           });
-        // this.$emit('input', this.suit);
       },
       reset() {
         this.entity = JSON.parse(JSON.stringify(this.value));
@@ -74,7 +70,7 @@
     },
     watch: {
     },
-    props: ['value', 'suitId', 'onCancel', 'onSubmit'],
+    props: ['value', 'projectId', 'suitId', 'onCancel', 'onSubmit'],
     name: 'caseEdit',
   };
 </script>

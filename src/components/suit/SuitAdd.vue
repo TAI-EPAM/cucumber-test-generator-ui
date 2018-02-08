@@ -19,10 +19,10 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import AxiosClient from '../../utils/httpClient';
 
   export default {
     components: {
@@ -63,19 +63,17 @@
         }
       },
       sendData() {
-        const sendData = Object.assign({}, this.entity);
+        const data = Object.assign({}, this.entity);
         const projectId = this.$route.params.projectId;
-        AxiosClient.post(`/cucumber/projects/${projectId}/suits/`, sendData)
-          .then((response) => {
-            sendData.id = response.data;
-            this.$store.commit('addSuit', sendData);
-            this.resetData();
-          })
-          .catch(() => {
-          });
+        data.rowNumber = this.getCountSuits + 1;
+        this.$store.dispatch('addSuitAsync', { projectId, data })
+        .then(() => { this.resetData(); });
       },
     },
     mounted() {
+    },
+    computed: {
+      ...mapGetters({ getCountSuits: 'getCountActiveSuits' }),
     },
     name: 'suitAdd',
     props: {

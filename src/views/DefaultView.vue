@@ -23,7 +23,6 @@
   import AppFooter from '../components/ui/AppFooter';
   import AppMenu from '../components/ui/AppMenu';
   import { Component as Vuedal } from '../components/ui/popoup-vuedals';
-  import AxiosClient from '../utils/httpClient';
 
   export default {
     components: {
@@ -45,14 +44,8 @@
         return this.getUI.menuIsOpen ? 'menuIsOpen' : '';
       },
       fetchProjects() {
-        AxiosClient.get('/cucumber/projects')
-          .then((response) => {
-            this.$store.commit('setProjects', { data: response.data });
-            this.dataIsLoaded = true;
-          })
-          .catch(() => {
-
-          });
+        this.$store.dispatch('getProjectsAsync')
+         .then(() => { this.dataIsLoaded = true; });
       },
     },
     mounted() {

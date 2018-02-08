@@ -35,8 +35,6 @@
   import SuitEdit from '../suit/SuitEdit';
   import CaseAdd from '../case/CaseAdd';
   import Confirmation from '../Confimation';
-  import AxiosClient from '../../utils/httpClient';
-  // import UUI from '../../assets/vendors/epam-ui/js/uui-core.min';
 
   export default {
     components: {
@@ -65,6 +63,7 @@
               this.$vuedals.close();
             },
             suitId,
+            projectId: this.$route.params.projectId,
           },
         });
       },
@@ -117,12 +116,12 @@
               this.$vuedals.close();
             },
             onSubmit() {
-              AxiosClient.delete(`/cucumber/suits/${suitId}`)
+              this.$store.dispatch('deleteSuitAsync', { projectId: this.$route.params.projectId, suitId })
                 .then(() => {
-                  this.$store.commit('removeSuit', suitId);
+                  if (suitId === +this.$route.params.suitId) {
+                    this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
+                  }
                   this.$vuedals.close();
-                })
-                .catch(() => {
                 });
             },
           },
@@ -135,8 +134,8 @@
     computed: {
       ...mapGetters(
         {
-          items: 'getSuits',
-          getSuit: 'getSuit',
+          items: 'getActiveSuits',
+          getSuit: 'getActiveSuitById',
           activeProject: 'getActiveProject',
         },
       ),

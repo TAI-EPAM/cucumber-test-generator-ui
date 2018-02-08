@@ -16,7 +16,7 @@
     },
     methods: {
       getSuitById(suitId = this.$route.params.suitId) {
-        this.activeSuit = this.$store.getters.getSuit(suitId);
+        this.activeSuit = this.$store.getters.getActiveSuitById(suitId);
       },
     },
     mounted() {

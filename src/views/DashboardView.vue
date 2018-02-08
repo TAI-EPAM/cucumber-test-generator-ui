@@ -3,7 +3,7 @@
     <h2>Dashboard</h2>
     <ul>
       <li>
-        <router-link to="suits">Home</router-link>
+        <router-link to="/">Home</router-link>
       </li>
     </ul>
   </section>

@@ -20,7 +20,6 @@
 
 <script>
   import TagsComponent from '../ui/TagsInput';
-  import AxiosClient from '../../utils/httpClient';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
 
@@ -45,18 +44,15 @@
     },
     methods: {
       save() {
-        const sendData = Object.assign({}, this.entity);
+        const sendData = {};
+        Object.assign(sendData, this.entity);
         delete sendData.cases;
-        AxiosClient.put(`/cucumber/suits/${this.entity.id}`, sendData)
+        this.$store.dispatch('editSuitAsync', this.entity)
           .then(() => {
-            this.$store.commit('updateSuit', { suitId: this.entity.id, updateData: this.entity });
             if (this.onSubmit) {
               this.onSubmit();
             }
-          })
-          .catch(() => {
           });
-          // this.$emit('input', this.suit);
       },
       reset() {
         this.entity = JSON.parse(JSON.stringify(this.value));
