@@ -84,7 +84,7 @@
       },
     },
     mounted() {
-      console.log(this.$v);
+
     },
     computed: {
       ...mapGetters({ getCountSuits: 'getCountActiveSuits' }),
