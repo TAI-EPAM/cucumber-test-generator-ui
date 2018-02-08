@@ -46,6 +46,15 @@
   @import "../../assets/vendors/epam-ui/less/uui-core.less";
   @import "../../assets/vendors/epam-ui/less/uui-form-elements.less";
 
+  @keyframes move {
+    0% {
+      left: 100%;
+    }
+    100% {
+      left: 360px;
+    }
+  }
+
 .curtain-component {
 
   & .curtain-wrapper {
@@ -66,7 +75,8 @@
       z-index: 11000;
       background-color: #FFF;
       height: 100vh;
-      left: 360px;
+      animation: move 0.2s 1 linear;
+      animation-fill-mode: forwards;
 
       & .curtain-header {
 
