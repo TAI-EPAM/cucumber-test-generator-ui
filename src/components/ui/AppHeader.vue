@@ -36,10 +36,10 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import StepSuggestions from '@/components/suggestion/StepSuggestions';
   import VButton from './EpamButton';
   import ProjectSelector from './ProjectSelector';
   import Curtain from './Curtain';
-  import StepSuggestions from '../StepSuggestions';
 
   export default {
     components: {
