@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
   import VButton from './EpamButton';
   import ProjectSelector from './ProjectSelector';
   import Curtain from './Curtain';
@@ -59,13 +59,18 @@
     },
 
     computed: {
-      ...mapGetters(['isAuth']),
+      ...mapGetters({ isAuth: 'isAuth', getSuggestions: 'getCurrentSuggestions' }),
     },
 
     mounted() {
+      this.fetchSuggestions()
+        .then(() => {
+          this.certainComponent.props = { suggestions: this.getSuggestions };
+         // console.log(this.certainComponent);
+        });
     },
-
     methods: {
+      ...mapActions({ fetchSuggestions: 'getSuggestionsAsync' }),
       logout() {
         this.$store.commit('logout');
         this.$router.push(

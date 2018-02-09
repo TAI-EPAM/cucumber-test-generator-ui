@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     debug: false,
     projects: [],
     currentCommits: [],
+    currentSuggestions: [],
     tags: [],
     auth: {
       isAuth: Vue.ls.get('isAuth', false),
@@ -55,6 +56,7 @@ const store = new Vuex.Store({
       return false;
     },
     getCurrentCommits: state => state.currentCommits,
+    getCurrentSuggestions: state => state.currentSuggestions,
   },
 
   mutations: {
@@ -137,6 +139,11 @@ const store = new Vuex.Store({
     setHistory(state, data) {
       const st = state;
       st.currentCommits = data;
+    },
+    //* **************SUGGESTIONS********************/
+    setSuggestions(state, data) {
+      const st = state;
+      st.currentSuggestions = data;
     },
     //* **************TAGS******************** */
     createTags(state) {
@@ -286,6 +293,17 @@ const store = new Vuex.Store({
           .then(() => {
             commit('removeCase', { suitId, caseId });
             commit('setHistory', []);
+            resolve();
+          })
+          .catch(() => { });
+      });
+    },
+    //* *************SUGGESTIONS******************** */
+    getSuggestionsAsync({ state, commit }) {
+      return new Promise((resolve) => {
+        AxiosClient.get('/cucumber/stepSuggestions', { headers: { authorization: state.auth.token } })
+          .then((response) => {
+            commit('setSuggestions', response.data);
             resolve();
           })
           .catch(() => { });

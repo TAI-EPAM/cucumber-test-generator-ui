@@ -1,21 +1,30 @@
 <template>
-  <div>
-    <h1>{{ title }}</h1>
+  <div v-if="suggestions && suggestions.length">
+    <div v-for="item in suggestions.slice(0, 7)">
+      <suggestion-item  :suggestion="item"/>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'StepSuggestions',
-    data() {
-      return {
-        title: 'Edit Suggestions Steps',
-      };
-    },
-  };
+import SuggestionItem from './SuggestionItem';
+
+export default {
+  components: {
+    SuggestionItem,
+  },
+  name: 'StepSuggestions',
+  data() {
+    return {
+      title: 'Edit Suggestions Steps',
+    };
+  },
+  props: ['suggestions'],
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  @import "../assets/vendors/epam-ui/less/uui-core.less";
+  @import "../assets/vendors/epam-ui/less/uui-form-elements.less";
 </style>
