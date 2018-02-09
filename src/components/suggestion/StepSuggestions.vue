@@ -2,7 +2,7 @@
 <section>
   <suggestion-add/>
   <div v-if="suggestions && suggestions.length">
-    <div v-for="item in suggestions.slice(0, 7)">
+    <div v-for="item in suggestions.slice(suggestions.length-7, suggestions.length)">
       <suggestion-item  :suggestion="item"/>
     </div>
   </div>
