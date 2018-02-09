@@ -11,7 +11,7 @@
     data() {
       return {};
     },
-    name: 'suggestion-item',
+    name: 'SuggestionItem',
     props: ['suggestion'],
   };
 </script>

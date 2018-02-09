@@ -1,17 +1,22 @@
 <template>
+<section>
+  <suggestion-add/>
   <div v-if="suggestions && suggestions.length">
     <div v-for="item in suggestions.slice(0, 7)">
       <suggestion-item  :suggestion="item"/>
     </div>
   </div>
+</section>
 </template>
 
 <script>
 import SuggestionItem from './SuggestionItem';
+import SuggestionAdd from './SuggestionAdd';
 
 export default {
   components: {
     SuggestionItem,
+    SuggestionAdd,
   },
   name: 'StepSuggestions',
   data() {

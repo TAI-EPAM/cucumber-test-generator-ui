@@ -143,7 +143,15 @@ const store = new Vuex.Store({
     //* **************SUGGESTIONS********************/
     setSuggestions(state, data) {
       const st = state;
-      st.currentSuggestions = data;
+      if (st.currentSuggestions) {
+        st.currentSuggestions = data;
+      } else {
+        st.currentSuggestions = [data];
+      }
+    },
+    addSuggestion(state, data) {
+      const st = state;
+      st.currentSuggestions.push(data);
     },
     //* **************TAGS******************** */
     createTags(state) {
@@ -304,6 +312,18 @@ const store = new Vuex.Store({
         AxiosClient.get('/cucumber/stepSuggestions', { headers: { authorization: state.auth.token } })
           .then((response) => {
             commit('setSuggestions', response.data);
+            resolve();
+          })
+          .catch(() => { });
+      });
+    },
+    addSuggestionAsync({ state, commit }, data) {
+      return new Promise((resolve) => {
+        AxiosClient.post('/cucumber/stepSuggestions', data)
+          .then((response) => {
+            const sendData = Object.assign({}, data);
+            sendData.id = response;
+            commit('addSuggestion', sendData);
             resolve();
           })
           .catch(() => { });
