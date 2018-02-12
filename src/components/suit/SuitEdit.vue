@@ -24,7 +24,7 @@
         <epam-button @click="save" 
           class="uui-button large"
           :class="buttonClass"
-          v-bind:disabled="$v.entity.$invalid">Update suit</epam-button>
+          :disabled="$v.entity.$invalid">Update suit</epam-button>
       </div>
     </section>
 </template>
@@ -60,7 +60,6 @@
         const sendData = {};
         Object.assign(sendData, this.entity);
         delete sendData.cases;
-        console.log(this.entity);
         this.$store.dispatch('editSuitAsync', { projectId: this.projectId, suitId: this.entity.id, updateData: sendData })
           .then(() => {
             if (this.onSubmit) {
@@ -74,11 +73,6 @@
           this.onCancel();
         }
       },
-    },
-    mounted() {
-      console.log(this.entity);
-    },
-    update() {
     },
     watch: {
       value(n) {

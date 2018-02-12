@@ -24,7 +24,7 @@
       <epam-button @click="sendData" 
         class="uui-button large"
         :class="buttonClass"
-        v-bind:disabled="$v.entity.$invalid">Add Suit</epam-button>
+        :disabled="$v.entity.$invalid">Add Suit</epam-button>
     </div>
   </section>
 </template>

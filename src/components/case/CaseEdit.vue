@@ -24,7 +24,7 @@
       <epam-button @click="save" 
         class="uui-button large"
         :class="buttonClass"
-        v-bind:disabled="$v.entity.$invalid">Update case</epam-button>
+        :disabled="$v.entity.$invalid">Update case</epam-button>
     </div>
   </section>
 </template>
