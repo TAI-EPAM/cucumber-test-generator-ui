@@ -1,8 +1,16 @@
 <template>
   <section class="entity-add">
     <div class="uui-form-wrapper">
-      <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Suit Name" />
-      <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Suit Description" />
+      <input type="text" v-model="entity.name"
+          class="uui-form-element large"
+          placeholder="Suit Name"
+          @input="$v.entity.name.$touch()"
+          :class="{ 'error': $v.entity.name.$error }"/>
+      <input type="text" v-model="entity.description"
+           class="uui-form-element large"
+           placeholder="Suit Description"
+           @input="$v.entity.description.$touch()"
+           :class="{ 'error': $v.entity.description.$error }"/>
       <tags-component v-model="entity.tags"></tags-component>
       <div class="priority-component">
         <div class="title">Priority:</div>
@@ -13,7 +21,10 @@
     </div>
     <div class="form-buttons-holder">
       <epam-button @click="resetData" class="large">Cancel</epam-button>
-      <epam-button @click="sendData" class="lime-green large">Add Suit</epam-button>
+      <epam-button @click="sendData" 
+        class="uui-button large"
+        :class="buttonClass"
+        :disabled="$v.entity.$invalid">Add Suit</epam-button>
     </div>
   </section>
 </template>
@@ -23,6 +34,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
+  import mapValidations from '../../validator';
 
   export default {
     components: {
@@ -49,6 +61,7 @@
         ],
       };
     },
+    ...mapValidations(),
     methods: {
       resetData() {
         Object.assign(this.entity, {
@@ -71,9 +84,16 @@
       },
     },
     mounted() {
+
     },
     computed: {
       ...mapGetters({ getCountSuits: 'getCountActiveSuits' }),
+      buttonClass() {
+        return {
+          disable: this.$v.entity.$invalid,
+          'lime-green': !this.$v.entity.$invalid,
+        };
+      },
     },
     name: 'suitAdd',
     props: {
@@ -84,6 +104,10 @@
 </script>
 
 <style lang="less" scoped>
+.uui-input-group {
+  display: block;
+}
+
 .suit-add {
   width: 600px;
   margin: 0 auto;

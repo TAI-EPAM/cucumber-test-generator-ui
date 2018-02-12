@@ -1,8 +1,16 @@
 <template>
     <section class="entity-add" v-if="entity">
       <div class="uui-form-wrapper">
-        <input type="text" v-model="entity.name" class="uui-form-element large" placeholder="Suit Name" />
-        <input type="text" v-model="entity.description" class="uui-form-element large" placeholder="Suit Description" />
+        <input type="text" v-model="entity.name"
+          class="uui-form-element large"
+          placeholder="Suit Name"
+          @input="$v.entity.name.$touch()"
+          :class="{ 'error': $v.entity.name.$error }"/>
+      <input type="text" v-model="entity.description"
+           class="uui-form-element large"
+           placeholder="Suit Description"
+           @input="$v.entity.description.$touch()"
+           :class="{ 'error': $v.entity.description.$error }"/>
         <tags-component v-model="entity.tags"></tags-component>
         <div class="priority-component">
           <div class="title">Priority:</div>
@@ -13,7 +21,10 @@
       </div>
       <div class="form-buttons-holder">
         <epam-button @click="reset" class="large">Cancel</epam-button>
-        <epam-button @click="save" class="lime-green large">Save</epam-button>
+        <epam-button @click="save" 
+          class="uui-button large"
+          :class="buttonClass"
+          :disabled="$v.entity.$invalid">Update suit</epam-button>
       </div>
     </section>
 </template>
@@ -22,6 +33,7 @@
   import TagsComponent from '../ui/TagsInput';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import mapValidations from '../../validator';
 
   export default {
     components: {
@@ -42,12 +54,13 @@
         origin: this.value,
       };
     },
+    ...mapValidations(),
     methods: {
       save() {
         const sendData = {};
         Object.assign(sendData, this.entity);
         delete sendData.cases;
-        this.$store.dispatch('editSuitAsync', this.entity)
+        this.$store.dispatch('editSuitAsync', { projectId: this.projectId, suitId: this.entity.id, updateData: sendData })
           .then(() => {
             if (this.onSubmit) {
               this.onSubmit();
@@ -61,17 +74,20 @@
         }
       },
     },
-    mounted() {
-
-    },
-    update() {
-    },
     watch: {
       value(n) {
         this.entity = JSON.parse(JSON.stringify(n));
       },
     },
-    props: ['value', 'onCancel', 'onSubmit'],
+    computed: {
+      buttonClass() {
+        return {
+          disable: this.$v.entity.$invalid,
+          'lime-green': !this.$v.entity.$invalid,
+        };
+      },
+    },
+    props: ['projectId', 'value', 'onCancel', 'onSubmit'],
     name: 'SuitEdit',
   };
 </script>

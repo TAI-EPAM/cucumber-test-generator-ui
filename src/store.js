@@ -233,11 +233,11 @@ const store = new Vuex.Store({
           .catch(() => { });
       });
     },
-    editSuitAsync({ commit }, { projectId, data }) {
+    editSuitAsync({ commit }, { projectId, suitId, updateData }) {
       return new Promise((resolve) => {
-        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${data.id}`, data.updateData)
+        AxiosClient.put(`/cucumber/projects/${projectId}/suits/${suitId}`, updateData)
           .then(() => {
-            commit('updateSuit', data.updateData);
+            commit('updateSuit', updateData);
             resolve();
           })
           .catch(() => { });

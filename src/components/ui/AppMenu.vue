@@ -90,6 +90,7 @@
           component: SuitEdit,
           props: {
             value: this.getSuit(suitId),
+            projectId: this.$route.params.projectId,
             onCancel() {
               this.$vuedals.close();
             },

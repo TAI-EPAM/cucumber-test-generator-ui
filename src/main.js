@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import Vuelidate from 'vuelidate';
 import VueLocalStorage from 'vue-ls';
+
 import App from './App';
 import router from './router';
 
@@ -15,7 +16,7 @@ Vue.config.productionTip = false;
 Vue.use(Vuedals);
 Vue.use(VueLocalStorage);
 Vue.use(Vuex);
-
+Vue.use(Vuelidate);
 
 /* eslint-disable no-new */
 new Vue({
