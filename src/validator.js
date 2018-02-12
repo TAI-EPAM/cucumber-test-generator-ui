@@ -1,6 +1,6 @@
 import { required, maxLength } from 'vuelidate/lib/validators';
 
-function mapValidations() {
+function mapValidationsSuit() {
   return {
     validations: {
       entity: {
@@ -18,5 +18,24 @@ function mapValidations() {
     },
   };
 }
-export default mapValidations;
+function mapValidationsCase() {
+  return {
+    validations: {
+      entity: {
+        name: {
+          required,
+          maxLength: maxLength(250),
+        },
+        description: {
+          required,
+          maxLength: maxLength(250),
+        },
+        priority: {
+          required,
+        },
+      },
+    },
+  };
+}
+export { mapValidationsSuit, mapValidationsCase };
 

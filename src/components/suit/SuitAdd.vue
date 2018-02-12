@@ -34,7 +34,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import mapValidations from '../../validator';
+  import { mapValidationsSuit } from '../../validator';
 
   export default {
     components: {
@@ -61,7 +61,7 @@
         ],
       };
     },
-    ...mapValidations(),
+    ...mapValidationsSuit(),
     methods: {
       resetData() {
         Object.assign(this.entity, {

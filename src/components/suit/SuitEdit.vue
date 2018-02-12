@@ -33,7 +33,7 @@
   import TagsComponent from '../ui/TagsInput';
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
-  import mapValidations from '../../validator';
+  import { mapValidationsSuit } from '../../validator';
 
   export default {
     components: {
@@ -54,7 +54,7 @@
         origin: this.value,
       };
     },
-    ...mapValidations(),
+    ...mapValidationsSuit(),
     methods: {
       save() {
         const sendData = {};

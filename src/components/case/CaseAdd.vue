@@ -24,7 +24,7 @@
       <epam-button @click="sendData" 
         class="uui-button large"
         :class="buttonClass"
-        :disabled="$v.entity.$invalid">Add Suit</epam-button>
+        :disabled="$v.entity.$invalid">Add case</epam-button>
     </div>
   </section>
 </template>
@@ -33,7 +33,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import mapValidations from '../../validator';
+  import { mapValidationsCase } from '../../validator';
 
   export default {
     components: {
@@ -45,8 +45,8 @@
       return {
         entity: {
           id: null,
-          description: null,
-          name: null,
+          description: '',
+          name: '',
           priority: 1,
           tags: [],
           status: 'NOT_DONE',
@@ -60,13 +60,13 @@
         ],
       };
     },
-    ...mapValidations(),
+    ...mapValidationsCase(),
     methods: {
       resetData() {
         Object.assign(this.entity, {
           id: null,
-          description: null,
-          name: null,
+          description: '',
+          name: '',
           priority: 1,
           steps: [],
           tags: [],
