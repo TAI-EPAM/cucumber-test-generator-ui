@@ -270,6 +270,7 @@ const store = new Vuex.Store({
     },
     updateCaseAsync({ commit }, { projectId, suitId, caseId, updateData }) {
       const sendData = Object.assign({}, updateData);
+      sendData.action = 'UPDATE';
       return new Promise((resolve) => {
         AxiosClient.put(`/cucumber/projects/${projectId}/suits/${suitId}/cases/${caseId}`, sendData)
           .then(() => {
