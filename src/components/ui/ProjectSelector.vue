@@ -1,7 +1,7 @@
 <template>
   <div class="project-selector">
     <select v-model="selected">
-      <option disabled value="0">Please selecte project</option>
+      <option disabled value="0">Please select project</option>
       <option v-for="project in projects" :value="project.id">
         {{ project.name }}
       </option>
