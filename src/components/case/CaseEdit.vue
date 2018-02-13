@@ -33,7 +33,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import mapValidations from '../../validator';
+  import { mapValidationsCase } from '../../validator';
 
   export default {
     components: {
@@ -54,12 +54,11 @@
         origin: this.value,
       };
     },
-    ...mapValidations(),
+    ...mapValidationsCase(),
     methods: {
       save() {
         const sendData = {};
         Object.assign(sendData, this.entity);
-        sendData.action = 'CREATE';
         this.$store.dispatch('updateCaseAsync', { projectId: this.projectId, suitId: this.suitId, caseId: this.entity.id, updateData: sendData })
           .then(() => {
             this.$store.dispatch('getCaseHistoryAsync', { projectId: this.projectId, suitId: this.suitId, caseId: this.entity.id });
