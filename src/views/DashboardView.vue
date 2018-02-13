@@ -1,11 +1,11 @@
 <template>
   <section class="dashboard-view">
-    <h2>Dashboard</h2>
-    <ul>
+    <h2 class="dashboard-title">Dashboard</h2>
+    <!-- <ul>
       <li>
         <router-link to="/">Home</router-link>
       </li>
-    </ul>
+    </ul> -->
   </section>
 </template>
 
@@ -31,7 +31,8 @@
 </script>
 
 <style lang="less" scoped>
-  .dashboard-view {
 
+ .dashboard-title {
+    text-align: center;
   }
 </style>
