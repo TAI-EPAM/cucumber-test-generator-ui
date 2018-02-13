@@ -11,8 +11,8 @@
       </div>
     <div class="case-props-additional">
         <ul>
-           <li><span class="case-prop-name">Creation Date: </span>{{localCase.creationDate}}</li>
-           <li><span class="case-prop-name">Last Update Date: </span>{{localCase.updateDate}}</li>
+           <li><span class="case-prop-name">Creation Date: </span>{{localCase.creationDate | formatDate}}</li>
+           <li><span class="case-prop-name">Last Update Date: </span>{{localCase.updateDate | formatDate}}</li>
            <li><span class="case-prop-name">Description: </span>{{localCase.description}}</li>
         </ul>
     </div>

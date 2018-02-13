@@ -18,6 +18,19 @@ Vue.use(VueLocalStorage);
 Vue.use(Vuex);
 Vue.use(Vuelidate);
 
+Vue.filter('formatDate', (value) => {
+  const options = {
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+  };
+  if (value) {
+    const date = new Date(value);
+    return date.toLocaleString('en-US', options);
+  }
+  return null;
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
