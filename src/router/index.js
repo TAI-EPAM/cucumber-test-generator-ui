@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import SuitsView from '@/views/SuitsView';
 import CaseView from '@/views/CaseView';
 import DashboardView from '@/views/DashboardView';
-import StepsSuggestions from '@/components/StepSuggestions';
+import StepsSuggestions from '@/components/suggestion/StepSuggestions';
 import ProjectView from '@/views/ProjectView';
 
 Vue.use(Router);

@@ -35,11 +35,11 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
+  import StepSuggestions from '@/components/suggestion/StepSuggestions';
   import VButton from './EpamButton';
   import ProjectSelector from './ProjectSelector';
   import Curtain from './Curtain';
-  import StepSuggestions from '../StepSuggestions';
 
   export default {
     components: {
@@ -59,13 +59,17 @@
     },
 
     computed: {
-      ...mapGetters(['isAuth']),
+      ...mapGetters({ isAuth: 'isAuth', getSuggestions: 'getCurrentSuggestions' }),
     },
 
     mounted() {
+      this.fetchSuggestions()
+        .then(() => {
+          this.certainComponent.props = { suggestions: this.getSuggestions };
+        });
     },
-
     methods: {
+      ...mapActions({ fetchSuggestions: 'getSuggestionsAsync' }),
       logout() {
         this.$store.commit('logout');
         this.$router.push(
