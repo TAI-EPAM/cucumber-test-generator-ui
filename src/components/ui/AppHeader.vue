@@ -66,7 +66,6 @@
       this.fetchSuggestions()
         .then(() => {
           this.certainComponent.props = { suggestions: this.getSuggestions };
-         // console.log(this.certainComponent);
         });
     },
     methods: {
