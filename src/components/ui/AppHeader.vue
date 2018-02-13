@@ -96,6 +96,7 @@
       color: white;
       display: inline-block;
       margin: 20px 0 0 0;
+      cursor: pointer;
     }
   }
   header .uui-header-right {
