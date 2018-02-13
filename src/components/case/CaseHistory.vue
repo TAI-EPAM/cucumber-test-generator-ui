@@ -36,3 +36,11 @@
     props: ['caseName', 'commits'],
   };
 </script>
+
+<style lang="less" scoped>
+.no-commits-message {
+  margin: 20px;
+  font-size: 20px;
+  font-style: italic;
+}
+</style>
