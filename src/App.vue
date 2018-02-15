@@ -14,7 +14,6 @@
     },
     data() {
       return {
-        dataIsLoaded: false,
         menuItems: [],
         currentView: 'AppLogin',
       };

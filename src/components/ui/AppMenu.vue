@@ -1,5 +1,6 @@
-<template>
+/* TODO: NOT USE Remove Later */
 
+<template>
   <div class="uui-side-bar">
     <ul class="sidebar-menu">
       <li v-for="suit in items" class="sub-menu">

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper" id="app" :class="selectCssClass()" v-if="dataIsLoaded">
     <aside>
-      <app-menu v-if="getActiveProject" />
+      <project-menu v-if="getActiveProject"></project-menu>
     </aside>
     <div id="content-side">
       <app-header />
@@ -21,15 +21,15 @@
   import { mapGetters } from 'vuex';
   import AppHeader from '../components/ui/AppHeader';
   import AppFooter from '../components/ui/AppFooter';
-  import AppMenu from '../components/ui/AppMenu';
   import { Component as Vuedal } from '../components/ui/popoup-vuedals';
+  import ProjectMenu from '../components/ui/project-menu/ProjectMenu';
 
   export default {
     components: {
       AppHeader,
       AppFooter,
-      AppMenu,
       Vuedal,
+      ProjectMenu,
     },
     data() {
       return {
