@@ -5,33 +5,23 @@
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" :key="suit.id"/>
       </ul>
-      <epam-button @click="addSuit">Open Add Suit Modal</epam-button>
-      <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">{{ selectedObject }}</div>
+      <div style="text-align: center"><epam-button @click="addSuit">Open Add Suit Modal</epam-button></div>
+      <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">
+        {{ filterController }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import EpamButton from '../EpamButton';
-  import SuitAdd from '../../suit/SuitAdd';
+  import EpamButton from '../ui/EpamButton';
+  import SuitAdd from '../suit/SuitAdd';
   import ProjectMenuSuitItem from './ProjectMenuSuitItem';
   import ProjectMenuFilters from './ProjectMenuFilters';
+  import ProjectMenuClass from './ProjectMenu.class';
 
   export default {
-/*
-    beforeRouteEnter(to, from, next) {
-      next((vm) => {
-        console.warn('beforeRouteEnter');
-        vm.getSuitsItems();
-      });
-    },
-   beforeRouteUpdate(to, from, next) {
-    console.warn('beforeRouteUpdate');
-    next();
-   },
-
-*/
     components: {
       EpamButton,
       ProjectMenuFilters,
@@ -51,49 +41,24 @@
       return {
         localItems: [],
         filters: {
-          sortField: null,
-          reverse: false,
+          sortField: 'id',
+          isReverse: false,
+          searchString: null,
         },
         selectedObject: {
           suits: [],
           cases: [],
         },
+        filterController: new ProjectMenuClass(),
       };
     },
     methods: {
-      sortByKey(params) {
-        const arr = [...this.items];
-        const { key, reverse } = params;
-        arr.sort((a, b) => {
-          const x = a[key]; const y = b[key];
-          let answer = null;
-          if (x < y) {
-            answer = -1;
-          } else {
-            answer = (x > y) ? 1 : 0;
-          }
-          return answer;
-        });
-        if (reverse) {
-          arr.reverse();
-        }
-        return arr;
-      },
-      getFilterParams() {
-        return {
-          sortBy: {
-            key: this.filters.sortField,
-            reverse: this.filters.reverse,
-          },
-          searchString: null,
-        };
-      },
       getMenuItems() {
-        // Filter point here !!!
-        const params = this.getFilterParams();
-        if (!params.searchString) {
-          this.localItems = this.sortByKey({ ...params.sortBy });
-        }
+        this.localItems = this.filterController
+                            .setFilters(this.filters)
+                            .searchByName()
+                            .sortItems()
+                            .getSortedItems();
       },
       addSuit() {
         this.$vuedals.open({
@@ -111,18 +76,19 @@
       },
     },
     mounted() {
+      this.filterController.setItems(this.items);
       this.getMenuItems();
     },
     name: 'ProjectMenu',
     updated() {
     },
     watch: {
-      items() {
+      items(n) {
+        this.filterController.setItems(n);
         this.getMenuItems();
       },
       filters: {
         handler() {
-          console.warn('handler change');
           this.getMenuItems();
         },
         deep: true,

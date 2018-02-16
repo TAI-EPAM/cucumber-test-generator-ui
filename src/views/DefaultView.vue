@@ -22,7 +22,7 @@
   import AppHeader from '../components/ui/AppHeader';
   import AppFooter from '../components/ui/AppFooter';
   import { Component as Vuedal } from '../components/ui/popoup-vuedals';
-  import ProjectMenu from '../components/ui/project-menu/ProjectMenu';
+  import ProjectMenu from '../components/project-menu/ProjectMenu';
 
   export default {
     components: {

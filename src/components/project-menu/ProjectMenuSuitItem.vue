@@ -28,12 +28,12 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import EpamButton from '../../ui/EpamButton';
-  import SuitEdit from '../../suit/SuitEdit';
-  import CaseAdd from '../../case/CaseAdd';
-  import Confirmation from '../../Confimation';
+  import EpamButton from '../ui/EpamButton';
+  import SuitEdit from '../suit/SuitEdit';
+  import CaseAdd from '../case/CaseAdd';
+  import Confirmation from '../Confimation';
   import CaseItem from './ProjectMenuCaseItem';
-  import PriorityIcon from '../PriorityIcon';
+  import PriorityIcon from '../ui/PriorityIcon';
 
   export default {
     components: {

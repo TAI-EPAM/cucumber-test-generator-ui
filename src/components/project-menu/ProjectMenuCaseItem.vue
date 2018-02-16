@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import PriorityIcon from '../PriorityIcon';
+  import PriorityIcon from '../ui/PriorityIcon';
 
   export default {
     components: {
@@ -44,18 +44,17 @@
      font-size: 16px;
    }
 
-  .case-item {
+   aside .uui-side-bar ul > li.sub-menu .sub > li.case-item {
 
-    .checkbox-wrapper {
-      display: inline-block;
-      margin-left: 64px;
-    }
+     & .checkbox-wrapper {
+       display: inline-block;
+       margin-left: 64px;
+     }
 
-    a {
-      margin-left: 10px;
-      padding-left: 0!important;
-      width: auto!important;
-    }
-
-  }
+     & > a {
+       margin-left: 10px;
+       padding: 0;
+       width: auto;
+     }
+   }
 </style>
