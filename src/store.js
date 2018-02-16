@@ -159,6 +159,11 @@ const store = new Vuex.Store({
       const st = state;
       st.currentSuggestions.splice(st.currentSuggestions.findIndex(item => item.id === id), 1);
     },
+    updateSuggestion(state, data) {
+      const st = state;
+      const target = st.currentSuggestions.find(item => item.id === data.id);
+      Object.assign(target, data);
+    },
     //* **************TAGS******************** */
     createTags(state) {
       const tagsSet = new Set();
@@ -343,6 +348,13 @@ const store = new Vuex.Store({
       AxiosClient.delete(`/cucumber/stepSuggestions/${suggestionId}`, suggestionId)
           .then(() => {
             commit('deleteSuggestion', suggestionId);
+          })
+          .catch(() => { });
+    },
+    updateSuggestionAsync({ state, commit }, data) {
+      AxiosClient.put(`/cucumber/stepSuggestions/${data.id}`, data)
+          .then(() => {
+            commit('updateSuggestion', data);
           })
           .catch(() => { });
     },

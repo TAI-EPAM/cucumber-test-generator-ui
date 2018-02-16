@@ -1,10 +1,13 @@
 <template>
 <div class="item-wrapper">
-    <select class="select-type">
-        <option v-for="item of types" :selected="suggestion.type===item[0]">{{item[1]}}</option>
+    <select @change="updateSuggestion(entity)" v-model="entity.type"
+      class="select-type">
+        <option v-for="item of types" 
+          :selected="suggestion.type===item[0]"
+          >{{item[1]}}</option>
     </select>
     <input type="text" class="uui-form-element input-suggestion" :placeholder="suggestion.content" :value="suggestion.content"/>
-    <epam-button @click="() => deleteSuggestion(suggestion.id)" class="suggestion-delete"><i class="fa fa-xl fa-remove" aria-hidden="true"></i></epam-button>
+    <epam-button @click="deleteSuggestion(suggestion.id)" class="suggestion-delete"><i class="fa fa-xl fa-remove" aria-hidden="true"></i></epam-button>
 </div>
 </template>
 
@@ -21,10 +24,16 @@
     data() {
       return {
         types: [...StepTypeMap],
+        entity: {
+          content: this.suggestion.content,
+          id: this.suggestion.id,
+          type: this.suggestion.type,
+        },
       };
     },
     methods: {
-      ...mapActions({ deleteSuggestion: 'deleteSuggestionAsync' }),
+      ...mapActions({ deleteSuggestion: 'deleteSuggestionAsync',
+        updateSuggestion: 'updateSuggestionAsync' }),
     },
     name: 'SuggestionItem',
     props: ['suggestion'],
