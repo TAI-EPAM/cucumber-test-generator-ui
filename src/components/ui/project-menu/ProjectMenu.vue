@@ -5,8 +5,8 @@
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" />
       </ul>
-      <div style="color: white; text-align: center; margin: 10px 0">{{ selectedObject }}</div>
       <epam-button @click="addSuit">Open Add Suit Modal</epam-button>
+      <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">{{ selectedObject }}</div>
     </div>
   </div>
 </template>
@@ -74,6 +74,7 @@
         return arr;
       },
       getMenuItems() {
+        // Filter point here !!!
         this.localItems = this.sortByKey(this.items, 'priority', true);
       },
       addSuit() {

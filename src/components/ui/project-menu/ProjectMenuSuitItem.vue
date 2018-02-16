@@ -5,7 +5,7 @@
       <div class="checkbox-holder">
         <input type="checkbox" v-model="selected" />
       </div>
-      <span>{{ suit.name }} | {{ suit.priority }}</span>
+      <span class="item-name">{{ suit.name }} </span><priority-icon v-model="suit.priority" />
     </a>
     <ul class="sub" :class="{ 'active': isOpen }">
       <case-item v-for="item in suit.cases" :case-item="item" :selectedObject="selectedObject" :suit-id="suit.id"></case-item>
@@ -25,14 +25,16 @@
   import CaseAdd from '../../case/CaseAdd';
   import Confirmation from '../../Confimation';
   import CaseItem from './ProjectMenuCaseItem';
+  import PriorityIcon from '../PriorityIcon';
 
   export default {
     components: {
-      EpamButton,
-      SuitEdit,
       CaseAdd,
       Confirmation,
       CaseItem,
+      EpamButton,
+      PriorityIcon,
+      SuitEdit,
     },
     computed: {
       ...mapGetters(
@@ -131,6 +133,10 @@
     width: 20px;
     text-align:center;
     font-size: 18px;
+  }
+
+  aside .uui-side-bar ul > li > a > span.item-name {
+    margin-right: 10px;
   }
 
   .sub-menu {
