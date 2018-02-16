@@ -5,14 +5,22 @@
       <div class="checkbox-holder">
         <input type="checkbox" v-model="selected" />
       </div>
-      <span class="item-name">{{ suit.name }} </span><priority-icon v-model="suit.priority" />
+      <span class="item-name">{{ suit.name }} </span>
+      <priority-icon v-model="suit.priority" />
+      <v-popover offset="0" placement="bottom-start">
+        <i class="fa fa-ellipsis-v" />
+        <template slot="popover">
+          <ul class="dropdown-menu">
+            <li><a @click="editSuit()">Edit Suit</a></li>
+            <li><a @click="removeSuit()">Delete Suit</a></li>
+          </ul>
+        </template>
+      </v-popover>
     </a>
     <ul class="sub" :class="{ 'active': isOpen }">
       <case-item v-for="item in suit.cases" :case-item="item" :selectedObject="selectedObject" :suit-id="suit.id"></case-item>
-      <li>
-        <epam-button @click="editSuit()" small>Edit suit modal</epam-button>
+      <li style="padding: 10px; text-align: center">
         <epam-button @click="addCase()" small>Add case modal</epam-button>
-        <epam-button @click="removeSuit()" small>DEL</epam-button>
       </li>
     </ul>
   </li>
@@ -139,6 +147,19 @@
     margin-right: 10px;
   }
 
+  aside .uui-side-bar ul > li > a > div.v-popover  {
+    display: inline-block;
+    float: right;
+    text-align: center;
+    margin-right: -18px;
+    font-size: 14px;
+    line-height: 40px;
+    cursor: pointer;
+    & > span > i {
+      font-size: 14px;
+    }
+  }
+
   .sub-menu {
     .checkbox-holder {
       display: inline-block;
@@ -154,4 +175,26 @@
       }
     }
   }
+
+  .dropdown-menu {
+    list-style: none;
+    min-width: 200px;
+    & li {
+      width: 100%;
+      & a {
+        display: inline-block;
+        width: 100%;
+        padding: 5px 5px 5px 20px;
+        line-height: 24px;
+        cursor: pointer;
+        color: black;
+        &:hover {
+          text-decoration: none;
+          background: #e5e5e5;
+        }
+      }
+
+    }
+  }
+
 </style>

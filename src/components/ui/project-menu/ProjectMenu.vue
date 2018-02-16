@@ -75,7 +75,7 @@
       },
       getMenuItems() {
         // Filter point here !!!
-        this.localItems = this.sortByKey(this.items, 'priority', true);
+        this.localItems = this.sortByKey(this.items, 'priority');
       },
       addSuit() {
         this.$vuedals.open({

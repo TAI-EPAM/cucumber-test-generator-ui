@@ -1,0 +1,40 @@
+.tooltip {
+  display: block !important;
+  z-index: 10000;
+
+  .tooltip-inner {
+    background: black;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 10px 4px;
+  }
+
+  &.popover {
+
+    .popover-inner {
+      background: #f9f9f9;
+      color: black;
+      padding: 5px 0;
+      border-radius: 2px;
+      border: 1px solid #e5e5e5;
+      // box-shadow: 0 5px 30px rgba(#000, 0.1);
+    }
+
+    .popover-arrow {
+      display: none;
+      border-color: #f9f9f9;
+    }
+  }
+
+  &[aria-hidden='true'] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s, visibility .15s;
+  }
+
+  &[aria-hidden='false'] {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .15s;
+  }
+}

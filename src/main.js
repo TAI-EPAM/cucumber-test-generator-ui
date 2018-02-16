@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuelidate from 'vuelidate';
 import VueLocalStorage from 'vue-ls';
+import VTooltip from 'v-tooltip';
 
 import App from './App';
 import router from './router';
@@ -17,6 +18,7 @@ Vue.use(Vuedals);
 Vue.use(VueLocalStorage);
 Vue.use(Vuex);
 Vue.use(Vuelidate);
+Vue.use(VTooltip);
 
 /* eslint-disable no-new */
 new Vue({
