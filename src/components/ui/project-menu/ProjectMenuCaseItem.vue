@@ -4,14 +4,17 @@
       <input type="checkbox" v-model="selected" />
     </div>
     <router-link :to="{ name: 'caseView', params: { suitId, caseId: caseItem.id }}">
-      <span>{{caseItem.name}} | {{caseItem.priority }} | {{ caseItem.status }}</span>
+      <span>{{caseItem.name}}</span> <priority-icon v-model="caseItem.priority" /> {{ caseItem.status }}
     </router-link>
   </li>
 </template>
 
 <script>
+  import PriorityIcon from '../PriorityIcon';
+
   export default {
     components: {
+      PriorityIcon,
     },
     computed: {
     },
@@ -37,11 +40,15 @@
 </script>
 
 <style lang="less">
+   aside .uui-side-bar ul > li.sub-menu .sub > li.case-item > a > span {
+     font-size: 16px;
+   }
+
   .case-item {
 
     .checkbox-wrapper {
       display: inline-block;
-      margin-left: 40px;
+      margin-left: 64px;
     }
 
     a {

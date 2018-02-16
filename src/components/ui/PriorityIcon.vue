@@ -5,19 +5,16 @@
 </template>
 
 <script>
-  const PriorityMap = new Map();
-  PriorityMap.set(1, 'fa-angle-double-up raspberry');
-  PriorityMap.set(2, 'fa-arrow-up orange');
-  PriorityMap.set(3, 'fa-arrow-down blue');
-  PriorityMap.set(4, 'fa-angle-double-down green');
+  import PriorityMap from '@/constants/Priority';
 
   export default {
-    name: 'PrioriteIcon',
     methods: {
       getClass() {
-        return PriorityMap.get(this.value);
+        const item = PriorityMap.get(this.value);
+        return item.className;
       },
     },
+    name: 'PriorityIcon',
     props: ['value'],
   };
 </script>
