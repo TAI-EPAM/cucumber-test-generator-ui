@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createLogger from 'vuex/dist/logger';
 import AxiosClient from '@/utils/httpClient';
 import router from './router/index';
 import convertSteps from './convert';
@@ -8,6 +9,7 @@ import convertSteps from './convert';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  plugins: [createLogger()],
   state: {
     debug: false,
     projects: [],
@@ -152,6 +154,10 @@ const store = new Vuex.Store({
     addSuggestion(state, data) {
       const st = state;
       st.currentSuggestions.push(data);
+    },
+    deleteSuggestion(state, id) {
+      const st = state;
+      st.currentSuggestions.splice(st.currentSuggestions.findIndex(item => item.id === id), 1);
     },
     //* **************TAGS******************** */
     createTags(state) {
@@ -312,7 +318,10 @@ const store = new Vuex.Store({
       return new Promise((resolve) => {
         AxiosClient.get('/cucumber/stepSuggestions', { headers: { authorization: state.auth.token } })
           .then((response) => {
-            commit('setSuggestions', response.data);
+            const first = response.data.length - 7;
+            const last = response.data.length;
+            const res = response.data.slice(first, last);
+            commit('setSuggestions', res);
             resolve();
           })
           .catch(() => { });
@@ -329,6 +338,13 @@ const store = new Vuex.Store({
           })
           .catch(() => { });
       });
+    },
+    deleteSuggestionAsync({ state, commit }, suggestionId) {
+      AxiosClient.delete(`/cucumber/stepSuggestions/${suggestionId}`, suggestionId)
+          .then(() => {
+            commit('deleteSuggestion', suggestionId);
+          })
+          .catch(() => { });
     },
   },
 });
