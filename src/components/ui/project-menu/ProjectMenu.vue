@@ -1,9 +1,9 @@
 <template>
   <div class="project-menu">
-    <div class="project-menu-filter"></div>
+    <project-menu-filters v-model="filters"></project-menu-filters>
     <div class="uui-side-bar">
       <ul class="sidebar-menu">
-        <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" />
+        <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" :key="suit.id"/>
       </ul>
       <epam-button @click="addSuit">Open Add Suit Modal</epam-button>
       <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">{{ selectedObject }}</div>
@@ -16,6 +16,7 @@
   import EpamButton from '../EpamButton';
   import SuitAdd from '../../suit/SuitAdd';
   import ProjectMenuSuitItem from './ProjectMenuSuitItem';
+  import ProjectMenuFilters from './ProjectMenuFilters';
 
   export default {
 /*
@@ -33,6 +34,7 @@
 */
     components: {
       EpamButton,
+      ProjectMenuFilters,
       ProjectMenuSuitItem,
       SuitAdd,
     },
@@ -48,7 +50,10 @@
     data() {
       return {
         localItems: [],
-        filters: null,
+        filters: {
+          sortField: null,
+          reverse: false,
+        },
         selectedObject: {
           suits: [],
           cases: [],
@@ -56,8 +61,9 @@
       };
     },
     methods: {
-      sortByKey(array, key, reverse = false) {
-        const arr = [...array];
+      sortByKey(params) {
+        const arr = [...this.items];
+        const { key, reverse } = params;
         arr.sort((a, b) => {
           const x = a[key]; const y = b[key];
           let answer = null;
@@ -73,9 +79,21 @@
         }
         return arr;
       },
+      getFilterParams() {
+        return {
+          sortBy: {
+            key: this.filters.sortField,
+            reverse: this.filters.reverse,
+          },
+          searchString: null,
+        };
+      },
       getMenuItems() {
         // Filter point here !!!
-        this.localItems = this.sortByKey(this.items, 'priority');
+        const params = this.getFilterParams();
+        if (!params.searchString) {
+          this.localItems = this.sortByKey({ ...params.sortBy });
+        }
       },
       addSuit() {
         this.$vuedals.open({
@@ -96,9 +114,18 @@
       this.getMenuItems();
     },
     name: 'ProjectMenu',
+    updated() {
+    },
     watch: {
       items() {
         this.getMenuItems();
+      },
+      filters: {
+        handler() {
+          console.warn('handler change');
+          this.getMenuItems();
+        },
+        deep: true,
       },
     },
   };
