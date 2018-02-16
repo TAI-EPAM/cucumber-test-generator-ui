@@ -22,7 +22,7 @@ class ProjectMenu {
     };
   }
   setFilters(obj) {
-    this.filtersObj = obj;
+    this.filtersObj = { ...obj };
     return this;
   }
   getSortedItems() {

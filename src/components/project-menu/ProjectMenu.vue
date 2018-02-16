@@ -21,6 +21,9 @@
   import ProjectMenuFilters from './ProjectMenuFilters';
   import ProjectMenuClass from './ProjectMenu.class';
 
+
+  const ProjectMenuController = new ProjectMenuClass();
+
   export default {
     components: {
       EpamButton,
@@ -49,12 +52,11 @@
           suits: [],
           cases: [],
         },
-        filterController: new ProjectMenuClass(),
       };
     },
     methods: {
       getMenuItems() {
-        this.localItems = this.filterController
+        this.localItems = ProjectMenuController
                             .setFilters(this.filters)
                             .searchByName()
                             .sortItems()
@@ -76,7 +78,8 @@
       },
     },
     mounted() {
-      this.filterController.setItems(this.items);
+      ProjectMenuController.setItems(this.items);
+      console.warn(ProjectMenuController);
       this.getMenuItems();
     },
     name: 'ProjectMenu',
@@ -84,7 +87,7 @@
     },
     watch: {
       items(n) {
-        this.filterController.setItems(n);
+        ProjectMenuController.setItems(n);
         this.getMenuItems();
       },
       filters: {
