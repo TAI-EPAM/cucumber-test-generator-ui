@@ -1,7 +1,7 @@
 <template>
   <li class="sub-menu">
     <a>
-      <div class="fa arrow" @click="toggleOpen()" :class="{ 'fa-angle-right': !isOpen, 'fa-angle-down': isOpen }" />
+      <div class="fa arrow" @click="toggleOpen" :class="{ 'fa-angle-right': !isOpen, 'fa-angle-down': isOpen }" />
       <div class="checkbox-holder">
         <input type="checkbox" v-model="selected" />
       </div>
@@ -11,16 +11,16 @@
         <i class="fa fa-ellipsis-v" />
         <template slot="popover">
           <ul class="dropdown-menu">
-            <li><a @click="editSuit()">Edit Suit</a></li>
-            <li><a @click="removeSuit()">Delete Suit</a></li>
+            <li><a @click="editSuit">Edit Suit</a></li>
+            <li><a @click="removeSuit">Delete Suit</a></li>
           </ul>
         </template>
       </v-popover>
     </a>
     <ul class="sub" :class="{ 'active': isOpen }">
       <case-item v-for="item in suit.cases" :case-item="item" :selectedObject="selectedObject" :suit-id="suit.id" :key="suit.id"></case-item>
-      <li style="padding: 10px; text-align: center">
-        <epam-button @click="addCase()" small>Add case modal</epam-button>
+      <li class="add-case">
+        <epam-button @click="addCase" markup="transparent" small>+ Add new Case</epam-button>
       </li>
     </ul>
   </li>
@@ -134,44 +134,48 @@
 </script>
 
 <style lang="less">
-  aside .uui-side-bar ul > li > a .arrow {
-    display: inline-block;
-    float: none;
-    margin-left: 0;
-    width: 20px;
-    text-align:center;
-    font-size: 18px;
-  }
+  @import "../../assets/vendors/epam-ui/less/uui-colors";
 
-  aside .uui-side-bar ul > li > a > span.item-name {
-    margin-right: 10px;
-  }
 
-  aside .uui-side-bar ul > li > a > div.v-popover  {
-    display: inline-block;
-    float: right;
-    text-align: center;
-    margin-right: -18px;
-    font-size: 14px;
-    line-height: 40px;
-    cursor: pointer;
-    & > span > i {
-      font-size: 14px;
-    }
-  }
+  aside .uui-side-bar ul {
 
-  .sub-menu {
-    .checkbox-holder {
-      display: inline-block;
-      position: relative;
-      width: 20px;
-    }
+    & > li {
 
-    .sub {
-      display: none;
+      & > a {
 
-      &.active {
-        display: block!important;
+        padding: 0 10px;
+
+        & .arrow {
+          display: inline-block;
+          float: none;
+          margin-left: 0;
+          width: 20px;
+          text-align:center;
+          font-size: 14px;
+        }
+
+        & > span.item-name {
+          margin-right: 10px;
+          font-size: 14px;
+          letter-spacing: 0;
+          font-family: "Oswald Light";
+          text-transform: none;
+        }
+
+
+        & div.v-popover {
+          display: inline-block;
+          float: right;
+          text-align: center;
+          margin-right: -18px;
+          font-size: 14px;
+          line-height: 40px;
+          cursor: pointer;
+
+          & > span > i {
+            font-size: 14px;
+          }
+        }
       }
     }
   }
@@ -193,8 +197,36 @@
           background: #e5e5e5;
         }
       }
+    }
+  }
+
+
+  .sub-menu {
+    .checkbox-holder {
+      display: inline-block;
+      position: relative;
+      width: 20px;
+    }
+
+    .sub {
+      display: none;
+
+      &.active {
+        display: block!important;
+      }
+      & li.add-case {
+        padding: 10px; text-align: center;
+        & button {
+          border: none;
+          color: @green_lime;
+          &:hover, &:active {
+            color: @green_dark;
+          }
+        }
+      }
 
     }
   }
+
 
 </style>

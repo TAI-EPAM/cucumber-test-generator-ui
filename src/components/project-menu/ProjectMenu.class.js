@@ -1,3 +1,30 @@
+function Sorter(list, key, isReverse) {
+  const arr = list;
+
+  arr.forEach((item) => {
+    const listItem = item;
+    if (listItem.cases && listItem.cases.length) {
+      listItem.cases = Sorter(listItem.cases, key, isReverse);
+    }
+    return listItem;
+  });
+
+  arr.sort((a, b) => {
+    const x = a[key]; const y = b[key];
+    let answer = null;
+    if (x < y) {
+      answer = -1;
+    } else {
+      answer = (x > y) ? 1 : 0;
+    }
+    return answer;
+  });
+  if (isReverse) {
+    arr.reverse();
+  }
+  return arr;
+}
+
 class ProjectMenu {
   constructor() {
     this.items = [];
@@ -22,7 +49,7 @@ class ProjectMenu {
     };
   }
   setFilters(obj) {
-    this.filtersObj = { ...obj };
+    this.filtersObj = obj;
     return this;
   }
   getSortedItems() {
@@ -45,19 +72,7 @@ class ProjectMenu {
   sortItems() {
     const filterParams = this.getFilterParams();
     const { key, isReverse } = filterParams.sortBy;
-    this.sortedItems.sort((a, b) => {
-      const x = a[key]; const y = b[key];
-      let answer = null;
-      if (x < y) {
-        answer = -1;
-      } else {
-        answer = (x > y) ? 1 : 0;
-      }
-      return answer;
-    });
-    if (isReverse) {
-      this.sortedItems.reverse();
-    }
+    this.sortedItems = Sorter(this.sortedItems, key, isReverse);
     return this;
   }
 }

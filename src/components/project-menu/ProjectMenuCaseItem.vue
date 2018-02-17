@@ -40,21 +40,28 @@
 </script>
 
 <style lang="less">
-   aside .uui-side-bar ul > li.sub-menu .sub > li.case-item > a > span {
-     font-size: 16px;
-   }
-
    aside .uui-side-bar ul > li.sub-menu .sub > li.case-item {
-
-     & .checkbox-wrapper {
-       display: inline-block;
-       margin-left: 64px;
-     }
 
      & > a {
        margin-left: 10px;
        padding: 0;
        width: auto;
+       line-height: 50px;
+
+       & > i {
+         line-height: 50px;
+       }
+
+       & > span {
+         font-size: 14px;
+         line-height: 24px;
+       }
+     }
+
+     & .checkbox-wrapper {
+       display: inline-block;
+       margin-left: 54px;
+       line-height: 30px;
      }
    }
 </style>

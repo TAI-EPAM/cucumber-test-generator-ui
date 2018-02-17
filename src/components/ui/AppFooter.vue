@@ -20,5 +20,12 @@
   };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  footer {
+    .uui-footer {
+      border-top: 1px solid #cccccc;
+      background: #f8f8f8;
+    }
+  }
+
 </style>

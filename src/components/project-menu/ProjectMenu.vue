@@ -5,7 +5,10 @@
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" :key="suit.id"/>
       </ul>
-      <div style="text-align: center"><epam-button @click="addSuit">Open Add Suit Modal</epam-button></div>
+      <div class="add-suit">
+        <epam-button @click="addSuit" markup="lime-green">+ Add New Suit</epam-button>
+      </div>
+
       <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">
         {{ filterController }}
       </div>
@@ -79,7 +82,6 @@
     },
     mounted() {
       ProjectMenuController.setItems(this.items);
-      console.warn(ProjectMenuController);
       this.getMenuItems();
     },
     name: 'ProjectMenu',
@@ -100,9 +102,22 @@
   };
 </script>
 
-<style scoped>
-.uui-side-bar {
+<style lang="less" scoped>
+aside .uui-side-bar {
   display: block;
   width: 340px;
+  background: #373838;
+
+  & ul {
+   margin-bottom: 10px;
+  }
+
+  & .add-suit {
+    padding: 0 10px;
+    & button {
+      width: 100%;
+    }
+  }
 }
+
 </style>

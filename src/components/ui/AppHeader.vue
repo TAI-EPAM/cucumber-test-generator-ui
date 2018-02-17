@@ -84,6 +84,19 @@
 
 <style lang="less" scoped>
 
+  header {
+    .uui-header {
+      background: white;
+      border-bottom: 1px solid #cccccc;
+      color: #333333;
+
+      .brand-logo {
+        color: #333333;
+      }
+
+    }
+  }
+
   header button {
     float: right;
     margin: 12px 12px 0 0;

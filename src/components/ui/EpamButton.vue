@@ -51,4 +51,7 @@
 
 <style lang="less" scoped>
   @import '../../assets/vendors/epam-ui/less/uui-buttons.less';
+  button {
+    cursor: pointer;
+  }
 </style>

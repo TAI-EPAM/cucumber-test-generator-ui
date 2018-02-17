@@ -63,7 +63,7 @@
     width: 0;
     height: 100%;
     float: left;
-    background: #464547;
+    background: #373838;
   }
   #content-side {
     position: relative;
@@ -86,7 +86,6 @@
       width: 340px;
       height: 100%;
       float: left;
-      background: #464547;
     }
     #content-side {
       position: relative;
