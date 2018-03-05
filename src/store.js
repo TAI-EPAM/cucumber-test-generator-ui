@@ -24,6 +24,7 @@ const store = new Vuex.Store({
       suitsLoad: false,
     },
     activeProject: null,
+    globalErrors: [],
   },
 
   getters: {
@@ -57,6 +58,7 @@ const store = new Vuex.Store({
     },
     getCurrentCommits: state => state.currentCommits,
     getCurrentSuggestions: state => state.currentSuggestions,
+    getGlobalErrors: state => state.globalErrors,
   },
 
   mutations: {
@@ -182,6 +184,15 @@ const store = new Vuex.Store({
       const st = state;
       st.ui.menuIsOpen = v;
     },
+    //* ****** GlobalError ****** */
+    setGlobalError(state, data) {
+      const st = state;
+      st.globalErrors.push(data);
+    },
+    removeGlobalError(state, index) {
+      const st = state;
+      st.globalErrors.splice(index, 1);
+    },
   },
 
   actions: {
@@ -211,7 +222,8 @@ const store = new Vuex.Store({
             commit('setProjects', { data: response.data });
             resolve();
           })
-          .catch(() => { });
+          .catch(() => {
+          });
       });
     },
     getProjectByIdAsync({ commit }, projectId) {

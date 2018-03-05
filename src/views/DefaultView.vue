@@ -7,7 +7,10 @@
       <app-header />
       <main class="uui-main-container">
         <div class="app-wrapper">
-          <router-view />
+          <global-errors></global-errors>
+          <div class="content-view">
+            <router-view />
+          </div>
         </div>
       </main>
       <app-footer></app-footer>
@@ -22,9 +25,11 @@
   import AppFooter from '../components/ui/AppFooter';
   import { Component as Vuedal } from '../components/ui/popoup-vuedals';
   import ProjectMenu from '../components/project-menu/ProjectMenu';
+  import GlobalErrors from '../components/ui/GlobalErrors';
 
   export default {
     components: {
+      GlobalErrors,
       AppHeader,
       AppFooter,
       Vuedal,
@@ -44,13 +49,14 @@
       },
       fetchProjects() {
         this.$store.dispatch('getProjectsAsync')
-         .then(() => { this.dataIsLoaded = true; });
+          .then(() => {
+            this.dataIsLoaded = true;
+          });
+        this.dataIsLoaded = true;
       },
     },
     mounted() {
       this.fetchProjects();
-    },
-    updated() {
     },
     name: 'DefaultView',
   };
@@ -80,13 +86,13 @@
   }
 
   .menuIsOpen {
-    aside {
+    & aside {
       display: block;
       width: 340px;
       height: 100%;
       float: left;
     }
-    #content-side {
+    & #content-side {
       position: relative;
       height: 100%;
       overflow: auto;
@@ -94,10 +100,8 @@
       margin-left: 340px;
       margin-right: 0px;
     }
-    header {
+    & header {
       left: 340px;
     }
   }
-
-
 </style>
