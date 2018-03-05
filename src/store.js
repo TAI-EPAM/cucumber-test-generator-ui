@@ -155,6 +155,15 @@ const store = new Vuex.Store({
       const st = state;
       st.currentSuggestions.push(data);
     },
+    deleteSuggestion(state, id) {
+      const st = state;
+      st.currentSuggestions.splice(st.currentSuggestions.findIndex(item => item.id === id), 1);
+    },
+    updateSuggestion(state, data) {
+      const st = state;
+      const target = st.currentSuggestions.find(item => item.id === data.id);
+      Object.assign(target, data);
+    },
     //* **************TAGS******************** */
     createTags(state) {
       const tagsSet = new Set();
@@ -316,7 +325,10 @@ const store = new Vuex.Store({
       return new Promise((resolve) => {
         AxiosClient.get('/cucumber/stepSuggestions', { headers: { authorization: state.auth.token } })
           .then((response) => {
-            commit('setSuggestions', response.data);
+            const first = response.data.length - 7;
+            const last = response.data.length;
+            const res = response.data.slice(first, last);
+            commit('setSuggestions', res);
             resolve();
           })
           .catch(() => { });
@@ -333,6 +345,20 @@ const store = new Vuex.Store({
           })
           .catch(() => { });
       });
+    },
+    deleteSuggestionAsync({ state, commit }, suggestionId) {
+      AxiosClient.delete(`/cucumber/stepSuggestions/${suggestionId}`, suggestionId)
+        .then(() => {
+          commit('deleteSuggestion', suggestionId);
+        })
+        .catch(() => { });
+    },
+    updateSuggestionAsync({ state, commit }, data) {
+      AxiosClient.put(`/cucumber/stepSuggestions/${data.id}`, data)
+        .then(() => {
+          commit('updateSuggestion', data);
+        })
+        .catch(() => { });
     },
   },
 });
