@@ -116,13 +116,15 @@ const store = new Vuex.Store({
     },
     //* *************CASES******************** */
     addCase(state, payload) {
+      const caseItem = payload.data;
       const suitItem = state.activeProject.suits.filter(
-        suit => suit.id === parseInt(payload.suitId, 0))[0];
-       // Refactor this through object assign!!!
+        suit => suit.id === payload.suitId)[0];
+
+      caseItem.steps = [];
       if (suitItem.cases) {
-        suitItem.cases.push(payload.data);
+        suitItem.cases.push(caseItem);
       } else {
-        suitItem.cases = [payload.data];
+        suitItem.cases = [caseItem];
       }
     },
     updateCase(state, { suitId, caseId, updateData }) {
@@ -231,7 +233,7 @@ const store = new Vuex.Store({
         AxiosClient.post(`/cucumber/projects/${projectId}/suits/`, data)
           .then((response) => {
             const sendData = data;
-            sendData.id = response.data;
+            sendData.id = response.data.id;
             commit('addSuit', sendData);
             resolve();
           })
@@ -278,7 +280,7 @@ const store = new Vuex.Store({
       return new Promise((resolve) => {
         AxiosClient.post(`/cucumber/projects/${projectId}/suits/${suitId}/cases/`, data)
           .then((response) => {
-            sendData.id = response.data;
+            sendData.id = response.data.id;
             commit('addCase', { suitId, data: sendData });
             resolve();
           })

@@ -1,26 +1,21 @@
 <template>
-  <section class="case-view">
-    <div v-if="$route.params.caseId">
+  <section class="case-view" v-if="$route.params.caseId">
       <case :local-case="localCase"/>
 
       <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
       <epam-button markup="large" class="lime-green">Save Tests</epam-button>
       <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
-      <keep-alive v-if="localCase">
-          <!--case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/-->
-          <curtain
-            buttonClass="case-history-button orange"
-            buttonText="Show history"
-            headerText="HISTORY"
-            headerMarkup="orange"
-            :component="getCertainComponent()">
-          ></curtain>
-      </keep-alive>
-    </div>
-    <div v-else>
-      Nothing
-    </div>
+      <!--case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/-->
+      <curtain
+        buttonClass="case-history-button orange"
+        buttonText="Show history"
+        headerText="HISTORY"
+        headerMarkup="orange"
+        :component="getCertainComponent()"
+        v-if="localCase">
+      ></curtain>
+
   </section>
 </template>
 
