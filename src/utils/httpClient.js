@@ -9,4 +9,13 @@ const axiosClient = axios.create({
   headers: { authorization: Vue.ls.get('token') },
 });
 
+
+axiosClient.interceptors.response.use(response => response,
+  (error) => {
+    // alert('Kernel panic');
+    console.warn(error);
+    return Promise.reject(error);
+  },
+);
+
 export default axiosClient;
