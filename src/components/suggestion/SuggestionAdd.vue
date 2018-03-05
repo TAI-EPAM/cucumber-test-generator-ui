@@ -18,7 +18,7 @@ export default {
       entity: {
         id: 0,
         content: '',
-        type: 'GIVEN',
+        type: 1,
       },
     };
   },
@@ -27,7 +27,7 @@ export default {
       Object.assign(this.entity, {
         id: null,
         content: null,
-        type: 'GIVEN',
+        type: 1,
       });
     },
     send() {

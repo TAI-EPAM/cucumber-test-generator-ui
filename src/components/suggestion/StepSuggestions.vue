@@ -1,15 +1,12 @@
 <template>
-<section>
-  <div class="suggestions-content">
-     <suggestion-add/>
-     <div v-if="suggestions && suggestions.length">
-        <div v-for="item in suggestions.slice(suggestions.length-7, suggestions.length)">
-           <suggestion-item  :suggestion="item"/>
-         </div>
-     </div>
+<section class="suggestion">
+  <suggestion-add/>
+  <div v-if="suggestions && suggestions.length">
+    <div v-for="item in suggestions">
+      <suggestion-item  :suggestion="item"/>
+    </div>
   </div>
 </section>
-</div>
 </template>
 
 <script>
@@ -33,7 +30,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.suggestions-content {
-  margin: 20px;
-}
+  .suggestion {
+    margin: 20px 30px;
+  }
+
 </style>
