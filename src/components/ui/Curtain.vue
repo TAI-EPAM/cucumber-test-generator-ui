@@ -94,7 +94,7 @@
 
       & .curtain-body {
 
-        padding: 20px;
+        padding: 20px auto;
 
       }
 

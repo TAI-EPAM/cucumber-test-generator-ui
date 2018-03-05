@@ -273,6 +273,8 @@ const store = new Vuex.Store({
     //* *************CASES******************** */
     addCaseAsync({ commit }, { projectId, suitId, data }) {
       const sendData = Object.assign({}, data);
+      sendData.creationDate = Date.now();
+      sendData.updateDate = Date.now();
       return new Promise((resolve) => {
         AxiosClient.post(`/cucumber/projects/${projectId}/suits/${suitId}/cases/`, data)
           .then((response) => {

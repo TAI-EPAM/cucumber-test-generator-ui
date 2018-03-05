@@ -8,7 +8,6 @@
       <main class="uui-main-container">
         <div class="app-wrapper">
           <router-view />
-          routerName: {{$route.name}}
         </div>
       </main>
       <app-footer></app-footer>
