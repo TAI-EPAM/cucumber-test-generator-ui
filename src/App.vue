@@ -1,27 +1,41 @@
 <template>
-  <div id="app">
-    <app-header></app-header>
-    <div class="app-content">
-      <router-view/>
-    </div>
-    <app-footer></app-footer>
-  </div>
+    <component v-bind:is="viewSelector()"/>
 </template>
 
 <script>
-  import AppHeader from './components/ui/AppHeader';
-  import AppFooter from './components/ui/AppFooter';
+  import { mapGetters } from 'vuex';
+  import AppLogin from './components/ui/AppLogin';
+  import DefaultView from './views/DefaultView';
 
   export default {
     components: {
-      AppHeader,
-      AppFooter,
+      AppLogin,
+      DefaultView,
+    },
+    data() {
+      return {
+        menuItems: [],
+        currentView: 'AppLogin',
+      };
+    },
+    methods: {
+      viewSelector() {
+        return this.isAuth ? 'DefaultView' : 'AppLogin';
+      },
+    },
+    computed: {
+      ...mapGetters(['isAuth', 'isLoaded']),
+    },
+    mounted() {
+    },
+    update() {
+    },
+    beforeUpdate() {
     },
     name: 'app',
   };
 </script>
 
-<style lang="scss">
-	@import 'assets/css/variables.scss';
-	@import 'assets/css/app.scss';
+<style lang="less">
+  @import "assets/css/app";
 </style>

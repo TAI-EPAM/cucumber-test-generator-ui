@@ -1,71 +1,131 @@
 <template>
-  <div class="entity-card">
-    <h3>Add Suit</h3>
-    <div class="entity-card-edit">
-      <label><span>Name:</span> <input type="text" v-model.lazy="suit.name"/></label>
-      <label><span>Priority:</span>
-        <select v-model="suit.priority">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-      </label>
-      <label><span>Description:</span> <textarea maxlength="255" v-model.lazy="suit.description"/></label>
-      <label><span>Tags:</span> <input type="text" v-model.lazy="suit.tags"/></label>
+  <section class="entity-add">
+    <div class="uui-form-wrapper">
+      <input type="text" v-model="entity.name"
+          class="uui-form-element large"
+          placeholder="Suit Name"
+          @input="$v.entity.name.$touch()"
+          :class="{ 'error': $v.entity.name.$error }"/>
+      <input type="text" v-model="entity.description"
+           class="uui-form-element large"
+           placeholder="Suit Description"
+           @input="$v.entity.description.$touch()"
+           :class="{ 'error': $v.entity.description.$error }"/>
+      <tags-component v-model="entity.tags"></tags-component>
+      <div class="priority-component">
+        <div class="title">Priority:</div>
+        <div class="component">
+          <epam-multiswitch large="true" :values="priorityValues" v-model="entity.priority"/>
+        </div>
+      </div>
     </div>
-
-    <div class="buttons-holder">
-      <v-button @click="addSuit">Add Suit</v-button>
-      <v-button @click="cancelAddSuit" markup="warning">Cancel</v-button>
+    <div class="form-buttons-holder">
+      <epam-button @click="resetData" class="large">Cancel</epam-button>
+      <epam-button @click="sendData" 
+        class="uui-button large"
+        :class="buttonClass"
+        :disabled="$v.entity.$invalid">Add Suit</epam-button>
     </div>
-  </div></template>
+  </section>
+</template>
 
 <script>
-  import AxiosClient from '@/utils/httpClient';
-  import VButton from '@/components/ui/VButton';
-
+  import { mapGetters } from 'vuex';
+  import EpamButton from '../ui/EpamButton';
+  import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import TagsComponent from '../ui/TagsInput';
+  import { mapValidationsSuit } from '../../validator';
 
   export default {
-    components: { VButton },
-    computed: {
+    components: {
+      EpamButton,
+      EpamMultiswitch,
+      TagsComponent,
     },
     data() {
       return {
-        suit: {
+        entity: {
+          id: null,
+          description: null,
+          name: null,
+          priority: 1,
+          tags: [],
+          rowNumber: 1,
+        },
+        priorityValues: [
+          { value: 1, text: 'Critical' },
+          { value: 2, text: 'High' },
+          { value: 3, text: 'Medium' },
+          { value: 4, text: 'Low' },
+          { value: 5, text: 'Lowest' },
+        ],
+      };
+    },
+    ...mapValidationsSuit(),
+    methods: {
+      resetData() {
+        Object.assign(this.entity, {
+          id: null,
           description: null,
           name: null,
           priority: 1,
           tags: null,
-        },
-        dirty: false,
-      };
-    },
-    methods: {
-      addSuit() {
-        AxiosClient.post('/cucumber/suits/', this.suit)
-          .then((response) => {
-            this.suit.id = response.data;
-            this.$bus.$emit('suit-add', this.suit);
-          })
-          .catch(() => {
-          });
+        });
+        if (this.onCancel) {
+          this.onCancel();
+        }
       },
-      cancelAddSuit() {
-        this.suit = {};
-        this.$bus.$emit('suit-cancel');
+      sendData() {
+        const data = Object.assign({}, this.entity);
+        const projectId = this.$route.params.projectId;
+        data.rowNumber = this.getCountSuits + 1;
+        this.$store.dispatch('addSuitAsync', { projectId, data })
+        .then(() => { this.resetData(); });
       },
-
     },
     mounted() {
+
     },
-    name: 'suit-add',
+    computed: {
+      ...mapGetters({ getCountSuits: 'getCountActiveSuits' }),
+      buttonClass() {
+        return {
+          disable: this.$v.entity.$invalid,
+          'lime-green': !this.$v.entity.$invalid,
+        };
+      },
+    },
+    name: 'suitAdd',
     props: {
+      onCancel: Function,
+      onSubmit: Function,
     },
-  };
+};
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+.uui-input-group {
+  display: block;
+}
+
+.suit-add {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.priority-component {
+  display: flex;
+  align-items: center;
+  & > .title {
+    padding: 0 20px 0 0;
+    vertical-align: bottom;
+  }
+  & > .component {
+    flex-grow: 1;
+    & > ul {
+      width: 100%;
+    }
+  }
+}
 
 </style>

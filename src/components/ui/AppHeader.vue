@@ -1,56 +1,117 @@
 <template>
   <header>
-    <div class="holder">
-      <h1 @click="headerClick">Cucumber Test Generator</h1>
-      <v-button class="stepSwitch">Edit step suggestions</v-button>
+    <div class="uui-header">
+      <nav>
+        <div class="uui-responsive-header">
+          <div class="responsive-header">
+            <router-link to="/" class="responsive-brand-logo">
+              <span class="title">BDD Generator</span>
+            </router-link>
+          </div>
+        </div>
+        <!--div class="uui-toggle-box">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div-->
+        <router-link to="/" class="brand-logo">
+          BDD Generator
+        </router-link>
+      </nav>
+      <div class="uui-header-right">
+        <project-selector v-if="isAuth" />
+        <curtain
+          buttonClass="blue"
+          buttonText="edit step suggestions"
+          headerText="edit step suggestions"
+          :component="certainComponent">
+        </curtain>
+        <div class="user-info">
+          <a @click="logout" v-if="isAuth">Logout</a>
+        </div>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
-  import VButton from './VButton';
+  import { mapGetters, mapActions } from 'vuex';
+  import StepSuggestions from '@/components/suggestion/StepSuggestions';
+  import VButton from './EpamButton';
+  import ProjectSelector from './ProjectSelector';
+  import Curtain from './Curtain';
 
   export default {
     components: {
       VButton,
+      ProjectSelector,
+      Curtain,
+      StepSuggestions,
+    },
+
+    data() {
+      return {
+        certainComponent: {
+          component: StepSuggestions,
+          props: [],
+        },
+      };
+    },
+
+    computed: {
+      ...mapGetters({ isAuth: 'isAuth', getSuggestions: 'getCurrentSuggestions' }),
+    },
+
+    mounted() {
+      this.fetchSuggestions()
+        .then(() => {
+          this.certainComponent.props = { suggestions: this.getSuggestions };
+        });
     },
     methods: {
-      headerClick() {
-        this.$router.push({ name: 'suits' });
+      ...mapActions({ fetchSuggestions: 'getSuggestionsAsync' }),
+      logout() {
+        this.$store.commit('logout');
+        this.$router.push(
+          {
+            path: '/',
+          });
       },
     },
     name: 'app-header',
   };
 </script>
 
-<style lang="scss" scoped>
-  @import '../../assets/css/variables';
+<style lang="less" scoped>
 
-  header {
-    height: 50px;
-    box-sizing: border-box;
-    background: $header-bg-color;
-    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.07);
-
-    & > .holder {
-      position: relative;
-    }
-
-    & h1 {
-      display: inline-block;
-      line-height: 50px;
-      margin: 0 0 0 20px;
-      padding: 0 0 0 0;
-      font-size: 20px;
-      font-weight: normal;
-      cursor: pointer;
-    }
-
-    & .stepSwitch {
-      position: absolute;
-      top: 14px;
-      right: 0;
-    }
-
+  header button {
+    float: right;
+    margin: 12px 12px 0 0;
   }
+  header .user-info {
+    width: 200px;
+    float: right;
+    height: 60px;
+    & a {
+      color: white;
+      display: inline-block;
+      margin: 20px 0 0 0;
+    }
+  }
+  header .uui-header-right {
+    float: right;
+  }
+
+  header nav {
+    width: 200px;
+  }
+</style>
+
+<style lang="less">
+
+  header .curtain-component {
+    float: right;
+    margin-top: 12px;
+  }
+
 </style>

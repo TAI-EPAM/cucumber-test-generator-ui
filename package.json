@@ -11,10 +11,18 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "array-equal": "^1.0.0",
     "axios": "^0.17.0",
+    "jquery": "1.12.0",
+    "jquery-mousewheel": "^3.1.13",
+    "v-tooltip": "^2.0.0-rc.31",
     "vue": "^2.5.2",
+    "vue-ls": "^2.3.3",
+    "vue-multiselect": "^2.0.8",
     "vue-router": "^3.0.1",
-    "vuedraggable": "^2.14.1"
+    "vuedraggable": "^2.15.0",
+    "vuelidate": "^0.6.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -43,6 +51,8 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.3",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "node-sass": "^4.6.0",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
