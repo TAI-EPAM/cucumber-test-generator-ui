@@ -116,6 +116,12 @@ aside .uui-side-bar {
     padding: 0 10px;
     & button {
       width: 100%;
+      background: transparent;
+      border: none;
+      color: #a3c644;
+      &:hover {
+        background: #a3c644;
+      }
     }
   }
 }
