@@ -87,9 +87,19 @@ const store = new Vuex.Store({
     setActiveProject(state, payload) {
       const st = state;
       st.activeProject = payload.data;
+      const tagsSet = new Set();
+      st.activeProject.suits.forEach((suit) => {
+        if (suit.tags) {
+          suit.tags.forEach((tag) => {
+            tagsSet.add(tag);
+          });
+        }
+      });
+      st.tags = Array.from(tagsSet);
     },
     //* ************SUITS***********************/
     setSuits(state, payload) {
+      console.warn('setSuits');
       const st = state;
       st.activeProject.suits = payload.data;
 
