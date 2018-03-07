@@ -1,8 +1,12 @@
 import axios from 'axios';
 import Vue from 'vue';
 import VueLocalStorage from 'vue-ls';
+import Vuex from 'vuex';
+import store from '../store';
 
+Vue.use(Vuex);
 Vue.use(VueLocalStorage);
+
 const axiosClient = axios.create({
   // eslint-disable-next-line no-undef
   baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '',
@@ -12,8 +16,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.response.use(response => response,
   (error) => {
-    // alert('Kernel panic');
-    console.warn(error);
+    store.commit('setGlobalError', error);
     return Promise.reject(error);
   },
 );
