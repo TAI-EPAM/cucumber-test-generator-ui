@@ -15,7 +15,7 @@
       <div class="priority-component">
         <div class="title">Priority:</div>
         <div class="component">
-          <epam-multiswitch large="true" :values="priorityValues" v-model="entity.priority"/>
+          <priority-select v-model="entity.priority" />
         </div>
       </div>
     </div>
@@ -32,14 +32,14 @@
 <script>
   import { mapGetters } from 'vuex';
   import EpamButton from '../ui/EpamButton';
-  import EpamMultiswitch from '../ui/EpamMuiltswitch';
+  import PrioritySelect from '../ui/PrioritySelect';
   import TagsComponent from '../ui/TagsInput';
   import { mapValidationsSuit } from '../../utils/validator';
 
   export default {
     components: {
       EpamButton,
-      EpamMultiswitch,
+      PrioritySelect,
       TagsComponent,
     },
     data() {
@@ -52,13 +52,6 @@
           tags: [],
           rowNumber: 1,
         },
-        priorityValues: [
-          { value: 1, text: 'Critical' },
-          { value: 2, text: 'High' },
-          { value: 3, text: 'Medium' },
-          { value: 4, text: 'Low' },
-          { value: 5, text: 'Lowest' },
-        ],
       };
     },
     ...mapValidationsSuit(),

@@ -1,7 +1,5 @@
 <template>
   <i class="fa" :class="getClass()"></i>
-
-
 </template>
 
 <script>
