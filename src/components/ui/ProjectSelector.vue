@@ -17,18 +17,18 @@
 
     },
     computed: {
-      ...mapGetters(['getProjects']),
+      ...mapGetters({
+        projects: 'getProjects',
+      }),
     },
     data() {
       return {
-        projects: [],
         selected: 0,
       };
     },
     methods: {
     },
     mounted() {
-      this.projects = this.getProjects;
       if (this.$route.params.projectId) {
         this.selected = this.$route.params.projectId;
       }

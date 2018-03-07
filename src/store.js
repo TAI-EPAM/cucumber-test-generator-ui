@@ -58,10 +58,7 @@ const store = new Vuex.Store({
     },
     getCurrentCommits: state => state.currentCommits,
     getCurrentSuggestions: state => state.currentSuggestions,
-    getGlobalErrors: (state) => {
-      console.warn('getGlobalErrors');
-      return state.globalErrors;
-    },
+    getGlobalErrors: state => state.globalErrors,
   },
 
   mutations: {
