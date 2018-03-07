@@ -220,7 +220,7 @@ const store = new Vuex.Store({
     //* *************PROJECTS*******************/
     getProjectsAsync({ commit }) {
       return new Promise((resolve) => {
-        AxiosClient.get('/cucumber/1projects')
+        AxiosClient.get('/cucumber/projects')
           .then((response) => {
             commit('setProjects', { data: response.data });
             resolve();
