@@ -21,7 +21,7 @@
     </div>
     <div class="form-buttons-holder">
       <epam-button @click="resetData" class="large">Cancel</epam-button>
-      <epam-button @click="sendData" 
+      <epam-button @click="sendData"
         class="uui-button large"
         :class="buttonClass"
         :disabled="$v.entity.$invalid">Add Suit</epam-button>
@@ -34,7 +34,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import { mapValidationsSuit } from '../../validator';
+  import { mapValidationsSuit } from '../../utils/validator';
 
   export default {
     components: {

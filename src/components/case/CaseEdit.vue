@@ -21,7 +21,7 @@
     </div>
     <div class="form-buttons-holder">
       <epam-button @click="reset" class="large">Cancel</epam-button>
-      <epam-button @click="save" 
+      <epam-button @click="save"
         class="uui-button large"
         :class="buttonClass"
         :disabled="$v.entity.$invalid">Update case</epam-button>
@@ -33,7 +33,7 @@
   import EpamButton from '../ui/EpamButton';
   import EpamMultiswitch from '../ui/EpamMuiltswitch';
   import TagsComponent from '../ui/TagsInput';
-  import { mapValidationsCase } from '../../validator';
+  import { mapValidationsCase } from '../../utils/validator';
 
   export default {
     components: {

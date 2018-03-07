@@ -2,7 +2,7 @@ import axios from 'axios';
 import Vue from 'vue';
 import VueLocalStorage from 'vue-ls';
 import Vuex from 'vuex';
-import store from '../store';
+import store from '../store/store';
 
 Vue.use(Vuex);
 Vue.use(VueLocalStorage);

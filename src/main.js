@@ -7,7 +7,7 @@ import VTooltip from 'v-tooltip';
 import App from './App';
 import router from './router';
 
-import store from './store';
+import store from './store/store';
 
 // eslint-disable-next-line no-unused-vars
 import { Vuedals, Component as Vuedal, Bus as VuedalsBus } from './components/ui/popoup-vuedals';
