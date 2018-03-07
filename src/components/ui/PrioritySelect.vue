@@ -32,9 +32,6 @@
     },
     name: 'priority-select',
     props: ['value'],
-    mounted() {
-      console.warn(this.values);
-    },
   };
 </script>
 
