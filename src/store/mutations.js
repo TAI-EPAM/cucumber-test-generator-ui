@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import tagsGetter from '../utils/tagsGetter';
 
 export default {
   changeLoadingStatus(state, payload) {
@@ -26,19 +27,10 @@ export default {
   setActiveProject(state, payload) {
     const st = state;
     st.activeProject = payload.data;
-    const tagsSet = new Set();
-    st.activeProject.suits.forEach((suit) => {
-      if (suit.tags) {
-        suit.tags.forEach((tag) => {
-          tagsSet.add(tag);
-        });
-      }
-    });
-    st.tags = Array.from(tagsSet);
+    st.tags = Array.from(tagsGetter(st.activeProject.suits));
   },
   //* ************SUITS***********************/
   setSuits(state, payload) {
-    console.warn('setSuits');
     const st = state;
     st.activeProject.suits = payload.data;
 

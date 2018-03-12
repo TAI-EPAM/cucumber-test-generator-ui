@@ -5,7 +5,7 @@
       <div class="checkbox-holder">
         <input type="checkbox" v-model="selected" />
       </div>
-      <span class="item-name">{{ suit.name }} </span>
+      <span class="item-name">{{ suit.name }} ({{suit.casesCount}})</span>
       <priority-icon v-model="suit.priority" />
       <v-popover offset="0" placement="bottom-start">
         <i class="fa fa-ellipsis-v" />
