@@ -6,7 +6,7 @@ import convertSteps from '../utils/convert';
 export default {
   loginAsync({ commit }, entity) {
     const query = router.history.current.query;
-    AxiosClient.post('/cucumber/login', entity)
+    AxiosClient.post('/login', entity)
       .then((resp) => {
         if (resp.data.token) {
           commit('setToken', { token: resp.data.token });
@@ -25,7 +25,7 @@ export default {
   //* *************PROJECTS*******************/
   getProjectsAsync({ commit }) {
     return new Promise((resolve) => {
-      AxiosClient.get('/cucumber/projects')
+      AxiosClient.get('/projects')
         .then((response) => {
           commit('setProjects', { data: response.data });
           resolve();
@@ -36,7 +36,7 @@ export default {
   },
   getProjectByIdAsync({ commit }, projectId) {
     return new Promise((resolve) => {
-      AxiosClient.get(`/cucumber/projects/${projectId}`)
+      AxiosClient.get(`/projects/${projectId}`)
         .then((response) => {
           this.entity = response.data;
           commit('setActiveProject', { data: response.data });
@@ -48,7 +48,7 @@ export default {
   //* ************SUITS***********************/
   getSuitsAsync({ commit, state }, { projectId }) {
     if (router.history.current.name === 'Login') return;
-    AxiosClient.get(`/cucumber/projects/${projectId}/suits/`, { headers: { authorization: state.auth.token } })
+    AxiosClient.get(`/projects/${projectId}/suits/`, { headers: { authorization: state.auth.token } })
       .then((response) => {
         commit('setSuits', { data: response.data });
       })
@@ -59,7 +59,7 @@ export default {
   },
   addSuitAsync({ commit }, { projectId, data }) {
     return new Promise((resolve) => {
-      AxiosClient.post(`/cucumber/projects/${projectId}/suits/`, data)
+      AxiosClient.post(`/projects/${projectId}/suits/`, data)
         .then((response) => {
           const sendData = data;
           sendData.id = response.data.id;
@@ -71,7 +71,7 @@ export default {
   },
   deleteSuitAsync({ commit }, { suitId, projectId }) {
     return new Promise((resolve) => {
-      AxiosClient.delete(`/cucumber/projects/${projectId}/suits/${suitId}`)
+      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}`)
         .then(() => {
           commit('removeSuit', { suitId });
           resolve();
@@ -81,7 +81,7 @@ export default {
   },
   editSuitAsync({ commit }, { projectId, suitId, updateData }) {
     return new Promise((resolve) => {
-      AxiosClient.put(`/cucumber/projects/${projectId}/suits/${suitId}`, updateData)
+      AxiosClient.put(`/projects/${projectId}/suits/${suitId}`, updateData)
         .then(() => {
           commit('updateSuit', updateData);
           resolve();
@@ -92,7 +92,7 @@ export default {
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient.get(`/cucumber/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
+      AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
         .then(resp => resp.data.map(item => convertSteps(item)))
         .then((data) => {
           commit('setHistory', data);
@@ -107,7 +107,7 @@ export default {
     sendData.creationDate = Date.now();
     sendData.updateDate = Date.now();
     return new Promise((resolve) => {
-      AxiosClient.post(`/cucumber/projects/${projectId}/suits/${suitId}/cases/`, data)
+      AxiosClient.post(`/projects/${projectId}/suits/${suitId}/cases/`, data)
         .then((response) => {
           sendData.id = response.data.id;
           commit('addCase', { suitId, data: sendData });
@@ -120,7 +120,7 @@ export default {
     const sendData = Object.assign({}, updateData);
     sendData.action = 'UPDATE';
     return new Promise((resolve) => {
-      AxiosClient.put(`/cucumber/projects/${projectId}/suits/${suitId}/cases/${caseId}`, sendData)
+      AxiosClient.put(`/projects/${projectId}/suits/${suitId}/cases/${caseId}`, sendData)
         .then(() => {
           commit('updateCase', { suitId, caseId, updateData: sendData });
           resolve();
@@ -130,7 +130,7 @@ export default {
   },
   deleteCaseAsync({ commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient.delete(`/cucumber/projects/${projectId}/suits/${suitId}
+      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}
               /cases/${caseId}`)
         .then(() => {
           commit('removeCase', { suitId, caseId });
@@ -143,7 +143,7 @@ export default {
   //* *************SUGGESTIONS******************** */
   getSuggestionsAsync({ state, commit }) {
     return new Promise((resolve) => {
-      AxiosClient.get('/cucumber/stepSuggestions', { headers: { authorization: state.auth.token } })
+      AxiosClient.get('/stepSuggestions', { headers: { authorization: state.auth.token } })
         .then((response) => {
           const first = response.data.length - 7;
           const last = response.data.length;
@@ -156,7 +156,7 @@ export default {
   },
   addSuggestionAsync({ state, commit }, data) {
     return new Promise((resolve) => {
-      AxiosClient.post('/cucumber/stepSuggestions', data)
+      AxiosClient.post('/stepSuggestions', data)
         .then((response) => {
           const sendData = Object.assign({}, data);
           sendData.id = response;
@@ -167,14 +167,14 @@ export default {
     });
   },
   deleteSuggestionAsync({ state, commit }, suggestionId) {
-    AxiosClient.delete(`/cucumber/stepSuggestions/${suggestionId}`, suggestionId)
+    AxiosClient.delete(`/stepSuggestions/${suggestionId}`, suggestionId)
       .then(() => {
         commit('deleteSuggestion', suggestionId);
       })
       .catch(() => { });
   },
   updateSuggestionAsync({ state, commit }, data) {
-    AxiosClient.put(`/cucumber/stepSuggestions/${data.id}`, data)
+    AxiosClient.put(`/stepSuggestions/${data.id}`, data)
       .then(() => {
         commit('updateSuggestion', data);
       })
