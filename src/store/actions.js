@@ -12,6 +12,7 @@ export default {
           commit('setToken', { token: resp.data.token });
           Vue.ls.set('token', resp.data.token);
           Vue.ls.set('isAuth', 'true');
+          AxiosClient.defaults.headers.authorization = resp.data.token;
         }
         if (query && query.redirect) {
           router.push(
@@ -48,7 +49,7 @@ export default {
   //* ************SUITS***********************/
   getSuitsAsync({ commit, state }, { projectId }) {
     if (router.history.current.name === 'Login') return;
-    AxiosClient.get(`/projects/${projectId}/suits/`, { headers: { authorization: state.auth.token } })
+    AxiosClient.get(`/projects/${projectId}/suits/`)
       .then((response) => {
         commit('setSuits', { data: response.data });
       })
@@ -130,8 +131,7 @@ export default {
   },
   deleteCaseAsync({ commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}
-              /cases/${caseId}`)
+      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases/${caseId}`)
         .then(() => {
           commit('removeCase', { suitId, caseId });
           commit('setHistory', []);

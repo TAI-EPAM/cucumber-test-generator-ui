@@ -31,19 +31,9 @@ class ProjectMenu {
     this.sortedItems = [];
     this.filtersObj = {};
   }
-  transformSuits(list) {
-    const items = list;
-    items.forEach((item) => {
-      const modifyItem = item;
-      modifyItem.casesCount = item.cases.length;
-      return modifyItem;
-    });
-    this.items = items;
-    this.sortedItems = items;
-    return this;
-  }
   setItems(data) {
-    this.transformSuits(data);
+    this.items = [...data];
+    this.sortedItems = [...data];
     return this;
   }
   getItems() {

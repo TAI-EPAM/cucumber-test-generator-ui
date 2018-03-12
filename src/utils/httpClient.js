@@ -13,7 +13,6 @@ const axiosClient = axios.create({
   headers: { authorization: Vue.ls.get('token') },
 });
 
-
 axiosClient.interceptors.response.use(response => response,
   (error) => {
     store.commit('setGlobalError', error);
