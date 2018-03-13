@@ -10,8 +10,8 @@ At first install BDD Generator Back-end Part
    2.1. Set "JAVA_HOME"
    
    2.2. Set "M2_HOME"
-3. Git Clone (https://github.com/TAI-EPAM/JDI) at "develop" branch   
-4. In forlder "Java\JDI\jdi-cucumber-test-generator" run "mvn tomcat7:run-war"
+3. Git Clone (https://github.com/TAI-EPAM/jdi-cucumber-test-generator) at "develop" branch   
+4. In the root folder of jdi-cucumber-test-generator run "mvn tomcat7:run-war"
 
 ### Installing
 
