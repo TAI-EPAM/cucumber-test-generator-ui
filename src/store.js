@@ -242,7 +242,7 @@ const store = new Vuex.Store({
         AxiosClient.post(`/cucumber/projects/${projectId}/suits/`, data)
           .then((response) => {
             const sendData = data;
-            sendData.id = response.data;
+            sendData.id = response.data.id;
             commit('addSuit', sendData);
             resolve();
           })
@@ -287,7 +287,7 @@ const store = new Vuex.Store({
       return new Promise((resolve) => {
         AxiosClient.post(`/cucumber/projects/${projectId}/suits/${suitId}/cases/`, data)
           .then((response) => {
-            sendData.id = response.data;
+            sendData.id = response.data.id;
             commit('addCase', { suitId, data: sendData });
             resolve();
           })

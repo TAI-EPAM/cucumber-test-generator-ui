@@ -32,7 +32,7 @@
         if (newValue) {
           this.selectedObject.cases.push(this.caseItem.id);
         } else {
-          this.selectedObject.cases.splice(this.selectedSuits.cases.indexOf(this.caseItem.id), 1);
+          this.selectedObject.cases.splice(this.selectedObject.cases.indexOf(this.caseItem.id), 1);
         }
       },
     },
