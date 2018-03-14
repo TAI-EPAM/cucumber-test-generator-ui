@@ -21,7 +21,7 @@
     </div>
     <div class="form-buttons-holder">
       <epam-button @click="resetData" class="large">Cancel</epam-button>
-      <epam-button @click="sendData" 
+      <epam-button @click="sendData"
         class="uui-button large"
         :class="buttonClass"
         :disabled="$v.entity.$invalid">Add case</epam-button>
@@ -54,9 +54,8 @@
         priorityValues: [
           { value: 1, text: 'Critical' },
           { value: 2, text: 'High' },
-          { value: 3, text: 'Medium' },
-          { value: 4, text: 'Low' },
-          { value: 5, text: 'Lowest' },
+          { value: 3, text: 'Normal' },
+          { value: 4, text: 'Minor' },
         ],
       };
     },
