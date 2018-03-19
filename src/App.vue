@@ -6,11 +6,13 @@
   import { mapGetters } from 'vuex';
   import AppLogin from './components/ui/AppLogin';
   import DefaultView from './views/DefaultView';
+  import RegistrationView from './views/RegistrationView';
 
   export default {
     components: {
       AppLogin,
       DefaultView,
+      RegistrationView,
     },
     data() {
       return {
@@ -20,6 +22,10 @@
     },
     methods: {
       viewSelector() {
+        const registration = this.$route.path.includes('/registration');
+        if (registration) {
+          return 'RegistrationView';
+        }
         return this.isAuth ? 'DefaultView' : 'AppLogin';
       },
     },
