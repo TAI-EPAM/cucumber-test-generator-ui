@@ -33,7 +33,7 @@ class ProjectMenu {
   }
   setItems(data) {
     this.items = [...data];
-    this.sortedItems = [...data];
+    this.sortedItems = JSON.parse(JSON.stringify(data));
     return this;
   }
   getItems() {

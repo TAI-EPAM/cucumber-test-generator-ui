@@ -10,8 +10,8 @@
         <option value="name">Name</option>
         <option value="priority">Priority</option>
       </select>
+      <input type="checkbox" v-model="entity.isReverse" />
     </div>
-
   </div>
 </template>
 

@@ -51,7 +51,7 @@
         },
       ),
       casesCount() {
-        return `(${this.suit.cases.length})`;
+        return this.suit.cases && this.suit.cases.length ? `(${this.suit.cases.length})` : '(0)';
       },
     },
     data() {
