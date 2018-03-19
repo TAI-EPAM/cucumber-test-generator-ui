@@ -30,6 +30,7 @@ class ProjectMenu {
     this.items = [];
     this.sortedItems = [];
     this.filtersObj = {};
+    this.exactFiltersObj = {};
   }
   setItems(data) {
     this.items = [...data];
@@ -48,8 +49,16 @@ class ProjectMenu {
       searchString: this.filtersObj.searchString,
     };
   }
+  getExactFilters() {
+    return this.exactFiltersObj;
+  }
   setFilters(obj) {
     this.filtersObj = obj;
+    return this;
+  }
+  setExactFilters(obj) {
+    this.resetSortedItems();
+    this.exactFiltersObj = { ...obj };
     return this;
   }
   getSortedItems() {
@@ -69,11 +78,26 @@ class ProjectMenu {
     }
     return this;
   }
+  searchByExactFilters() {
+    Object.keys(this.exactFiltersObj).forEach((key) => {
+      if (this.exactFiltersObj[key]) {
+        this.searchByExactFilterItem(key, this.exactFiltersObj[key]);
+      }
+    });
+    return this;
+  }
+  searchByExactFilterItem(prop, value) {
+    const items = JSON.parse(JSON.stringify(this.items));
+    this.sortedItems = items.filter(s => s[prop] === value);
+  }
   sortItems() {
     const filterParams = this.getFilterParams();
     const { key, isReverse } = filterParams.sortBy;
     this.sortedItems = Sorter(this.sortedItems, key, isReverse);
     return this;
+  }
+  resetSortedItems() {
+    this.sortedItems = JSON.parse(JSON.stringify(this.items));
   }
 }
 

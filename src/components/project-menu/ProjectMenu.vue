@@ -1,6 +1,6 @@
 <template>
   <div class="project-menu">
-    <project-menu-filters v-model="filters"></project-menu-filters>
+    <project-menu-filters v-bind="{applyFilters}" v-model="modificators"></project-menu-filters>
     <div class="uui-side-bar">
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" :key="suit.id"/>
@@ -46,10 +46,17 @@
     data() {
       return {
         localItems: [],
-        filters: {
-          sortField: 'id',
-          isReverse: false,
-          searchString: null,
+        modificators: {
+          filters: {
+            sortField: 'id',
+            isReverse: false,
+            searchString: null,
+          },
+          exactFilters: {
+            date: null,
+            status: null,
+            priority: null,
+          },
         },
         selectedObject: {
           suits: [],
@@ -60,7 +67,7 @@
     methods: {
       getMenuItems() {
         this.localItems = ProjectMenuController
-                            .setFilters(this.filters)
+                            .setFilters(this.modificators.filters)
                             .searchByName()
                             .sortItems()
                             .getSortedItems();
@@ -79,6 +86,15 @@
           },
         });
       },
+      applyFilters() {
+        // console.warn(modificators);
+        this.localItems = ProjectMenuController
+          .setExactFilters(this.modificators.exactFilters)
+          .searchByExactFilters()
+          // .searchByName()
+          .sortItems()
+          .getSortedItems();
+      },
     },
     mounted() {
       ProjectMenuController.setItems(this.items);
@@ -92,7 +108,7 @@
         ProjectMenuController.setItems(n);
         this.getMenuItems();
       },
-      filters: {
+      modificators: {
         handler() {
           this.getMenuItems();
         },
@@ -107,6 +123,7 @@ aside .uui-side-bar {
   display: block;
   width: 340px;
   background: #373838;
+  top: auto;
 
   & ul {
    margin-bottom: 10px;
