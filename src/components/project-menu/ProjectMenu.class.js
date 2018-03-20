@@ -66,15 +66,13 @@ class ProjectMenu {
   }
   searchByName() {
     const str = this.getFilterParams().searchString;
-    const items = [...this.items];
+    const items = JSON.parse(JSON.stringify(this.sortedItems));
     if (str) {
       this.sortedItems = items.filter((s) => {
         const item = { ...s };
         item.cases = item.cases.filter(c => c.name.toLowerCase().match(new RegExp(str, 'g')));
         return item.cases.length ? item : item.name.toLowerCase().match(new RegExp(str, 'g'));
       });
-    } else {
-      this.sortedItems = [...this.items];
     }
     return this;
   }
@@ -98,6 +96,10 @@ class ProjectMenu {
   }
   resetSortedItems() {
     this.sortedItems = JSON.parse(JSON.stringify(this.items));
+  }
+  resetItems() {
+    this.localItems = JSON.parse((JSON.stringify(this.items)));
+    return this;
   }
 }
 

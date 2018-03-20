@@ -1,6 +1,6 @@
 <template>
   <div class="project-menu">
-    <project-menu-filters v-bind="{applyFilters}" v-model="modificators"></project-menu-filters>
+    <project-menu-filters v-bind="{applyFilters, resetFilters}" v-model="modificators"></project-menu-filters>
     <div class="uui-side-bar">
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem v-for="suit in localItems" :suit="suit" :selectedObject="selectedObject" :key="suit.id"/>
@@ -95,6 +95,19 @@
           .sortItems()
           .getSortedItems();
       },
+      resetFilters() {
+        const clearModel = {
+          date: null,
+          status: null,
+          priority: null,
+        };
+        Object.assign(this.modificators.exactFilters, clearModel);
+        this.localItems = ProjectMenuController
+          .setExactFilters(this.modificators.exactFilters)
+          .resetItems()
+          .sortItems()
+          .getSortedItems();
+      },
     },
     mounted() {
       ProjectMenuController.setItems(this.items);
@@ -104,9 +117,12 @@
     updated() {
     },
     watch: {
-      items(n) {
-        ProjectMenuController.setItems(n);
-        this.getMenuItems();
+      items: {
+        handler(n) {
+          ProjectMenuController.setItems(n);
+          this.getMenuItems();
+        },
+        deep: true,
       },
       modificators: {
         handler() {

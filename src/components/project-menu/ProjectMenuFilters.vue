@@ -33,6 +33,7 @@
           </option>
         </select>
       </label>
+      <epam-button @click="resetFilters()">Reset Filters</epam-button>
       <epam-button @click="applyFilters(entity)">Apply Filters</epam-button>
     </div>
   </div>
@@ -74,7 +75,7 @@
       // console.warn(this.applyFilters);
     },
     name: 'ProjectMenuFilters',
-    props: ['value', 'applyFilters'],
+    props: ['value', 'applyFilters', 'resetFilters'],
     watch: {
       entity: {
         handler() {
