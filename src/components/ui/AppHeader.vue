@@ -18,8 +18,8 @@
           BDD Generator
         </router-link>
       </nav>
-      <div class="uui-header-right">
-        <project-selector v-if="isAuth" />
+      <div class="uui-header-right" v-if="isAuth">
+        <project-selector />
         <curtain
           buttonClass="blue"
           buttonText="edit step suggestions"
@@ -27,7 +27,7 @@
           :component="certainComponent">
         </curtain>
         <div class="user-info">
-          <a @click="logout" v-if="isAuth">Logout</a>
+          <a @click="logout">Logout</a>
         </div>
       </div>
     </div>
@@ -63,10 +63,12 @@
     },
 
     mounted() {
-      this.fetchSuggestions()
-        .then(() => {
-          this.certainComponent.props = { suggestions: this.getSuggestions };
-        });
+      if (this.isAuth) {
+        this.fetchSuggestions()
+          .then(() => {
+            this.certainComponent.props = { suggestions: this.getSuggestions };
+          });
+      }
     },
     methods: {
       ...mapActions({ fetchSuggestions: 'getSuggestionsAsync' }),

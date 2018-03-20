@@ -1,4 +1,4 @@
-import { required, maxLength } from 'vuelidate/lib/validators';
+import { required, maxLength, email, minLength } from 'vuelidate/lib/validators';
 
 function mapValidationsSuit() {
   return {
@@ -37,5 +37,33 @@ function mapValidationsCase() {
     },
   };
 }
-export { mapValidationsSuit, mapValidationsCase };
+function mapValidationsRegistration() {
+  return {
+    validations: {
+      entity: {
+        firstName: {
+          required,
+          maxLength: maxLength(250),
+        },
+        lastName: {
+          required,
+          maxLength: maxLength(250),
+        },
+        email: {
+          required,
+          email,
+        },
+        password: {
+          required,
+          minLength: minLength(5),
+        },
+        confirmationPassword: {
+          required,
+          minLength: minLength(5),
+        },
+      },
+    },
+  };
+}
+export { mapValidationsSuit, mapValidationsCase, mapValidationsRegistration };
 

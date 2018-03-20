@@ -180,4 +180,10 @@ export default {
       })
       .catch(() => { });
   },
+  //* *************REGISTRATION******************** */
+  registerAsync(entity) {
+    AxiosClient.post('/registration', entity).then(() => {
+      this.$router.push({ path: '/login' });
+    }).catch(() => { });
+  },
 };
