@@ -9,7 +9,7 @@
       </div>
       <h1>Authorization</h1>
       <div class="linkContainer">
-        <a href="#" @click="register">Registration</a>
+        <router-link :to="{ name: 'Registration'}">Registration</router-link>
         <span></span>
         <a href="#">Forget password?</a>
       </div>
@@ -20,7 +20,7 @@
           <input type="checkbox" id="rememberMe" class="uui-checkbox"/><label for="rememberMe"> Remember me</label>
         </div>
         <div class="form-buttons-holder">
-          <v-button @click="() => login(this.entity)" class="lime-green large">Login</v-button>
+          <v-button @click="loginClick" class="lime-green large">Login</v-button>
         </div>
       </div>
       <footer class="loginFooter">
@@ -53,6 +53,9 @@
       ...mapActions({
         login: 'loginAsync',
       }),
+      loginClick() {
+        this.login(this.entity);
+      },
       register() {
         this.$router.push({ path: '/registration' });
       },
