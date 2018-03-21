@@ -7,12 +7,14 @@
   import AppLogin from './components/ui/AppLogin';
   import DefaultView from './views/DefaultView';
   import RegistrationView from './views/RegistrationView';
+  import PasswordForgotView from './views/PasswordForgotView';
 
   export default {
     components: {
       AppLogin,
       DefaultView,
       RegistrationView,
+      PasswordForgotView,
     },
     data() {
       return {
@@ -23,8 +25,12 @@
     methods: {
       viewSelector() {
         const registration = this.$route.path.includes('/registration');
+        const passwordForgot = this.$route.path.includes('/passwordForgot');
         if (registration) {
           return 'RegistrationView';
+        }
+        if (passwordForgot) {
+          return 'PasswordForgotView';
         }
         return this.isAuth ? 'DefaultView' : 'AppLogin';
       },

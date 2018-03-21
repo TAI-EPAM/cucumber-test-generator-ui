@@ -12,8 +12,16 @@ export default {
   },
   getUI: state => state.ui,
   getActiveProject: state => state.activeProject,
-  getActiveSuits: state => state.activeProject.suits,
-  getCountActiveSuits: state => state.activeProject.suits.length,
+  getActiveSuits: (state) => {
+    if (state.activeProject) {
+      return state.activeProject.suits;
+    } return null;
+  },
+  getCountActiveSuits: (state) => {
+    if (state.activeProject) {
+      return state.activeProject.suits.length;
+    } return null;
+  },
   getActiveSuitById: state => (suitId) => {
     if (suitId) {
       return state.activeProject.suits.filter(suit => suit.id === parseInt(suitId, 0))[0];
