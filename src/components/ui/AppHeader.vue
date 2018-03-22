@@ -87,7 +87,7 @@
 </script>
 
 <style lang="less" scoped>
-
+  @import "../../assets/vendors/epam-ui/less/uui-colors";
   header {
     .uui-header {
       background: white;
@@ -110,7 +110,7 @@
     float: right;
     height: 60px;
     & a {
-      color: white;
+      color: @blue_dark;
       display: inline-block;
       margin: 20px 0 0 0;
       cursor: pointer;
@@ -126,10 +126,8 @@
 </style>
 
 <style lang="less">
-
   header .curtain-component {
     float: right;
     margin-top: 12px;
   }
-
 </style>
