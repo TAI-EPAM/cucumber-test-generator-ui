@@ -1,6 +1,6 @@
 <template>
   <div id="content-side">
-    <app-header />
+    <app-header/>
     <main class="uui-main-container">
       <div class="app-wrapper">
         <global-errors></global-errors>
@@ -9,37 +9,47 @@
           <div class="uui-form-wrapper registration-form">
             <div class="name-container">
               <input type="text" name="first-name" value="" class="uui-form-element large"
-                     placeholder="First Name" v-model="entity.firstName"
-                     @input="$v.entity.firstName.$touch()" :class="{'error': $v.entity.firstName.$error}" />
+                     placeholder="First Name" v-model="entity.name"
+                     @input="$v.entity.name.$touch()"
+                     :class="{ 'error': $v.entity.name.$error }"/>
               <input type="text" name="last-name" value="" class="uui-form-element large"
-                     placeholder="Last Name" v-model="entity.lastName"
-                     @input="$v.entity.lastName.$touch()" :class="{'error': $v.entity.lastName.$error}"/>
+                     placeholder="Last Name" v-model="entity.surname"
+                     @input="$v.entity.surname.$touch()"
+                     :class="{ 'error': $v.entity.surname.$error }"/>
             </div>
             <input type="text" name="email" value="" class="uui-form-element large"
                    placeholder="E-mail" v-model="entity.email"
-                   @input="$v.entity.email.$touch()" :class="{'error': $v.entity.email.$error}"/>
+                   @input="$v.entity.email.$touch()"
+                   :class="{ 'error': $v.entity.email.$error }"/>
             <input type="password" name="password" value="" class="uui-form-element large"
                    placeholder="Password" v-model="entity.password"
-                   @input="$v.entity.password.$touch()" :class="{'error': $v.entity.password.$error}"/>
+                   @input="$v.entity.password.$touch()"
+                   :class="{ 'error': $v.entity.password.$error }"/>
             <input type="password" name="password" value="" class="uui-form-element large"
                    placeholder="Password Confirmation" v-model="entity.confirmationPassword"
-                   @input="$v.entity.password.$touch()" :class="{'error': $v.entity.password.$error}"/>
+                   @input="$v.entity.confirmationPassword.$touch()"
+                   :class="confirmationPassword"/>
             <div class="form-buttons-holder">
-              <v-button @click="() => register(this.entity)" class="uui-button blue large" :class="buttonClass">New user</v-button>
+              <epam-button @click="registerClick" class="uui-button blue large" :class="buttonClass">New user
+              </epam-button>
             </div>
           </div>
         </div>
       </div>
     </main>
     <app-footer></app-footer>
+    <vuedal></vuedal>
   </div>
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import AppHeader from '../components/ui/AppHeader';
   import AppFooter from '../components/ui/AppFooter';
   import GlobalErrors from '../components/ui/GlobalErrors';
-  import VButton from '../components/ui/EpamButton';
+  import EpamButton from '../components/ui/EpamButton';
+  import { Component as Vuedal } from '../components/ui/popoup-vuedals';
+  import Notification from '../components/Notification';
   import { mapValidationsRegistration } from '../utils/validator';
 
   export default {
@@ -47,13 +57,16 @@
       AppHeader,
       AppFooter,
       GlobalErrors,
-      VButton,
+      EpamButton,
+      Notification,
+      Vuedal,
+      mapActions,
     },
     data() {
       return {
         entity: {
-          firstName: null,
-          lastName: null,
+          name: null,
+          surname: null,
           email: null,
           password: null,
           confirmationPassword: null,
@@ -62,8 +75,23 @@
     },
     ...mapValidationsRegistration(),
     methods: {
-      register() {
-        this.$store.dispatch('registerAsync', { name: this.entity.firstName, surname: this.entity.lastName, email: this.entity.email, password: this.entity.password });
+      ...mapActions({
+        register: 'registerAsync',
+      }),
+      registerClick() {
+        this.register(this.entity).then(() => {
+          this.$vuedals.open({
+            title: 'New user registration',
+            component: Notification,
+            props: {
+              message: `Visit ${this.entity.email} to complete registration`,
+              onCancel() {
+                this.$vuedals.close();
+                this.$router.push({ path: '/login' });
+              },
+            },
+          });
+        });
       },
     },
     computed: {
@@ -71,6 +99,11 @@
         const passwordsEqual = this.entity.password === this.entity.confirmationPassword;
         return {
           disable: this.$v.entity.$invalid || !passwordsEqual,
+        };
+      },
+      confirmationPassword() {
+        return {
+          error: this.entity.password !== this.entity.confirmationPassword,
         };
       },
     },
@@ -115,7 +148,7 @@
       }
     }
 
-    .name-container{
+    .name-container {
       display: flex;
       justify-content: space-between;
 
@@ -125,7 +158,6 @@
       }
     }
   }
-
 
 
 </style>

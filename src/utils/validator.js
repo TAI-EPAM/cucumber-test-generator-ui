@@ -41,11 +41,11 @@ function mapValidationsRegistration() {
   return {
     validations: {
       entity: {
-        firstName: {
+        name: {
           required,
           maxLength: maxLength(250),
         },
-        lastName: {
+        surname: {
           required,
           maxLength: maxLength(250),
         },

@@ -181,9 +181,11 @@ export default {
       .catch(() => { });
   },
   //* *************REGISTRATION******************** */
-  registerAsync(entity) {
-    AxiosClient.post('/registration', entity).then(() => {
-      this.$router.push({ path: '/login' });
-    }).catch(() => { });
+  registerAsync(state, entity) {
+    return AxiosClient.post('/registration', entity);
+  },
+  //* *************PASSWORD_FORGOT******************** */
+  passwordForgotAsync(state, entity) {
+    return AxiosClient.post('/passwordForgot', entity);
   },
 };

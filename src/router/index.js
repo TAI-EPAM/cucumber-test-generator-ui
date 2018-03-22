@@ -48,6 +48,10 @@ const router = new Router({
       path: '/registration',
       name: 'Registration',
     },
+    {
+      path: '/passwordForgot',
+      name: 'PasswordForgot',
+    },
   ],
 });
 

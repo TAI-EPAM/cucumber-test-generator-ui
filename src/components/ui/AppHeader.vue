@@ -15,7 +15,7 @@
           <span></span>
         </div-->
         <router-link to="/" class="brand-logo">
-          BDD Generator
+          <logo></logo>
         </router-link>
       </nav>
       <div class="uui-header-right" v-if="isAuth">
@@ -40,6 +40,7 @@
   import VButton from './EpamButton';
   import ProjectSelector from './ProjectSelector';
   import Curtain from './Curtain';
+  import Logo from './Logo';
 
   export default {
     components: {
@@ -47,6 +48,7 @@
       ProjectSelector,
       Curtain,
       StepSuggestions,
+      Logo,
     },
 
     data() {
