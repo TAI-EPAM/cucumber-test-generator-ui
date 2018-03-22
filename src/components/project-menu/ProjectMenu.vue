@@ -47,15 +47,16 @@
       return {
         localItems: [],
         modificators: {
-          filters: {
-            sortField: 'id',
-            isReverse: false,
-            searchString: null,
-          },
+          exactFiltersMode: 'suit',
           exactFilters: {
             date: null,
             status: null,
             priority: null,
+          },
+          filters: {
+            sortField: 'id',
+            isReverse: false,
+            searchString: null,
           },
         },
         selectedObject: {
@@ -89,7 +90,7 @@
       applyFilters() {
         // console.warn(modificators);
         this.localItems = ProjectMenuController
-          .setExactFilters(this.modificators.exactFilters)
+          .setExactFilters(this.modificators.exactFilters, this.modificators.exactFiltersMode)
           .searchByExactFilters()
           // .searchByName()
           .sortItems()

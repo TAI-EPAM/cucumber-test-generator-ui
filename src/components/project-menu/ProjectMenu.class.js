@@ -31,6 +31,7 @@ class ProjectMenu {
     this.sortedItems = [];
     this.filtersObj = {};
     this.exactFiltersObj = {};
+    this.exactFiltersMode = null;
   }
   setItems(data) {
     this.items = [...data];
@@ -56,9 +57,10 @@ class ProjectMenu {
     this.filtersObj = obj;
     return this;
   }
-  setExactFilters(obj) {
+  setExactFilters(obj, mode) {
     this.resetSortedItems();
     this.exactFiltersObj = { ...obj };
+    this.exactFiltersMode = mode;
     return this;
   }
   getSortedItems() {
@@ -80,13 +82,24 @@ class ProjectMenu {
     Object.keys(this.exactFiltersObj).forEach((key) => {
       if (this.exactFiltersObj[key]) {
         this.searchByExactFilterItem(key, this.exactFiltersObj[key]);
+        // console.warn(this.sortedItems[0]);
       }
     });
+
     return this;
   }
+
   searchByExactFilterItem(prop, value) {
     const items = JSON.parse(JSON.stringify(this.items));
-    this.sortedItems = items.filter(s => s[prop] === value);
+    if (this.exactFiltersMode === 'case') {
+      this.sortedItems = items.filter((s) => {
+        const item = s;
+        item.cases = item.cases.filter(c => c[prop] === value);
+        return item.cases.length !== 0 ? item : null;
+      });
+    } else {
+      this.sortedItems = items.filter(s => s[prop] === value);
+    }
   }
   sortItems() {
     const filterParams = this.getFilterParams();

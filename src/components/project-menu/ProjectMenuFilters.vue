@@ -17,6 +17,10 @@
       Search by name: <input type="text" v-model="entity.filters.searchString" />
     </div>
     <div class="filter-panel" v-show="panels.filter">
+      <div class="entityTypes-holder">
+        <label><input type="radio" value="suit" v-model="entity.exactFiltersMode" :checked="entity.exactFiltersMode === value"/> Suit</label>
+        <label><input type="radio" value="case" v-model="entity.exactFiltersMode" :checked="entity.exactFiltersMode === value"/> Case</label>
+      </div>
       <label>
         <span>Status:</span>
         <select v-model="entity.exactFilters.status">
@@ -33,8 +37,8 @@
           </option>
         </select>
       </label>
-      <epam-button @click="resetFilters()">Reset Filters</epam-button>
-      <epam-button @click="applyFilters(entity)">Apply Filters</epam-button>
+      <epam-button @click="resetFilters()" :markup="'small'">Reset Filters</epam-button>
+      <epam-button @click="applyFilters(entity)" :markup="'small'">Apply Filters</epam-button>
     </div>
   </div>
 </template>
@@ -72,7 +76,7 @@
       },
     },
     mounted() {
-      // console.warn(this.applyFilters);
+      // console.warn(this.value);
     },
     name: 'ProjectMenuFilters',
     props: ['value', 'applyFilters', 'resetFilters'],
@@ -111,6 +115,12 @@
         display: inline-block;
       }
     }
+    & .entityTypes-holder {
+      & label {
+        display: inline-block;
+      }
+    }
+
   }
 
   & > .filter-nav {
