@@ -1,30 +1,25 @@
 <template>
-<div class="item-wrapper">
- <div class="item-line-wrapper">
-      <select @change="updateSuggestion(entity)" v-model="entity.type"
-        class="select-type">
-          <option v-for="item in types"
-           :selected="suggestion.type===item[0]">{{item[1]}}</option>
+  <div class="item-wrapper">
+    <div class="item-line-wrapper">
+      <select v-model="suggestion.type" @change="setCheck" class="select-type">
+        <option v-for="item in types">
+          {{item[1]}}
+        </option>
       </select>
-        <input type="text" class="uui-form-element input-suggestion"
-          :placeholder="suggestion.content"
-          :value="suggestion.content"
-          v-on="{mouseover:showPen, mouseleave: hidePen}"
-          :readonly="!canUpdateContent"
-          v-focus="canUpdateContent"
-          />
-        <button role="button" class="suggestion-update"
-            v-on="{mouseover: showPen,
-                  mouseleave: hidePen,
-                  click: setUpdateMode}"
-            v-bind:class="{'pen': isShownPen}">
-                <i class="fa fa-xl fa-pencil" aria-hidden="true"></i></button>
-        <epam-button @click="deleteSuggestion(suggestion.id)"
-          class="suggestion-delete">
-          <i class="fa fa-xl fa-remove" aria-hidden="true"></i>
-        </epam-button>
+      <input type="text" class="uui-form-element input-suggestion"
+             v-model="suggestion.content"
+             v-on:input="setCheck"
+      />
+      <epam-button @click="deleteSuggestion(suggestion.id)"
+                   class="suggestion-delete" v-if="!showCheck">
+        <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
+      </epam-button>
+      <epam-button @click="updateValue"
+                   class="suggestion-apply" v-if="showCheck">
+        <i class="fa fa-check icon" aria-hidden="true"></i>
+      </epam-button>
     </div>
-</div>
+  </div>
 </template>
 
 
@@ -37,15 +32,6 @@
     components: {
       EpamButton,
     },
-    directives: {
-      focus(el, value) {
-        if (value) {
-          // this.hidePen();
-          el.focus();
-          // console.log(el);
-        }
-      },
-    },
     data() {
       return {
         types: [...StepTypeMap],
@@ -54,25 +40,20 @@
           id: this.suggestion.id,
           type: this.suggestion.type,
         },
-        isShownPen: false,
-        canUpdateContent: false,
+        showCheck: false,
       };
     },
     methods: {
-      ...mapActions({ deleteSuggestion: 'deleteSuggestionAsync',
-        updateSuggestion: 'updateSuggestionAsync' }),
-      showPen() {
-        this.isShownPen = true;
+      ...mapActions({
+        deleteSuggestion: 'deleteSuggestionAsync',
+        updateSuggestion: 'updateSuggestionAsync',
+      }),
+      setCheck() {
+        this.showCheck = true;
       },
-      hidePen() {
-        this.isShownPen = false;
-      },
-      setUpdateMode() {
-        this.canUpdateContent = true;
-        console.log('can write');
-      },
-      resetUpdateMode() {
-        this.canUpdateContent = false;
+      updateValue() {
+        this.updateSuggestion(this.entity);
+        this.showCheck = false;
       },
     },
     name: 'SuggestionItem',
@@ -81,44 +62,74 @@
 </script>
 
 <style lang="less" scoped>
-.item-wrapper {
-  width: 100%;
-}
-.item-line-wrapper {
-  display: flex;
-  border: 1px solid gray;
-  .fa.fa-remove {
-      color: #999999;
-    }
-  .fa.fa-pencil {
-      color: #999999;
-      margin: 10px;
+  @import "../../assets/vendors/epam-ui/less/uui-colors";
+  @import "../../assets/vendors/epam-ui/less/uui-fonts";
+
+  .item-wrapper {
+    width: 100%;
+    margin-bottom: 4px;
   }
-}
-.input-suggestion {
+
+  .item-line-wrapper {
+    display: flex;
+
+    .fa.fa-remove {
+      color: @gray;
+    }
+    .fa.fa-pencil {
+      color: @gray;
+      margin: 10px;
+    }
+  }
+
+  .input-suggestion {
     flex-grow: 2;
     color: black;
     outline: none;
     border: none;
-}
-.select-type {
-  align-self: stretch;
-  border: none;
-  background-color: #ebeef0;
-}
-.suggestion-update {
-  display: none;
-  border: none;
-  background-color: white;
+    border: 1px solid @gray_border;
+    background-color: @gray_input_bg;
+  }
+
+  .input-suggestion:focus {
+    background-color: @white;
+    border-color: @blue;
+  }
+
+  .select-type {
+    align-self: stretch;
+    border: none;
+    background-color: @white;
+    color: @gray;
+    font-family: @Oswald_Regular;
+    font-size: 14px;
+  }
+
+  .suggestion-update {
+    display: none;
+    border: none;
+    background-color: white;
     &.pen {
       display: flex;
     }
-}
-.suggestion-delete {
-  justify-content: flex-end;
-  background-color: #ebeef0;
-  padding: 5px 10px;
-  border-left: 1px solid #cccccc;
-}
+  }
+
+  .suggestion-delete {
+    justify-content: flex-end;
+    padding: 5px 10px;
+    background-color: @white;
+    border: 1px solid @white;
+    border-radius: 50%;
+    margin-left: 4px;
+  }
+
+  .suggestion-apply {
+    justify-content: flex-end;
+    padding: 5px 10px;
+    background-color: @green_lime;
+    border: 1px solid @white;
+    color: white;
+    border-radius: 50%;
+  }
 
 </style>

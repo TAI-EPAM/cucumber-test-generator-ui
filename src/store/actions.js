@@ -154,12 +154,21 @@ export default {
         .catch(() => { });
     });
   },
+  getSuggestionsByStepTypeAsync({ state, commit }, type) {
+    return AxiosClient.get(`/stepSuggestions/${type}`, { headers: { authorization: state.auth.token } })
+      .then((response) => {
+        const first = response.data.length - 7;
+        const last = response.data.length;
+        const res = response.data.slice(first, last);
+        commit('setSuggestions', res);
+      }).catch(() => { });
+  },
   addSuggestionAsync({ state, commit }, data) {
     return new Promise((resolve) => {
       AxiosClient.post('/stepSuggestions', data)
         .then((response) => {
           const sendData = Object.assign({}, data);
-          sendData.id = response;
+          sendData.id = response.data;
           commit('addSuggestion', sendData);
           resolve();
         })

@@ -23,7 +23,7 @@
         <curtain
           buttonClass="blue"
           buttonText="edit step suggestions"
-          headerText="edit step suggestions"
+          headerText="suggestions"
           :component="certainComponent">
         </curtain>
         <div class="user-info">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters } from 'vuex';
   import StepSuggestions from '@/components/suggestion/StepSuggestions';
   import VButton from './EpamButton';
   import ProjectSelector from './ProjectSelector';
@@ -55,25 +55,17 @@
       return {
         certainComponent: {
           component: StepSuggestions,
-          props: [],
         },
       };
     },
 
     computed: {
-      ...mapGetters({ isAuth: 'isAuth', getSuggestions: 'getCurrentSuggestions' }),
+      ...mapGetters({ isAuth: 'isAuth' }),
     },
 
     mounted() {
-      if (this.isAuth) {
-        this.fetchSuggestions()
-          .then(() => {
-            this.certainComponent.props = { suggestions: this.getSuggestions };
-          });
-      }
     },
     methods: {
-      ...mapActions({ fetchSuggestions: 'getSuggestionsAsync' }),
       logout() {
         this.$store.commit('logout');
         this.$router.push(
