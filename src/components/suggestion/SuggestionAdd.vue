@@ -1,57 +1,69 @@
 <template>
-<div class="add-wrapper">
-   <input type="text" class="uui-form-element" placeholder="Add here..." v-model="entity.content"/>
-   <epam-button @click="send" class="lime-green">Add step suggestion</epam-button>
-</div>
+  <div>
+    <div class="add-wrapper" v-if="!searchSteps">
+      <input type="text" class="uui-form-element large" placeholder="Step suggestion" v-model="entity.content"/>
+      <epam-button @click="send" class="lime-green large">Add step suggestion</epam-button>
+    </div>
+    <div class="add-wrapper" v-if="searchSteps">
+      <input type="text" class="uui-form-element large" placeholder="Step suggestion" v-model="searchContent"/>
+      <epam-button @click="send" class="blue large">Search steps</epam-button>
+    </div>
+  </div>
 </template>
 
 
 <script>
-import EpamButton from '../ui/EpamButton';
+  import EpamButton from '../ui/EpamButton';
 
-export default {
-  components: {
-    EpamButton,
-  },
-  data() {
-    return {
-      entity: {
-        id: 0,
-        content: '',
-        type: 1,
+  export default {
+    components: {
+      EpamButton,
+    },
+    data() {
+      return {
+        entity: {
+          id: 0,
+          content: '',
+          type: 'GIVEN',
+        },
+        searchContent: '',
+        searchSteps: false,
+      };
+    },
+    methods: {
+      reset() {
+        Object.assign(this.entity, {
+          id: null,
+          content: null,
+          type: 'GIVEN',
+        });
       },
-    };
-  },
-  methods: {
-    reset() {
-      Object.assign(this.entity, {
-        id: null,
-        content: null,
-        type: 1,
-      });
+      send() {
+        this.$store.dispatch('addSuggestionAsync', this.entity)
+          .then(() => {
+            this.reset();
+          });
+      },
     },
-    send() {
-      this.$store.dispatch('addSuggestionAsync', this.entity)
-         .then(() => {
-           this.reset();
-         });
-    },
-  },
-  name: 'SuggestionAdd',
-};
+    name: 'SuggestionAdd',
+  };
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/vendors/epam-ui/less/uui-core.less";
-.add-wrapper {
-    background-color: @gray_light;
-    margin-bottom: 7px;
-    padding: 20px;
-}
-input.uui-form-element {
+  @import "../../assets/vendors/epam-ui/less/uui-core.less";
+  @import "../../assets/vendors/epam-ui/less/uui-form-elements";
+
+  .add-wrapper {
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    padding-top: 41px;
+  }
+
+  input.uui-form-element {
     min-width: 300px;
-    width: 60%;
-    margin: auto 20px;
-    padding: 3px;
-}
+    width: 70%;
+    margin-right: 16px;
+  }
+
 </style>
