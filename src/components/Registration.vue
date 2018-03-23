@@ -34,9 +34,6 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import AppHeader from './ui/AppHeader';
-  import AppFooter from './ui/AppFooter';
-  import GlobalErrors from './ui/GlobalErrors';
   import EpamButton from './ui/EpamButton';
   import { Component as Vuedal } from './ui/popoup-vuedals/index';
   import Notification from './Notification';
@@ -44,9 +41,6 @@
 
   export default {
     components: {
-      AppHeader,
-      AppFooter,
-      GlobalErrors,
       EpamButton,
       Notification,
       Vuedal,
