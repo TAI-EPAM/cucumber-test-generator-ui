@@ -94,11 +94,23 @@ class ProjectMenu {
     if (this.exactFiltersMode === 'case') {
       this.sortedItems = items.filter((s) => {
         const item = s;
-        item.cases = item.cases.filter(c => c[prop] === value);
+        if (prop === 'creationDate') {
+          item.cases = item.cases.filter(c =>
+            Math.floor(c[prop] / 86400000) === Math.floor(value / 86400000));
+        } else {
+          item.cases = item.cases.filter(c => c[prop] === value);
+        }
+
         return item.cases.length !== 0 ? item : null;
       });
     } else {
-      this.sortedItems = items.filter(s => s[prop] === value);
+// eslint-disable-next-line no-lonely-if
+      if (prop === 'creationDate') {
+        this.sortedItems = items.filter(s =>
+          Math.floor(s[prop] / 86400000) === Math.floor(value / 86400000));
+      } else {
+        this.sortedItems = items.filter(s => s[prop] === value);
+      }
     }
   }
   sortItems() {

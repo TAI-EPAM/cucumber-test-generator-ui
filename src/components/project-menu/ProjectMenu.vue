@@ -49,7 +49,7 @@
         modificators: {
           exactFiltersMode: 'suit',
           exactFilters: {
-            date: null,
+            creationDate: null,
             status: null,
             priority: null,
           },

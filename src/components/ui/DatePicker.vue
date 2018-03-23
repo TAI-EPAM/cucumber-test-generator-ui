@@ -32,7 +32,7 @@
     props: ['value'],
     watch: {
       time(n) {
-        this.$emit('input', n);
+        this.$emit('input', n.getTime());
       },
     },
   };
