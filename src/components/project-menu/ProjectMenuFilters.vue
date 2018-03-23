@@ -37,6 +37,10 @@
           </option>
         </select>
       </label>
+      <label>
+        <span>Date:</span>
+        <date-picker v-model="entity.exactFilters.date"></date-picker>
+      </label>
       <epam-button @click="resetFilters()" :markup="'small'">Reset Filters</epam-button>
       <epam-button @click="applyFilters(entity)" :markup="'small'">Apply Filters</epam-button>
     </div>
@@ -47,15 +51,20 @@
   import PriorityMap from '@/constants/Priority';
   import StatusMap from '@/constants/Status';
   import EpamButton from '../ui/EpamButton';
+  import DatePicker from '../../components/ui/DatePicker';
 
   export default {
     components: {
       EpamButton,
+      PriorityMap,
+      StatusMap,
+      DatePicker,
     },
     computed: {
     },
     data() {
       return {
+        time: new Date(),
         entity: Object.assign({}, this.value),
         panels: {
           search: false,
@@ -94,6 +103,9 @@
   };
 </script>
 
+<style scoped>
+@import "../../assets/css/vue-datepicker-local.css";
+</style>
 <style scoped lang="less">
 .project-menu-filter {
   color: white;
@@ -101,7 +113,7 @@
   font-size: 11px;
 
   &.extend {
-    height: 170px;
+    height: 220px;
   }
 
   & .search-panel {
@@ -120,7 +132,6 @@
         display: inline-block;
       }
     }
-
   }
 
   & > .filter-nav {
