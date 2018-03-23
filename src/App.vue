@@ -6,15 +6,13 @@
   import { mapGetters } from 'vuex';
   import AppLogin from './components/ui/AppLogin';
   import DefaultView from './views/DefaultView';
-  import RegistrationView from './views/RegistrationView';
-  import PasswordForgotView from './views/PasswordForgotView';
+  import SystemView from './views/SystemView';
 
   export default {
     components: {
       AppLogin,
       DefaultView,
-      RegistrationView,
-      PasswordForgotView,
+      SystemView,
     },
     data() {
       return {
@@ -26,11 +24,8 @@
       viewSelector() {
         const registration = this.$route.path.includes('/registration');
         const passwordForgot = this.$route.path.includes('/passwordForgot');
-        if (registration) {
-          return 'RegistrationView';
-        }
-        if (passwordForgot) {
-          return 'PasswordForgotView';
+        if (passwordForgot || registration) {
+          return 'SystemView';
         }
         return this.isAuth ? 'DefaultView' : 'AppLogin';
       },

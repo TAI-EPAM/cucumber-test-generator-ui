@@ -5,6 +5,8 @@ import CaseView from '@/views/CaseView';
 import DashboardView from '@/views/DashboardView';
 import StepsSuggestions from '@/components/suggestion/StepSuggestions';
 import ProjectView from '@/views/ProjectView';
+import PasswordForgot from '@/components/PasswordForgot';
+import Registration from '@/components/Registration';
 
 Vue.use(Router);
 
@@ -47,10 +49,12 @@ const router = new Router({
     {
       path: '/registration',
       name: 'Registration',
+      component: Registration,
     },
     {
       path: '/passwordForgot',
       name: 'PasswordForgot',
+      component: PasswordForgot,
     },
   ],
 });

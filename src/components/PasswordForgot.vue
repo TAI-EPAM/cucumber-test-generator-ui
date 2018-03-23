@@ -1,41 +1,23 @@
 <template>
-  <div id="content-side">
-    <app-header/>
-    <main class="uui-main-container">
-      <div class="app-wrapper">
-        <global-errors></global-errors>
-        <div class="content-view">
-          <h2 class="registration-title">Access recovering</h2>
-          <div class="uui-form-wrapper registration-form">
-            <input type="text" name="email" value="" class="uui-form-element large"
-                   placeholder="E-mail" v-model="email"/>
-            <div class="form-buttons-holder">
-              <epam-button @click="passwordForgotClick" class="uui-button lime-green large">Send email</epam-button>
-            </div>
-          </div>
-        </div>
+  <div class="password-forgot-view">
+    <h2 class="registration-title">Access recovering</h2>
+    <div class="uui-form-wrapper registration-form">
+      <input type="text" name="email" value="" class="uui-form-element large"
+             placeholder="E-mail" v-model="email"/>
+      <div class="form-buttons-holder">
+        <epam-button @click="passwordForgotClick" class="uui-button lime-green large">Send email</epam-button>
       </div>
-    </main>
-    <app-footer></app-footer>
-    <vuedal></vuedal>
+    </div>
   </div>
 </template>
 
 <script>
   import { mapActions } from 'vuex';
-  import AppHeader from '../components/ui/AppHeader';
-  import AppFooter from '../components/ui/AppFooter';
-  import GlobalErrors from '../components/ui/GlobalErrors';
-  import Notification from '../components/Notification';
-  import EpamButton from '../components/ui/EpamButton';
-  import { Component as Vuedal } from '../components/ui/popoup-vuedals';
+  import EpamButton from './ui/EpamButton';
+  import { Component as Vuedal } from './ui/popoup-vuedals/index';
 
   export default {
     components: {
-      AppHeader,
-      AppFooter,
-      GlobalErrors,
-      Notification,
       EpamButton,
       mapActions,
       Vuedal,

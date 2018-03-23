@@ -1,55 +1,45 @@
 <template>
-  <div id="content-side">
-    <app-header/>
-    <main class="uui-main-container">
-      <div class="app-wrapper">
-        <global-errors></global-errors>
-        <div class="content-view">
-          <h2 class="registration-title">New Account Registration</h2>
-          <div class="uui-form-wrapper registration-form">
-            <div class="name-container">
-              <input type="text" name="first-name" value="" class="uui-form-element large"
-                     placeholder="First Name" v-model="entity.name"
-                     @input="$v.entity.name.$touch()"
-                     :class="{ 'error': $v.entity.name.$error }"/>
-              <input type="text" name="last-name" value="" class="uui-form-element large"
-                     placeholder="Last Name" v-model="entity.surname"
-                     @input="$v.entity.surname.$touch()"
-                     :class="{ 'error': $v.entity.surname.$error }"/>
-            </div>
-            <input type="text" name="email" value="" class="uui-form-element large"
-                   placeholder="E-mail" v-model="entity.email"
-                   @input="$v.entity.email.$touch()"
-                   :class="{ 'error': $v.entity.email.$error }"/>
-            <input type="password" name="password" value="" class="uui-form-element large"
-                   placeholder="Password" v-model="entity.password"
-                   @input="$v.entity.password.$touch()"
-                   :class="{ 'error': $v.entity.password.$error }"/>
-            <input type="password" name="password" value="" class="uui-form-element large"
-                   placeholder="Password Confirmation" v-model="entity.confirmationPassword"
-                   @input="$v.entity.confirmationPassword.$touch()"
-                   :class="confirmationPassword"/>
-            <div class="form-buttons-holder">
-              <epam-button @click="registerClick" class="uui-button blue large" :class="buttonClass">New user
-              </epam-button>
-            </div>
-          </div>
-        </div>
+  <div class="registration-content-view">
+    <h2 class="registration-title">New Account Registration</h2>
+    <div class="uui-form-wrapper registration-form">
+      <div class="name-container">
+        <input type="text" name="first-name" value="" class="uui-form-element large"
+               placeholder="First Name" v-model="entity.name"
+               @input="$v.entity.name.$touch()"
+               :class="{ 'error': $v.entity.name.$error }"/>
+        <input type="text" name="last-name" value="" class="uui-form-element large"
+               placeholder="Last Name" v-model="entity.surname"
+               @input="$v.entity.surname.$touch()"
+               :class="{ 'error': $v.entity.surname.$error }"/>
       </div>
-    </main>
-    <app-footer></app-footer>
-    <vuedal></vuedal>
+      <input type="text" name="email" value="" class="uui-form-element large"
+             placeholder="E-mail" v-model="entity.email"
+             @input="$v.entity.email.$touch()"
+             :class="{ 'error': $v.entity.email.$error }"/>
+      <input type="password" name="password" value="" class="uui-form-element large"
+             placeholder="Password" v-model="entity.password"
+             @input="$v.entity.password.$touch()"
+             :class="{ 'error': $v.entity.password.$error }"/>
+      <input type="password" name="password" value="" class="uui-form-element large"
+             placeholder="Password Confirmation" v-model="entity.confirmationPassword"
+             @input="$v.entity.confirmationPassword.$touch()"
+             :class="confirmationPassword"/>
+      <div class="form-buttons-holder">
+        <epam-button @click="registerClick" class="uui-button blue large" :class="buttonClass">New user
+        </epam-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import { mapActions } from 'vuex';
-  import AppHeader from '../components/ui/AppHeader';
-  import AppFooter from '../components/ui/AppFooter';
-  import GlobalErrors from '../components/ui/GlobalErrors';
-  import EpamButton from '../components/ui/EpamButton';
-  import { Component as Vuedal } from '../components/ui/popoup-vuedals';
-  import Notification from '../components/Notification';
+  import AppHeader from './ui/AppHeader';
+  import AppFooter from './ui/AppFooter';
+  import GlobalErrors from './ui/GlobalErrors';
+  import EpamButton from './ui/EpamButton';
+  import { Component as Vuedal } from './ui/popoup-vuedals/index';
+  import Notification from './Notification';
   import { mapValidationsRegistration } from '../utils/validator';
 
   export default {
