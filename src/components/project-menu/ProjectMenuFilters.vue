@@ -39,7 +39,7 @@
       </label>
       <label>
         <span>Date:</span>
-        <date-picker v-model="entity.exactFilters.date"></date-picker>
+        <date-picker v-model="entity.exactFilters.creationDate"></date-picker>
       </label>
       <epam-button @click="resetFilters()" :markup="'small'">Reset Filters</epam-button>
       <epam-button @click="applyFilters(entity)" :markup="'small'">Apply Filters</epam-button>
