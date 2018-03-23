@@ -43,8 +43,6 @@
       </label>
       <epam-button @click="resetFilters()" :markup="'small'">Reset Filters</epam-button>
       <epam-button @click="applyFilters(entity)" :markup="'small'">Apply Filters</epam-button>
-
-      {{entity.exactFilters}}
     </div>
   </div>
 </template>
@@ -115,7 +113,7 @@
   font-size: 11px;
 
   &.extend {
-    height: 300px;
+    height: 220px;
   }
 
   & .search-panel {

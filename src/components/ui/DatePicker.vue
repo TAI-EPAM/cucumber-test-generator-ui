@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <vue-datepicker-local v-model="time" :local="pickerLocale" @confirm="setDate" clearable></vue-datepicker-local>
-    {{time}}
-  </div>
+    <vue-datepicker-local v-model="time" :local="pickerLocale" clearable></vue-datepicker-local>
 </template>
 
 <script>
@@ -30,10 +27,6 @@
       };
     },
     methods: {
-      setDate() {
-        console.warn('setDate');
-        // this.$emit('input', this.localTarget);
-      },
     },
     name: 'DatePicker',
     props: ['value'],
