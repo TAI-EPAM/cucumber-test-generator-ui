@@ -89,25 +89,27 @@ class ProjectMenu {
     return this;
   }
 
+  static datesEqual(prop, value) {
+    const time = new Date(prop).getTime();
+    return Math.floor(time / 86400000) === Math.floor(value / 86400000);
+  }
+
   searchByExactFilterItem(prop, value) {
     const items = JSON.parse(JSON.stringify(this.items));
     if (this.exactFiltersMode === 'case') {
       this.sortedItems = items.filter((s) => {
         const item = s;
         if (prop === 'creationDate') {
-          item.cases = item.cases.filter(c =>
-            Math.floor(c[prop] / 86400000) === Math.floor(value / 86400000));
+          item.cases = item.cases.filter(c => ProjectMenu.datesEqual(c[prop], value));
         } else {
           item.cases = item.cases.filter(c => c[prop] === value);
         }
-
         return item.cases.length !== 0 ? item : null;
       });
     } else {
 // eslint-disable-next-line no-lonely-if
       if (prop === 'creationDate') {
-        this.sortedItems = items.filter(s =>
-          Math.floor(s[prop] / 86400000) === Math.floor(value / 86400000));
+        this.sortedItems = items.filter(s => ProjectMenu.datesEqual(s[prop], value));
       } else {
         this.sortedItems = items.filter(s => s[prop] === value);
       }
