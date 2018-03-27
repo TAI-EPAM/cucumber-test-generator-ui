@@ -1,5 +1,6 @@
 <template>
   <section class="case-view" v-if="$route.params.caseId">
+      <case-top-menu :local-case="localCase" v-if="localCase"></case-top-menu>
       <case :local-case="localCase"/>
 
       <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
@@ -7,35 +8,23 @@
       <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
 
       <!--case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/-->
-      <curtain
-        buttonClass="case-history-button orange"
-        buttonText="Show history"
-        headerText="HISTORY"
-        headerMarkup="orange"
-        :component="getCertainComponent()"
-        v-if="localCase">
-      ></curtain>
-
   </section>
 </template>
 
 <script>
-  import equal from 'array-equal';
   import { mapGetters } from 'vuex';
   import Case from '@/components/Case';
-  import CaseHistory from '@/components/case/CaseHistory';
   import Confirmation from '@/components/Confimation';
   import EpamButton from '@/components/ui/EpamButton';
   import CaseEdit from '@/components/case/CaseEdit';
-  import Curtain from '@/components/ui/Curtain';
+  import CaseTopMenu from '../components/case/CaseTopMenu';
 
   export default {
     components: {
       Case,
-      CaseHistory,
       EpamButton,
       CaseEdit,
-      Curtain,
+      CaseTopMenu,
     },
     data() {
       return {
@@ -88,27 +77,6 @@
             this.localCase = this.getCase(suitId, caseId);
           });
       },
-      isCreatedCommit(commit) {
-        const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
-        const oldValues = [];
-        const existAttributes = commit.propertyDifferences.map((el) => {
-          oldValues.push(el.oldValue);
-          return el.propertyName;
-        });
-        if (oldValues.find(el => el != null) || !equal(attributes, existAttributes)) {
-          return false;
-        }
-        return true;
-      },
-      getCertainComponent() {
-        return {
-          component: CaseHistory,
-          props: [
-            { caseName: this.localCase.name },
-            { commits: this.getCommits.filter(el => !this.isCreatedCommit(el)) },
-          ],
-        };
-      },
     },
     mounted() {
       if (this.$route.params.projectId &&
@@ -122,7 +90,6 @@
         isAuth: 'isAuth',
         getToken: 'getToken',
         getCase: 'getActiveCaseById',
-        getCommits: 'getCurrentCommits',
       }),
     },
     watch: {
