@@ -157,7 +157,7 @@ export default {
   getSuggestionsByStepTypeAsync({ state, commit }, type) {
     return AxiosClient.get(`/stepSuggestions/${type}`, { headers: { authorization: state.auth.token } })
       .then((response) => {
-        const first = response.data.length - 7;
+        const first = response.data.length >= 7 ? response.data.length - 7 : 0;
         const last = response.data.length;
         const res = response.data.slice(first, last);
         commit('setSuggestions', res);
@@ -182,7 +182,7 @@ export default {
       })
       .catch(() => { });
   },
-  updateSuggestionAsync({ state, commit }, data) {
+  updateSuggestionAsync({ commit }, data) {
     AxiosClient.put(`/stepSuggestions/${data.id}`, data)
       .then(() => {
         commit('updateSuggestion', data);

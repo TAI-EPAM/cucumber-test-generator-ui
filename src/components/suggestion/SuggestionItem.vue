@@ -1,13 +1,13 @@
 <template>
   <div class="item-wrapper">
     <div class="item-line-wrapper">
-      <select v-model="suggestion.type" @change="setCheck" class="select-type">
+      <select v-model="entityData.type" @change="setCheck" class="select-type">
         <option v-for="item in types">
           {{item[1]}}
         </option>
       </select>
       <input type="text" class="uui-form-element input-suggestion"
-             v-model="suggestion.content"
+             v-model="entityData.content"
              v-on:input="setCheck"
       />
       <epam-button @click="deleteSuggestion(suggestion.id)"
@@ -35,13 +35,15 @@
     data() {
       return {
         types: [...StepTypeMap],
-        entity: {
-          content: this.suggestion.content,
-          id: this.suggestion.id,
-          type: this.suggestion.type,
-        },
+        entity: { },
         showCheck: false,
       };
+    },
+    computed: {
+      entityData() {
+        this.entity = JSON.parse(JSON.stringify(this.suggestion));
+        return this.entity;
+      },
     },
     methods: {
       ...mapActions({
@@ -52,7 +54,8 @@
         this.showCheck = true;
       },
       updateValue() {
-        this.updateSuggestion(this.entity);
+        const data = { ...this.entity, ...{ version: this.entity.version || 0 } };
+        this.updateSuggestion(data);
         this.showCheck = false;
       },
     },
