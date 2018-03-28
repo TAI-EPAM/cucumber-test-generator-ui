@@ -18,7 +18,7 @@
       </v-popover>
     </a>
     <ul class="sub" :class="{ 'active': isOpen }">
-      <case-item v-for="item in suit.cases" :case-item="item" :selectedObject="selectedObject" :suit-id="suit.id" :key="suit.id"></case-item>
+      <case-item v-for="item in suit.cases" :case-item="item" :selectedObject="selectedObject" :suit-id="suit.id" :key="item.id"></case-item>
       <li class="add-case">
         <epam-button @click="addCase" markup="transparent" small>+ Add new Case</epam-button>
       </li>

@@ -46,7 +46,8 @@ export default {
   },
   addSuit(state, payload) {
     const st = state;
-    st.activeProject.suits.push(payload);
+    const data = { ...payload, ...{ cases: [] } };
+    st.activeProject.suits.push(data);
   },
   updateSuit(state, payload) {
     const target = state.activeProject.suits.filter(suit =>
@@ -62,13 +63,8 @@ export default {
     const caseItem = payload.data;
     const suitItem = state.activeProject.suits.filter(
       suit => suit.id === payload.suitId)[0];
-
     caseItem.steps = [];
-    if (suitItem.cases) {
-      suitItem.cases.push(caseItem);
-    } else {
-      suitItem.cases = [caseItem];
-    }
+    suitItem.cases.push(caseItem);
   },
   updateCase(state, { suitId, caseId, updateData }) {
     const targetSuit = state.activeProject.suits.filter(suit => +suit.id === +suitId)[0];
