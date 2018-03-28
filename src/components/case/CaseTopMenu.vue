@@ -2,7 +2,7 @@
   <section class="caseTopPanel">
     <div class="caseName">Case {{this.localCase.name}}</div>
     <div class="nextCase">
-      <a href="#" class="nextCaseButton"></a>
+      <a href="#" class="nextCaseButton" @click.prevent="saveAndCreateNewCase"></a>
     </div>
     <div class="history">
       <curtain
@@ -28,12 +28,14 @@
   import CaseHistory from '@/components/case/CaseHistory';
   import Curtain from '@/components/ui/Curtain';
   import CaseEdit from '@/components/case/CaseEdit';
+  import CaseAdd from '@/components/case/CaseAdd';
 
   export default {
     components: {
       CaseHistory,
       Curtain,
       CaseEdit,
+      CaseAdd,
     },
     name: 'case-top-menu',
     data() {
@@ -56,6 +58,8 @@
             },
           },
         });
+      },
+      saveAndCreateNewCase() {
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
