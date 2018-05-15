@@ -115,7 +115,7 @@
         width: 60px;
 
         .filter {
-          background: url("../../assets/images/filter.svg") 0 0 no-repeat;
+          background: url("../../assets/images/svg/filter.svg") 0 0 no-repeat;
           width: 19px;
           height: 19px;
           display: inline-block;

@@ -51,6 +51,7 @@
           priority: 1,
           tags: [],
           rowNumber: 1,
+          status: 'NOT_DONE',
         },
       };
     },
@@ -63,6 +64,7 @@
           name: null,
           priority: 1,
           tags: null,
+          status: 'NOT_DONE',
         });
         if (this.onCancel) {
           this.onCancel();

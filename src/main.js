@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import Vuelidate from 'vuelidate';
 import VueLocalStorage from 'vue-ls';
 import VTooltip from 'v-tooltip';
+import * as svgicon from 'vue-svgicon';
 
 import App from './App';
 import router from './router';
@@ -19,6 +20,9 @@ Vue.use(VueLocalStorage);
 Vue.use(Vuex);
 Vue.use(Vuelidate);
 Vue.use(VTooltip);
+Vue.use(svgicon, {
+  tagName: 'svgicon',
+});
 
 Vue.filter('formatDate', (value) => {
   const options = {
