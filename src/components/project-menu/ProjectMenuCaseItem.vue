@@ -4,7 +4,7 @@
       <input type="checkbox" v-model="selected" />
     </div>
     <router-link :to="{ name: 'caseView', params: { suitId, caseId: caseItem.id }}">
-      <span>{{caseItem.name}}</span> <priority-icon v-model="caseItem.priority" /> {{ caseItem.status }}
+      <span>{{caseItem.name}}</span> <priority-icon v-model="caseItem.priority" /> {{ caseItem.displayedStatusName }}
     </router-link>
   </li>
 </template>
