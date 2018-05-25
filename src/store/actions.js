@@ -10,9 +10,9 @@ export default {
       .then((resp) => {
         if (resp.data.token) {
           commit('setToken', { token: `Bearer ${resp.data.token}` });
-          Vue.ls.set('token', `Bearer ${resp.data.token}`);
+          Vue.ls.set('token', resp.data.token);
           Vue.ls.set('isAuth', 'true');
-          AxiosClient.defaults.headers.authorization = `Bearer ${resp.data.token}`;
+          AxiosClient.headers.authorization = `Bearer ${resp.data.token}`;
         }
         if (query && query.redirect) {
           router.push(

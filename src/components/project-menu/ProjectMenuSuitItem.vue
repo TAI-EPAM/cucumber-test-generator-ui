@@ -6,7 +6,7 @@
         <input type="checkbox" v-model="selected" />
       </div>
       <span class="item-name">{{ suit.name }} {{casesCount}}</span>
-      <priority-icon v-model="suit.priority" />
+      <priority-icon v-model="suit.priority" /> {{ suit.displayedStatusName }}
       <v-popover offset="0" placement="bottom-start">
         <i class="fa fa-ellipsis-v" />
         <template slot="popover">

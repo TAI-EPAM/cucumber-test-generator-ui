@@ -31,11 +31,11 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
+  import { mapGetters } from 'vuex';
   import EpamButton from '../ui/EpamButton';
   import PrioritySelect from '../ui/PrioritySelect';
   import TagsComponent from '../ui/TagsInput';
-  import {mapValidationsSuit} from '../../utils/validator';
+  import { mapValidationsSuit } from '../../utils/validator';
 
   export default {
     components: {
@@ -73,7 +73,7 @@
         const data = Object.assign({}, this.entity);
         const projectId = this.$route.params.projectId;
         data.rowNumber = this.getCountSuits + 1;
-        this.$store.dispatch('addSuitAsync', {projectId, data})
+        this.$store.dispatch('addSuitAsync', { projectId, data })
           .then(() => {
             this.resetData();
           });
@@ -83,7 +83,7 @@
 
     },
     computed: {
-      ...mapGetters({getCountSuits: 'getCountActiveSuits'}),
+      ...mapGetters({ getCountSuits: 'getCountActiveSuits' }),
       buttonClass() {
         return {
           disable: this.$v.entity.$invalid,
