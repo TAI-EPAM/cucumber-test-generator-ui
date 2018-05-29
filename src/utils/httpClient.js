@@ -10,10 +10,14 @@ Vue.use(VueLocalStorage);
 const axiosClient = axios.create({
   // eslint-disable-next-line no-undef
   baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:8080/' : '',
-  headers: { authorization: `Bearer ${Vue.ls.get('token')}` },
+  headers: (Vue.ls.get('token')) ? { authorization: `Bearer ${Vue.ls.get('token')}` } : {},
 });
 
-axiosClient.interceptors.response.use(response => response,
+axiosClient.interceptors.response.use(
+  (response) => {
+    console.log('jere');
+    return response;
+  },
   (error) => {
     store.commit('setGlobalError', error);
     return Promise.reject(error);
