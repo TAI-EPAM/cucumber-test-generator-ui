@@ -15,7 +15,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.response.use(
   (response) => {
-    console.log('jere');
+
     return response;
   },
   (error) => {

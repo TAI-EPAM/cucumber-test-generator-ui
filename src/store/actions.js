@@ -6,10 +6,10 @@ import convertSteps from '../utils/convert';
 export default {
   loginAsync({ commit }, entity) {
     const query = router.history.current.query;
-    console.log(JSON.stringify(entity));
+
     AxiosClient.post('/login', entity)
       .then((resp) => {
-        console.log(resp);
+
         if (resp.data.token) {
           commit('setToken', { token: `Bearer ${resp.data.token}` });
           Vue.ls.set('token', resp.data.token);
