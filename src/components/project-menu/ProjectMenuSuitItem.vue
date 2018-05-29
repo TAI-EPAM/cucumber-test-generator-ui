@@ -16,7 +16,7 @@
           </ul>
         </template>
       </v-popover>
-      <span class="item-status" :class="suit.status && suit.status.toLowerCase()">{{ suit.status && suit.status.replace(/_/, ' ') }}</span>
+      <span class="item-status" :class="suit.displayedStatusName && suit.displayedStatusName.toLowerCase()">{{ suit.displayedStatusName && suit.displayedStatusName.replace(/_/, ' ') }}</span>
     </a>
     <ul class="sub" :class="{ 'active': isOpen }">
       <case-item v-for="item in suit.cases"

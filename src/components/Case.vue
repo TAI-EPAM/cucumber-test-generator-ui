@@ -5,7 +5,7 @@
       <div class="case-props-main">
          <h2>{{ localCase.name }}</h2>
          <ul>
-           <li><span class="case-prop-name">Status: </span><span>NOT DONE</span></li>
+           <li><span class="case-prop-name">Status: </span><span>{{localCase.displayedStatusName}}</span></li>
            <li><span class="case-prop-name">Priority: </span><span>{{localCase.priority}}</span></li>
          </ul>
       </div>
@@ -17,7 +17,7 @@
         </ul>
     </div>
    </div>
-   
+
     <!-- Steps-->
     <case-steps v-model="localCase.steps"></case-steps>
 
@@ -30,7 +30,7 @@ Choose case
 
 <script>
   import CaseSteps from './CaseSteps';
-  
+
   export default {
     components: {
       CaseSteps,

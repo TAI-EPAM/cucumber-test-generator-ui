@@ -9,10 +9,10 @@ export default {
     AxiosClient.post('/login', entity)
       .then((resp) => {
         if (resp.data.token) {
-          commit('setToken', { token: resp.data.token });
+          commit('setToken', { token: `Bearer ${resp.data.token}` });
           Vue.ls.set('token', resp.data.token);
           Vue.ls.set('isAuth', 'true');
-          AxiosClient.defaults.headers.authorization = resp.data.token;
+          AxiosClient.defaults.headers.authorization = `Bearer ${resp.data.token}`;
         }
         if (query && query.redirect) {
           router.push(
@@ -93,7 +93,7 @@ export default {
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: state.auth.token } })
+      AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
         .then(resp => resp.data.map(item => convertSteps(item)))
         .then((data) => {
           commit('setHistory', data);
@@ -143,29 +143,29 @@ export default {
   //* *************SUGGESTIONS******************** */
   getSuggestionsAsync({ state, commit }) {
     return new Promise((resolve) => {
-      AxiosClient.get('/stepSuggestions', { headers: { authorization: state.auth.token } })
+      AxiosClient.get('/stepSuggestions', { headers: { authorization: `Bearer ${state.auth.token}` } })
         .then((response) => {
           const first = response.data.length - 7;
           const last = response.data.length;
           const res = response.data.slice(first, last);
-          commit('setSuggestions', res);
+          commit('step-suggestions', res);
           resolve();
         })
         .catch(() => { });
     });
   },
   getSuggestionsByStepTypeAsync({ state, commit }, type) {
-    return AxiosClient.get(`/stepSuggestions/${type}`, { headers: { authorization: state.auth.token } })
+    return AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
       .then((response) => {
         const first = response.data.length >= 7 ? response.data.length - 7 : 0;
         const last = response.data.length;
         const res = response.data.slice(first, last);
-        commit('setSuggestions', res);
+        commit('step-suggestions', res);
       }).catch(() => { });
   },
   addSuggestionAsync({ state, commit }, data) {
     return new Promise((resolve) => {
-      AxiosClient.post('/stepSuggestions', data)
+      AxiosClient.post('/step-suggestions', data)
         .then((response) => {
           const sendData = Object.assign({}, data);
           sendData.id = response.data;
@@ -176,14 +176,14 @@ export default {
     });
   },
   deleteSuggestionAsync({ state, commit }, suggestionId) {
-    AxiosClient.delete(`/stepSuggestions/${suggestionId}`, suggestionId)
+    AxiosClient.delete(`/step-suggestions/${suggestionId}`, suggestionId)
       .then(() => {
         commit('deleteSuggestion', suggestionId);
       })
       .catch(() => { });
   },
   updateSuggestionAsync({ commit }, data) {
-    AxiosClient.put(`/stepSuggestions/${data.id}`, data)
+    AxiosClient.put(`/step-suggestions/${data.id}`, data)
       .then(() => {
         commit('updateSuggestion', data);
       })
@@ -191,10 +191,10 @@ export default {
   },
   //* *************REGISTRATION******************** */
   registerAsync(state, entity) {
-    return AxiosClient.post('/registration', entity);
+    return AxiosClient.post('/user/registration', entity);
   },
   //* *************PASSWORD_FORGOT******************** */
   passwordForgotAsync(state, entity) {
-    return AxiosClient.post('/passwordForgot', entity);
+    return AxiosClient.post('/user/passwordForgot', entity);
   },
 };
