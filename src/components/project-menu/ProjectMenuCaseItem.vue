@@ -9,8 +9,8 @@
       <span class="case-name">{{caseItem.name}}</span>
       <priority-icon v-model="caseItem.priority" />
       <span class="case-item-status"
-            :class="caseItem.status && caseItem.status.toLowerCase()">
-        {{ caseItem.status && caseItem.status.replace(/_/, ' ') }}
+            :class="caseItem.displayedStatusName && caseItem.displayedStatusName.toLowerCase()">
+        {{ caseItem.displayedStatusName && caseItem.displayedStatusName.replace(/_/, ' ') }}
       </span>
     </router-link>
   </li>

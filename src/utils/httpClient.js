@@ -9,8 +9,8 @@ Vue.use(VueLocalStorage);
 
 const axiosClient = axios.create({
   // eslint-disable-next-line no-undef
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:8080/cucumber' : '',
-  headers: { authorization: Vue.ls.get('token') },
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:8080/' : '',
+  headers: (Vue.ls.get('token')) ? { authorization: `Bearer ${Vue.ls.get('token')}` } : {},
 });
 
 axiosClient.interceptors.response.use(response => response,
