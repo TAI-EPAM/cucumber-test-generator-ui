@@ -38,4 +38,5 @@ export default {
   getCurrentCommits: state => state.currentCommits,
   getCurrentSuggestions: state => state.currentSuggestions,
   getGlobalErrors: state => state.globalErrors,
+  getSelectObject: state => state.selectedObject,
 };

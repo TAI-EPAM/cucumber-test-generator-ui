@@ -9,6 +9,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    selectedObject: null,
     debug: false,
     projects: [],
     currentCommits: [],
@@ -32,5 +33,7 @@ const store = new Vuex.Store({
   actions,
 });
 
-export default store;
+export default ({
+  store,
+});
 
