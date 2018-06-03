@@ -46,6 +46,7 @@
           this.selectedObject.cases.has(this.caseItem.id);
         } else {
           this.selectedObject.cases.delete(this.caseItem.id);
+          this.$store.state.selectedObject = null;
         }
       },
     },

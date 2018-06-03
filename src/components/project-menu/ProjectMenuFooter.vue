@@ -1,8 +1,8 @@
 <template>
   <div class="footer-menu-button">
-    <button class="footer-menu-big-button" @click="GeneratorButton" >GENERATOR</button>
-    <button class="footer-menu-big-button" @click="TestRunButton" >TEST RUN</button>
-    <button class="footer-menu-small-button"  @click="DeletePopupButton($store.selectedObject)" >del</button>
+    <epam-button class="footer-menu-big-button" @click="GeneratorButton" ><svgicon name="generate" class="imgButton"></svgicon><p>GENERATOR</p></epam-button>
+    <epam-button class="footer-menu-big-button" @click="TestRunButton" v-bind:disabled="$store.state.selectedObject==null"><svgicon name="testRun" class="imgButton"></svgicon><p>TEST RUN</p></epam-button>
+    <epam-button class="footer-menu-small-button" @click="DeletePopupButton($store.state.selectedObject)" v-bind:disabled="$store.state.selectedObject==null"><svgicon name="delete" class="imgButton"></svgicon></epam-button>
   </div>
 </template>
 
@@ -10,6 +10,9 @@
   import { mapGetters } from 'vuex';
   import EpamButton from '../ui/EpamButton';
   import Confirmation from '../Confimation';
+  import '../../assets/converted/delete';
+  import '../../assets/converted/generate';
+  import '../../assets/converted/testRun';
 
   export default {
     components: {
@@ -29,24 +32,28 @@
     },
     methods: {
       DeletePopupButton() {
-        this.$vuedals.open({
-          title: 'Delete',
-          component: Confirmation,
-          props: {
-            onCancel() {
-              this.$vuedals.close();
+        if (this.$store.state.selectedObject) {
+          this.$vuedals.open({
+            title: 'Delete',
+            component: Confirmation,
+            props: {
+              onCancel() {
+                this.$vuedals.close();
+              },
+              onSubmit() {
+                console.log(JSON.stringify(this.$store.state.selectedObject));// add multidelete.
+                this.$vuedals.close();
+                this.$store.state.selectedObject.checked = false;
+              },
             },
-            onSubmit() {
-              this.$vuedals.close();
-            },
-          },
-        });
+          });
+        }
       },
     },
   };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import "../../assets/vendors/epam-ui/less/uui-colors";
   @import "../../assets/vendors/epam-ui/less/uui-form-elements";
   @import "../../assets/vendors/epam-ui/less/uui-fonts";
@@ -55,23 +62,55 @@
       display: flex;
       width: 100%;
       position: absolute;
-      bottom: 10%;
+      bottom: 8%;
       justify-content:space-around;
+      .footer-menu-small-button{
+        width: 20%;
+        background: #cb2323;
+
+        &:hover {
+          background: #b22746;
+        }
+
+        .imgButton{
+          width: 15px;
+          vertical-align: middle;
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+          background: #e5e5e5;
+          border-color: #e5e5e5;
+          color: @gray_light;
+          i {
+            color: @gray_light;
+          }
+        }
+      }
       & button {
-        height: 40px;
+        display: flex;
+        justify-content:space-around;
         width: 35%;
         background: #3bb4f2;
         border: none;
         color: white;
+
+        .imgButton{
+          width: 15px;
+        }
         &:hover {
-        background: #1a9cb0;
-        }}
-      & .footer-menu-small-button{
-        width: 20%;
-        background: #cb2323;
-        &:hover {
-          background: #b22746;
+          background: #1a9cb0;
+          color: @gray_light;
+        }
+        &:disabled {
+          cursor: not-allowed;
+          background: #e5e5e5;
+          border-color: #e5e5e5;
+          color: white;
+          i {
+            color: white;
+          }
         }
       }
-      }
+    }
 </style>

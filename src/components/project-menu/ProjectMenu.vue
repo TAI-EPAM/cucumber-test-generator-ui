@@ -134,7 +134,7 @@
         }
         this.selectedObject.cases = cases;
         this.selectedObject.suits = suits;
-        return this.$store.state.selectedObject;
+        this.$store.state.selectedObject = this.selectedObject;
       },
       selectSuit(suitId) {
         let suits = new Set(this.selectedObject.suits);
@@ -160,6 +160,7 @@
         }
         this.selectedObject.suits = suits;
         this.selectedObject.cases = cases;
+        this.$store.state.selectedObject = this.selectedObject;
       },
       selectCase(suitId, caseId) {
         let suits = new Set(this.selectedObject.suits);
@@ -186,6 +187,7 @@
         this.selectedObject.suits = suits;
         this.selectedObject.cases = cases;
         this.checkIfAllSelected();
+        this.$store.state.selectedObject = this.selectedObject;
       },
       resetSearch() {
         this.modificators.filters.searchString = null;

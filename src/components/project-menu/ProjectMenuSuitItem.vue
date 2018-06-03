@@ -152,6 +152,7 @@
           this.selectedObject.suits.add(this.suit.id);
         } else {
           this.selectedObject.suits.delete(this.suit.id);
+          this.$store.state.selectedObject = null;
         }
       },
     },

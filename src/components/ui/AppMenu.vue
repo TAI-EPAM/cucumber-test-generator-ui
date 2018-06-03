@@ -27,7 +27,6 @@
     <epam-button @click="addSuit">Open Add Suit Modal</epam-button>
 
   </div>
-
 </template>
 
 <script>
