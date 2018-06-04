@@ -74,6 +74,7 @@
         caseId = this.$route.params.caseId) {
         this.$store.dispatch('getCaseHistoryAsync', { projectId, suitId, caseId })
           .then(() => {
+            this.$router.push({ path: `/projects/${projectId}/suits/${suitId}/case/${caseId}` });
             this.localCase = this.getCase(suitId, caseId);
           });
       },

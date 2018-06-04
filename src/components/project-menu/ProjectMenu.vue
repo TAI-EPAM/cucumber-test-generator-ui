@@ -19,6 +19,7 @@
       <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">
         {{ filterController }}
       </div>
+      <ProjectMenuFooter/>
     </div>
   </div>
 </template>
@@ -31,6 +32,7 @@
   import ProjectMenuSuitItem from './ProjectMenuSuitItem';
   import ProjectMenuFilters from './ProjectMenuFilters';
   import ProjectMenuClass from './ProjectMenu.class';
+  import ProjectMenuFooter from './ProjectMenuFooter';
 
   const ProjectMenuController = new ProjectMenuClass();
 
@@ -40,6 +42,7 @@
       ProjectMenuFilters,
       ProjectMenuSuitItem,
       SuitAdd,
+      ProjectMenuFooter,
     },
     computed: {
       ...mapGetters(
@@ -47,6 +50,7 @@
           items: 'getActiveSuits',
           getSuit: 'getActiveSuitById',
           activeProject: 'getActiveProject',
+          selectedObject: 'getSelectObject',
         },
       ),
     },
@@ -130,6 +134,7 @@
         }
         this.selectedObject.cases = cases;
         this.selectedObject.suits = suits;
+        this.$store.state.selectedObject = this.selectedObject;
       },
       selectSuit(suitId) {
         let suits = new Set(this.selectedObject.suits);
@@ -155,7 +160,7 @@
         }
         this.selectedObject.suits = suits;
         this.selectedObject.cases = cases;
-        this.checkIfAllSelected();
+        this.$store.state.selectedObject = this.selectedObject;
       },
       selectCase(suitId, caseId) {
         let suits = new Set(this.selectedObject.suits);
@@ -182,6 +187,7 @@
         this.selectedObject.suits = suits;
         this.selectedObject.cases = cases;
         this.checkIfAllSelected();
+        this.$store.state.selectedObject = this.selectedObject;
       },
       resetSearch() {
         this.modificators.filters.searchString = null;
@@ -269,5 +275,6 @@ aside .uui-side-bar {
     }
   }
 }
+
 
 </style>
