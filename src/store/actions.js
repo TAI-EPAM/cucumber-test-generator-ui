@@ -198,3 +198,4 @@ export default {
     return AxiosClient.post('/user/passwordForgot', entity);
   },
 };
+

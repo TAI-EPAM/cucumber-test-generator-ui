@@ -7,6 +7,7 @@ import StepsSuggestions from '@/components/suggestion/StepSuggestions';
 import ProjectView from '@/views/ProjectView';
 import PasswordForgot from '@/components/PasswordForgot';
 import Registration from '@/components/Registration';
+import TestRun from '@/components/ui/TestRun';
 
 Vue.use(Router);
 
@@ -55,6 +56,12 @@ const router = new Router({
       path: '/passwordForgot',
       name: 'PasswordForgot',
       component: PasswordForgot,
+    },
+    {
+      path: '/testRun',
+      name: 'TestRun',
+      component: TestRun,
+      meta: { requiresAuth: true },
     },
   ],
 });

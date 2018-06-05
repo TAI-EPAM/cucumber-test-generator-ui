@@ -1,7 +1,7 @@
 <template>
   <div class="footer-menu-button">
     <epam-button class="footer-menu-big-button" @click="GeneratorButton" ><svgicon name="generate" class="imgButton"></svgicon><p>GENERATOR</p></epam-button>
-    <epam-button class="footer-menu-big-button" @click="TestRunButton" v-bind:disabled="$store.state.selectedObject==null"><svgicon name="testRun" class="imgButton"></svgicon><p>TEST RUN</p></epam-button>
+    <epam-button class="footer-menu-big-button" @click="TestRunButton($store.state.selectedObject)" v-bind:disabled="$store.state.selectedObject==null"><svgicon name="testRun" class="imgButton"></svgicon><p>TEST RUN</p></epam-button>
     <epam-button class="footer-menu-small-button" @click="DeletePopupButton($store.state.selectedObject)" v-bind:disabled="$store.state.selectedObject==null"><svgicon name="delete" class="imgButton"></svgicon></epam-button>
   </div>
 </template>
@@ -43,11 +43,13 @@
               onSubmit() {
                 console.log(JSON.stringify(this.$store.state.selectedObject));// add multidelete.
                 this.$vuedals.close();
-                this.$store.state.selectedObject.checked = false;
               },
             },
           });
         }
+      },
+      TestRunButton() {
+        this.$router.push({ path: '/testRun' });
       },
     },
   };
