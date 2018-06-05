@@ -26,9 +26,11 @@
   import { Component as Vuedal } from '../components/ui/popoup-vuedals';
   import ProjectMenu from '../components/project-menu/ProjectMenu';
   import GlobalErrors from '../components/ui/GlobalErrors';
+  import TestRun from '../components/ui/TestRun';
 
   export default {
     components: {
+      TestRun,
       GlobalErrors,
       AppHeader,
       AppFooter,
