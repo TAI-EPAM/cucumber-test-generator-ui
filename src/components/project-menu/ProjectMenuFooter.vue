@@ -37,6 +37,7 @@
     },
     methods: {
       ...mapActions({
+        deleteSuitsAsync: 'deleteSuitsAsync',
         GeneratorButtonAsync: 'GeneratorButtonAsync',
       }),
       DeletePopupButton() {
@@ -49,7 +50,30 @@
                 this.$vuedals.close();
               },
               onSubmit() {
-                console.log(JSON.stringify(this.$store.state.selectedObject));// add multidelete.
+                debugger;
+                let removeCaseIds =[];
+                let removeSuitsIds =[];
+                const suitActiveIds = this.$store.state.selectedObject.suits;
+                const caseActiveIds = this.$store.state.selectedObject.cases;
+                const suits = JSON.stringify(this.$store.state.activeProject.suits);
+                const suitsFiltred = JSON.parse(suits).filter(item => suitActiveIds.has(item.id));
+                const caseFiltered = suitsFiltred.filter(item => item.cases = item.cases.filter(item => caseActiveIds.has(item.id)));
+                if (this.$store.state.selectedObject.checkAll){
+                  suitsFiltred.forEach(item => removeSuitsIds.push(item.id));
+                  this.$store.dispatch('deleteSuitsAsync', { projectId: this.$route.params.projectId, removeSuitsIds })
+                    .then(() => {
+                    });
+                } else {
+                  // caseFiltered.forEach(item => {
+                  //   let saveCasesAndSuits = {
+                  //     casesId: item.cases.map(index => index.id),
+                  //     suitId : item.id,
+                  //   }
+                  //   this.$store.dispatch('deleteCaseAsync', { projectId: this.$route.params.projectId, suitId: newCaseId.suitId, caseId: newCaseId.casesId })
+                  //     .then(() => {
+                  //     });
+                  // });
+                }
                 this.$vuedals.close();
               },
             },

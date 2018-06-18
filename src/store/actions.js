@@ -96,6 +96,15 @@ export default {
         });
     });
   },
+  // deleteSuitsAsync(commit , { removeSuitsIds, projectId }) {
+  //   debugger;
+  //     AxiosClient.delete(`/projects/${projectId}/suits`)
+  //       .then(() => {
+  //         commit('deleteSuitsAsync', removeSuitsIds);
+  //       })
+  //       .catch(() => {
+  //       });
+  // },
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
