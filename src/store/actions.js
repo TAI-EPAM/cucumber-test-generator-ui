@@ -2,7 +2,7 @@ import Vue from 'vue';
 import AxiosClient from '@/utils/httpClient';
 import router from '../router/index';
 import convertSteps from '../utils/convert';
-
+/* eslint-disable */
 export default {
   loginAsync({ commit }, entity) {
     const query = router.history.current.query;
@@ -21,7 +21,8 @@ export default {
             });
         }
       })
-      .catch(() => { });
+      .catch(() => {
+      });
   },
   //* *************PROJECTS*******************/
   getProjectsAsync({ commit }) {
@@ -43,7 +44,8 @@ export default {
           commit('setActiveProject', { data: response.data });
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   //* ************SUITS***********************/
@@ -56,7 +58,8 @@ export default {
       .then(() => {
         commit('changeLoadingStatus', { isLoad: true });
       })
-      .catch(() => { });
+      .catch(() => {
+      });
   },
   addSuitAsync({ commit }, { projectId, data }) {
     return new Promise((resolve) => {
@@ -67,7 +70,8 @@ export default {
           commit('addSuit', sendData);
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   deleteSuitAsync({ commit }, { suitId, projectId }) {
@@ -77,7 +81,8 @@ export default {
           commit('removeSuit', { suitId });
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   editSuitAsync({ commit }, { projectId, suitId, updateData }) {
@@ -87,7 +92,8 @@ export default {
           commit('updateSuit', updateData);
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   //* *************HISTORY******************** */
@@ -99,7 +105,8 @@ export default {
           commit('setHistory', data);
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   //* *************CASES******************** */
@@ -114,7 +121,8 @@ export default {
           commit('addCase', { suitId, data: sendData });
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   updateCaseAsync({ commit }, { projectId, suitId, caseId, updateData }) {
@@ -126,7 +134,8 @@ export default {
           commit('updateCase', { suitId, caseId, updateData: sendData });
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   deleteCaseAsync({ commit }, { projectId, suitId, caseId }) {
@@ -137,7 +146,8 @@ export default {
           commit('setHistory', []);
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   //* *************SUGGESTIONS******************** */
@@ -151,7 +161,8 @@ export default {
           commit('step-suggestions', res);
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   getSuggestionsByStepTypeAsync({ state, commit }, type) {
@@ -161,7 +172,8 @@ export default {
         const last = response.data.length;
         const res = response.data.slice(first, last);
         commit('step-suggestions', res);
-      }).catch(() => { });
+      }).catch(() => {
+      });
   },
   addSuggestionAsync({ state, commit }, data) {
     return new Promise((resolve) => {
@@ -172,7 +184,8 @@ export default {
           commit('addSuggestion', sendData);
           resolve();
         })
-        .catch(() => { });
+        .catch(() => {
+        });
     });
   },
   deleteSuggestionAsync({ state, commit }, suggestionId) {
@@ -180,14 +193,16 @@ export default {
       .then(() => {
         commit('deleteSuggestion', suggestionId);
       })
-      .catch(() => { });
+      .catch(() => {
+      });
   },
   updateSuggestionAsync({ commit }, data) {
     AxiosClient.put(`/step-suggestions/${data.id}`, data)
       .then(() => {
         commit('updateSuggestion', data);
       })
-      .catch(() => { });
+      .catch(() => {
+      });
   },
   //* *************REGISTRATION******************** */
   registerAsync(state, entity) {
@@ -197,5 +212,41 @@ export default {
   passwordForgotAsync(state, entity) {
     return AxiosClient.post('/user/passwordForgot', entity);
   },
+  //* *************Generator_Button******************** */
+  GeneratorButtonAsync(state, entity) {
+    AxiosClient.post(`/projects/${entity.projectId}/feature-file`, entity.suitAndCaseIds,{ responseType: 'blob' })
+      .then((response) => {
+        const data = response.data;
+        const fileName = "test.zip";
+        const saveData = (function () {
+          const a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          return function (data, fileName) {
+            if(response.request.readyState === 4){
+              if(response.request.status === 200){
+                const jsonSave = data,
+                  blob = new Blob([jsonSave], {type: "application/octet-stream"}),
+                  url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                window.URL.revokeObjectURL(url);
+              }
+            } else {
+              if(response.request.readyState === 2){
+                if(response.request.status === 200) {
+                  response.request.responseType = "blob";
+                } else {
+                  response.request.responseType = "text";
+                }
+              }
+            }
+          };
+        }());
+        saveData(data, fileName);
+      })
+      .catch(() => {
+      });
+  },
 };
-

@@ -152,6 +152,8 @@
           this.selectedObject.suits.add(this.suit.id);
         } else {
           this.selectedObject.suits.delete(this.suit.id);
+        }
+        if (this.selectedObject.suits.size < 1) {
           this.$store.state.selectedObject = null;
         }
       },
