@@ -167,8 +167,8 @@
         let cases = new Set(this.selectedObject.cases);
         if (cases.has(caseId)) {
           cases.delete(caseId);
-          suits.delete(suitId);
         } else {
+          suits.add(suitId);
           cases.add(caseId);
           let checkSuit = true;
           this.localItems.forEach((item) => {

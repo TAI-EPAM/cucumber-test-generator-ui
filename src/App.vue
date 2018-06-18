@@ -27,7 +27,6 @@
         if (passwordForgot || registration) {
           return 'SystemView';
         }
-        console.log(this.isAuth);
         return this.isAuth ? 'DefaultView' : 'AppLogin';
       },
     },
