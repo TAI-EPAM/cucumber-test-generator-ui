@@ -19,6 +19,8 @@
   import CaseEdit from '@/components/case/CaseEdit';
   import CaseTopMenu from '../components/case/CaseTopMenu';
 
+  /* eslint-disable */
+
   export default {
     components: {
       Case,
@@ -60,8 +62,12 @@
               this.$vuedals.close();
             },
             onSubmit() {
-              this.$store.dispatch('deleteCaseAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, caseId: vm.localCase.id })
-               .then(() => {
+              const removeCaseIds = [];
+              removeCaseIds.push(vm.localCase.id);
+              this.$store.dispatch('deleteCaseAsync',
+                { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, removeCaseIds }
+              )
+              .then(() => {
                  this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
                  this.$vuedals.close();
                });

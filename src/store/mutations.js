@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import tagsGetter from '../utils/tagsGetter';
+/* eslint-disable */
 
 export default {
   changeLoadingStatus(state, payload) {
@@ -58,6 +59,11 @@ export default {
     const st = state;
     st.activeProject.suits = state.activeProject.suits.filter(suit => suit.id !== payload.suitId);
   },
+  removeSuits(state, payload) {
+    const st = state;
+    st.activeProject.suits = state.activeProject.suits.filter(suit => {return !payload.removeSuitsIds.includes(suit.id);});
+  },
+
   //* *************CASES******************** */
   addCase(state, payload) {
     const caseItem = payload.data;
@@ -72,9 +78,10 @@ export default {
     Object.assign(targetCase, updateData);
   },
   removeCase(state, payload) {
-    const suitItem = state.activeProject
-      .suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
-    suitItem.cases = suitItem.cases.filter(item => item.id !== payload.caseId);
+    const suitItem = state.activeProject.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+    suitItem.cases = suitItem.cases.filter(item => {
+      return !payload.removeCaseIds.includes(item.id)
+    });
   },
   //* **************HISTORY********************/
   setHistory(state, data) {

@@ -25,7 +25,7 @@
     },
     comments: {},
     name: 'footer-menu-button',
-    data: {
+    data:{
     },
     computed: {
       ...mapGetters(
@@ -38,6 +38,7 @@
     methods: {
       ...mapActions({
         deleteSuitsAsync: 'deleteSuitsAsync',
+        deleteCaseAsync: 'deleteCaseAsync',
         GeneratorButtonAsync: 'GeneratorButtonAsync',
       }),
       DeletePopupButton() {
@@ -50,36 +51,70 @@
                 this.$vuedals.close();
               },
               onSubmit() {
-                debugger;
-                let removeCaseIds =[];
                 let removeSuitsIds =[];
+                let saveRemoveSuits =[];
+                let allSelectSuitAndCase = [];
+                let deleteCasesinSuits =[];
+                let SelectSuitAndCase = [];
+                const suits = JSON.parse(JSON.stringify(this.$store.state.activeProject.suits));
                 const suitActiveIds = this.$store.state.selectedObject.suits;
                 const caseActiveIds = this.$store.state.selectedObject.cases;
-                const suits = JSON.stringify(this.$store.state.activeProject.suits);
-                const suitsFiltred = JSON.parse(suits).filter(item => suitActiveIds.has(item.id));
-                const caseFiltered = suitsFiltred.filter(item => item.cases = item.cases.filter(item => caseActiveIds.has(item.id)));
+                const suitsFiltred = suits.filter(item => suitActiveIds.has(item.id));
+                const caseFiltered = JSON.parse(JSON.stringify(suitsFiltred)).filter(item => item.cases = item.cases.filter(item => caseActiveIds.has(item.id)));
+                suits.forEach( item => {
+                  let saveAr = {
+                    caseIds: item.cases.map(index => index.id),
+                    suitId: item.id
+                  }
+                  allSelectSuitAndCase.push(saveAr);
+                });
                 if (this.$store.state.selectedObject.checkAll){
-                  suitsFiltred.forEach(item => removeSuitsIds.push(item.id));
+                  suitsFiltred.forEach(item => { saveRemoveSuits.push(item.id)});
+                }
+                else {
+                  caseFiltered.forEach(item => {
+                    let saveArr = {
+                      caseIds: item.cases.map(index => index.id),
+                      suitId: item.id
+                    }
+                    SelectSuitAndCase.push(saveArr);
+                  });
+                }
+                allSelectSuitAndCase.forEach(item => {
+                  SelectSuitAndCase.forEach(items =>{
+                    if( JSON.stringify(item) === JSON.stringify(items)){
+                      saveRemoveSuits.push(items.suitId);
+                      deleteCasesinSuits.push(items.caseIds);
+                    }
+                  })
+                })
+                removeSuitsIds = saveRemoveSuits.filter(function(item, pos) {
+                  return saveRemoveSuits.indexOf(item) == pos;
+                })
+                let CaseWithout = SelectSuitAndCase.filter(item => !deleteCasesinSuits.includes(item.caseIds));
+                if(removeSuitsIds.length !== null){
                   this.$store.dispatch('deleteSuitsAsync', { projectId: this.$route.params.projectId, removeSuitsIds })
                     .then(() => {
-                    });
-                } else {
-                  // caseFiltered.forEach(item => {
-                  //   let saveCasesAndSuits = {
-                  //     casesId: item.cases.map(index => index.id),
-                  //     suitId : item.id,
-                  //   }
-                  //   this.$store.dispatch('deleteCaseAsync', { projectId: this.$route.params.projectId, suitId: newCaseId.suitId, caseId: newCaseId.casesId })
-                  //     .then(() => {
-                  //     });
-                  // });
+                      this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
+                      this.$vuedals.close();
+                    })
                 }
+                CaseWithout.forEach(item => {
+                  let saveRemoveCases = {
+                    caseIds: item.caseIds,
+                    suitId: item.suitId
+                  };
+                  this.$store.dispatch('deleteCaseAsync',{ projectId: this.$route.params.projectId, suitId: saveRemoveCases.suitId, removeCaseIds: saveRemoveCases.caseIds  })
+                    .then(() => {
+                      this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
+                      this.$vuedals.close();
+                    });
+                })
                 this.$vuedals.close();
               },
             },
           });
-        }
-      },
+        }},
       TestRunButton() {
         this.$router.push({ path: '/testRun' });
       },

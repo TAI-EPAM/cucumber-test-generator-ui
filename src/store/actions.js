@@ -96,15 +96,19 @@ export default {
         });
     });
   },
-  // deleteSuitsAsync(commit , { removeSuitsIds, projectId }) {
-  //   debugger;
-  //     AxiosClient.delete(`/projects/${projectId}/suits`)
-  //       .then(() => {
-  //         commit('deleteSuitsAsync', removeSuitsIds);
-  //       })
-  //       .catch(() => {
-  //       });
-  // },
+
+  deleteSuitsAsync({commit} , { removeSuitsIds, projectId }) {
+    AxiosClient.delete(`/projects/${projectId}/suits`, {
+      data:  removeSuitsIds,
+      headers: {
+        "Content-Type": "application/json;charset=utf-8"
+      }})
+      .then(() => {
+        commit('removeSuits',{  removeSuitsIds });
+      })
+      .catch(() => {
+      });
+  },
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
@@ -147,11 +151,15 @@ export default {
         });
     });
   },
-  deleteCaseAsync({ commit }, { projectId, suitId, caseId }) {
+  deleteCaseAsync({ commit }, { projectId, suitId, removeCaseIds }) {
     return new Promise((resolve) => {
-      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases/${caseId}`)
+      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases`,  {
+        data: removeCaseIds,
+        headers: {
+                "Content-Type": "application/json;charset=utf-8"
+        }})
         .then(() => {
-          commit('removeCase', { suitId, caseId });
+          commit('removeCase', { suitId, removeCaseIds });
           commit('setHistory', []);
           resolve();
         })
@@ -160,9 +168,9 @@ export default {
     });
   },
   //* *************SUGGESTIONS******************** */
-  getSuggestionsAsync({ state, commit }) {
+  getSuggestionsAsync({ state, commit }, type) {
     return new Promise((resolve) => {
-      AxiosClient.get('/stepSuggestions', { headers: { authorization: `Bearer ${state.auth.token}` } })
+      AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
         .then((response) => {
           const first = response.data.length - 7;
           const last = response.data.length;
