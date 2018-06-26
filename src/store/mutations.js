@@ -90,6 +90,7 @@ export default {
   },
   //* **************SUGGESTIONS********************/
   setSuggestions(state, data) {
+    debugger;
     const st = state;
     if (st.currentSuggestions) {
       st.currentSuggestions = data;

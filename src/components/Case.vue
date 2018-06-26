@@ -1,7 +1,7 @@
 <template>
   <section class="panel">
   <div v-if="localCase">
-    <div class="case-props">
+    <div class="case-props" >
       <div class="case-props-main">
          <h2>{{ localCase.name }}</h2>
          <ul>

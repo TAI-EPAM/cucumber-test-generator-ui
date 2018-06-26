@@ -2,7 +2,7 @@
   <section class="suggestion">
     <div class="panel">
       <div class="options">
-        <a href="" @click.prevent="setType()">All</a>
+        <a href="" @click.prevent="setType('ANY')">All</a>
         <a href="" @click.prevent="setType('GIVEN')">Given</a>
         <a href="" @click.prevent="setType('WHEN')">When</a>
         <a href="" @click.prevent="setType('THEN')">Then</a>
@@ -42,17 +42,22 @@
         suggestions: [],
       };
     },
-    mounted() {
-      this.fetchSuggestions()
-        .then(() => {
-          this.suggestions = this.getSuggestions;
-        });
-    },
     computed: {
       ...mapGetters({ getSuggestions: 'getCurrentSuggestions' }),
       filterSuggestion() {
         return this.getSuggestions;
       },
+    },
+    mounted() {
+      this.$store.dispatch('getSuggestionsByStepTypeAsync', { type: 'ANY', projectId: this.$route.params.projectId })
+        .then(() => {
+          this.suggestions = this.getSuggestions;
+        });
+      // this.getSuggestionsByType('ANY')
+      //   .then(() => {
+      //     debugger;
+      //
+      //   });
     },
     methods: {
       ...mapActions({
@@ -62,9 +67,10 @@
       setType(type) {
         this.type = type;
         if (type) {
-          this.getSuggestionsByType(type);
-        } else {
-          this.fetchSuggestions();
+          this.$store.dispatch('getSuggestionsByStepTypeAsync', { type, projectId: this.$route.params.projectId })
+            .then(() => {
+            });
+          // this.getSuggestionsByType(type);
         }
       },
     },

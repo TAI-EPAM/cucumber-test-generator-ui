@@ -168,33 +168,34 @@ export default {
     });
   },
   //* *************SUGGESTIONS******************** */
-  getSuggestionsAsync({ state, commit }, type) {
-    return new Promise((resolve) => {
-      AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
-        .then((response) => {
-          const first = response.data.length - 7;
-          const last = response.data.length;
-          const res = response.data.slice(first, last);
-          commit('step-suggestions', res);
-          resolve();
-        })
-        .catch(() => {
-        });
-    });
-  },
-  getSuggestionsByStepTypeAsync({ state, commit }, type) {
-    return AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+  // getSuggestionsAsync({ state, commit }, type) {
+  //   return new Promise((resolve) => {
+  //     AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+  //       .then((response) => {
+  //         const first = response.data.length - 7;
+  //         const last = response.data.length;
+  //         const res = response.data.slice(first, last);
+  //         commit('step-suggestions', res);
+  //         resolve();
+  //       })
+  //       .catch(() => {
+  //       });
+  //   });
+  // },
+  getSuggestionsByStepTypeAsync({ state, commit }, {type, projectId}) {
+    return AxiosClient.get(`/projects/${projectId}/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
       .then((response) => {
+        debugger;
         const first = response.data.length >= 7 ? response.data.length - 7 : 0;
         const last = response.data.length;
         const res = response.data.slice(first, last);
-        commit('step-suggestions', res);
+        commit('setSuggestions', res);
       }).catch(() => {
       });
   },
-  addSuggestionAsync({ state, commit }, data) {
+  addSuggestionAsync({ state, commit }, { data, projectId }) {
     return new Promise((resolve) => {
-      AxiosClient.post('/step-suggestions', data)
+      AxiosClient.post(`/projects/${projectId}/step-suggestions`, data)
         .then((response) => {
           const sendData = Object.assign({}, data);
           sendData.id = response.data;
@@ -205,16 +206,16 @@ export default {
         });
     });
   },
-  deleteSuggestionAsync({ state, commit }, suggestionId) {
-    AxiosClient.delete(`/step-suggestions/${suggestionId}`, suggestionId)
+  deleteSuggestionAsync({ state, commit }, {suggestionId, projectId}) {
+    AxiosClient.delete(`/projects/${projectId}/step-suggestions/${suggestionId}`, suggestionId)
       .then(() => {
         commit('deleteSuggestion', suggestionId);
       })
       .catch(() => {
       });
   },
-  updateSuggestionAsync({ commit }, data) {
-    AxiosClient.put(`/step-suggestions/${data.id}`, data)
+  updateSuggestionAsync({ commit }, { data, projectId }) {
+    AxiosClient.put(`/projects/${projectId}/step-suggestions/${data.id}`, data)
       .then(() => {
         commit('updateSuggestion', data);
       })
