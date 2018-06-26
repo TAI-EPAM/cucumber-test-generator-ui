@@ -232,6 +232,7 @@ export default {
                 a.download = fileName;
                 a.click();
                 window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
               }
             } else {
               if(response.request.readyState === 2){
