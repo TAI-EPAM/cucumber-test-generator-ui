@@ -11,15 +11,15 @@
             <tbody>
                 <tr >
                   <td class="row-title">Old Value</td>
-                  <td class="row-title">New Value</td>                   
+                  <td class="row-title">New Value</td>
                 </tr>
                 <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')">
                     <td>{{ item.oldValue || '-'}}</td>
-                    <td>{{ item.newValue || '-'}}</td>                   
+                    <td>{{ item.newValue || '-'}}</td>
                 </tr>
                 <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')">
                     <td>{{ item.oldValue.description || '-'}}</td>
-                    <td>{{ item.newValue.description || '-'}}</td>                   
+                    <td>{{ item.newValue.description || '-'}}</td>
                 </tr>
             </tbody>
         </table>

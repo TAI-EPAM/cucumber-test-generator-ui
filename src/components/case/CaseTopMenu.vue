@@ -1,6 +1,6 @@
 <template>
   <section class="caseTopPanel">
-    <div class="caseName">Case {{this.localCase.name}}</div>
+    <div class="caseName">Case {{this.localCase.name}}<button @click=""><svgicon name="info"></svgicon></button></div>
     <div class="nextCase">
       <a href="#" class="nextCaseButton" @click.prevent="saveAndCreateNewCase"></a>
     </div>
@@ -60,6 +60,23 @@
         });
       },
       saveAndCreateNewCase() {
+        const suitId = this.$route.params.suitId;
+        const projectId = this.$route.params.projectId;
+        this.$vuedals.open({
+          title: 'Add New Case',
+          component: CaseAdd,
+          props: {
+            onCancel() {
+              this.$vuedals.close();
+            },
+            onSubmit() {
+              this.$vuedals.close();
+              this.$router.push({ path: `/projects/${projectId}/suits/${suitId}/case/${this.data.entity.id}` });
+            },
+            suitId,
+            projectId,
+          },
+        });
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
