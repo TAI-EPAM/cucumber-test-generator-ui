@@ -9,7 +9,6 @@
 </template>
 
 <script>
-  /* eslint-disable */
 
   import { mapActions, mapGetters } from 'vuex';
   import EpamButton from '../ui/EpamButton';
@@ -51,16 +50,16 @@
                 this.$vuedals.close();
               },
               onSubmit() {
-                let removeSuitsIds =[];
-                let saveRemoveSuits =[];
-                let allSelectSuitAndCase = [];
-                let deleteCasesinSuits =[];
-                let SelectSuitAndCase = [];
-                const suits = JSON.parse(JSON.stringify(this.$store.state.activeProject.suits));
+                let removeSuitsIds =[],
+                    saveRemoveSuits =[],
+                    allSelectSuitAndCase = [],
+                    deleteCasesinSuits =[],
+                    selectSuitAndCase = [];
+                const suits =  _.cloneDeep(this.$store.state.activeProject.suits);
                 const suitActiveIds = this.$store.state.selectedObject.suits;
                 const caseActiveIds = this.$store.state.selectedObject.cases;
                 const suitsFiltred = suits.filter(item => suitActiveIds.has(item.id));
-                const caseFiltered = JSON.parse(JSON.stringify(suitsFiltred)).filter(item => item.cases = item.cases.filter(item => caseActiveIds.has(item.id)));
+                const caseFiltered =  _.cloneDeep(suitsFiltred).filter(item => item.cases = item.cases.filter(item => caseActiveIds.has(item.id)));
                 suits.forEach( item => {
                   let saveAr = {
                     caseIds: item.cases.map(index => index.id),
@@ -77,21 +76,22 @@
                       caseIds: item.cases.map(index => index.id),
                       suitId: item.id
                     }
-                    SelectSuitAndCase.push(saveArr);
+                    selectSuitAndCase.push(saveArr);
                   });
                 }
-                allSelectSuitAndCase.forEach(item => {
-                  SelectSuitAndCase.forEach(items =>{
-                    if( JSON.stringify(item) === JSON.stringify(items)){
-                      saveRemoveSuits.push(items.suitId);
-                      deleteCasesinSuits.push(items.caseIds);
+                //search for suits to be removed completely
+                allSelectSuitAndCase.forEach(firstItem => {
+                  selectSuitAndCase.forEach(secondItem =>{
+                    if( JSON.stringify(firstItem) === JSON.stringify(secondItem)){
+                      saveRemoveSuits.push(secondItem.suitId);
+                      deleteCasesinSuits.push(secondItem.caseIds);
                     }
                   })
                 })
-                removeSuitsIds = saveRemoveSuits.filter(function(item, pos) {
+                removeSuitsIds = saveRemoveSuits.filter( (item, pos) => {
                   return saveRemoveSuits.indexOf(item) == pos;
                 })
-                let CaseWithout = SelectSuitAndCase.filter(item => !deleteCasesinSuits.includes(item.caseIds));
+                let CaseWithout = selectSuitAndCase.filter(item => !deleteCasesinSuits.includes(item.caseIds));
                 if(removeSuitsIds.length !== null){
                   this.$store.dispatch('deleteSuitsAsync', { projectId: this.$route.params.projectId, removeSuitsIds })
                     .then(() => {
