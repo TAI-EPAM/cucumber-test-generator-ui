@@ -2,7 +2,7 @@ import Vue from 'vue';
 import AxiosClient from '@/utils/httpClient';
 import router from '../router/index';
 import convertSteps from '../utils/convert';
-/* eslint-disable */
+
 export default {
   loginAsync({ commit }, entity) {
     const query = router.history.current.query;
@@ -96,17 +96,27 @@ export default {
         });
     });
   },
+
+  deleteSuitsAsync({ commit }, { removeSuitsIds, projectId }) {
+    AxiosClient.delete(`/projects/${projectId}/suits`, { data: removeSuitsIds, headers: { 'Content-Type': 'application/json;charset=utf-8' } })
+      .then(() => {
+        commit('removeSuits', { removeSuitsIds });
+      })
+      .catch(() => {
+      });
+  },
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
-        .then(resp => resp.data.map(item => convertSteps(item)))
-        .then((data) => {
-          commit('setHistory', data);
-          resolve();
-        })
-        .catch(() => {
-        });
+      AxiosClient
+        .get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+          .then(resp => resp.data.map(item => convertSteps(item)))
+          .then((data) => {
+            commit('setHistory', data);
+            resolve();
+          })
+          .catch(() => {
+          });
     });
   },
   //* *************CASES******************** */
@@ -138,11 +148,11 @@ export default {
         });
     });
   },
-  deleteCaseAsync({ commit }, { projectId, suitId, caseId }) {
+  deleteCaseAsync({ commit }, { projectId, suitId, removeCaseIds }) {
     return new Promise((resolve) => {
-      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases/${caseId}`)
+      AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases`, { data: removeCaseIds, headers: { 'Content-Type': 'application/json;charset=utf-8' } })
         .then(() => {
-          commit('removeCase', { suitId, caseId });
+          commit('removeCase', { suitId, removeCaseIds });
           commit('setHistory', []);
           resolve();
         })
@@ -151,9 +161,9 @@ export default {
     });
   },
   //* *************SUGGESTIONS******************** */
-  getSuggestionsAsync({ state, commit }) {
+  getSuggestionsAsync({ state, commit }, type) {
     return new Promise((resolve) => {
-      AxiosClient.get('/stepSuggestions', { headers: { authorization: `Bearer ${state.auth.token}` } })
+      AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
         .then((response) => {
           const first = response.data.length - 7;
           const last = response.data.length;
@@ -214,19 +224,19 @@ export default {
   },
   //* *************Generator_Button******************** */
   GeneratorButtonAsync(state, entity) {
-    AxiosClient.post(`/projects/${entity.projectId}/feature-file`, entity.suitAndCaseIds,{ responseType: 'blob' })
+    AxiosClient.post(`/projects/${entity.projectId}/feature-file`, entity.suitAndCaseIds, { responseType: 'blob' })
       .then((response) => {
         const data = response.data;
-        const fileName = "test.zip";
+        const fileName = 'test.zip';
         const saveData = (function () {
-          const a = document.createElement("a");
+          const a = document.createElement('a');
           document.body.appendChild(a);
           a.style = "display: none";
           return function (data, fileName) {
             if(response.request.readyState === 4){
               if(response.request.status === 200){
                 const jsonSave = data,
-                  blob = new Blob([jsonSave], {type: "application/octet-stream"}),
+                  blob = new Blob([jsonSave], { type: 'application/octet-stream' }),
                   url = window.URL.createObjectURL(blob);
                 a.href = url;
                 a.download = fileName;
@@ -235,11 +245,11 @@ export default {
                 document.body.removeChild(a);
               }
             } else {
-              if(response.request.readyState === 2){
-                if(response.request.status === 200) {
-                  response.request.responseType = "blob";
+              if (response.request.readyState === 2) {
+                if (response.request.status === 200) {
+                  response.request.responseType = 'blob';
                 } else {
-                  response.request.responseType = "text";
+                  response.request.responseType = 'text';
                 }
               }
             }
