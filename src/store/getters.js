@@ -40,4 +40,5 @@ export default {
   getGlobalErrors: state => state.globalErrors,
   getSelectObject: state => state.selectedObject,
   getUpdateSteps: state => state.updateSteps,
+  getSaveCaseForMove: state =>state.saveCaseForMove,
 };

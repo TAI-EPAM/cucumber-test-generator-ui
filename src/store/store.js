@@ -27,6 +27,7 @@ const store = new Vuex.Store({
     },
     activeProject: null,
     globalErrors: [],
+    saveCaseForMove: null,
   },
 
   getters,

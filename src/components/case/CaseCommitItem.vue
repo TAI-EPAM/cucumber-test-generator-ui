@@ -3,7 +3,7 @@
     <div v-if="commit">
         <div @click="changeView" class="commit-title">
                         <span class="fa fa-lg caret-gray" v-bind:class="isShownArrow"></span>
-                        {{ Date.now(commit.updatedDate) | formatDate}}
+                        {{ commit.updatedDate | formatDate}}
                         <b>{{ commit.author}}</b>
                         <span v-html="commitTitle"></span>
         </div>

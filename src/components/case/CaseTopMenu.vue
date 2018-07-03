@@ -48,7 +48,7 @@
   import Case from '@/components/Case';
   import CaseSteps from '@/components/CaseSteps';
   import '../../assets/converted/info';
-  /* eslint-disable */
+
   export default {
     components: {
       CaseSteps,
@@ -151,10 +151,10 @@
       ...mapGetters({
         getCommits: 'getCurrentCommits',
         getSuit: 'getActiveSuitById',
-        updateSteps: 'getUpdateSteps'
+        updateSteps: 'getUpdateSteps',
       }),
     },
-    props: ['localCase','updateSteps'],
+    props: ['localCase'],
   };
 </script>
 
@@ -170,7 +170,7 @@
 
   .caseTopPanel {
     height: 68px;
-    margin: -30px -30px 42px -100px;
+    margin: -30px -30px 0px -50px;
     background-color: @white;
     display: flex;
     box-shadow: 0px 1px 1px @gray_light;
@@ -198,9 +198,9 @@
     }
        .caseInfo{
          display: none;
-         /*opacity: 0.8;*/
+         opacity: 0.8;
          background: #39c2d7;
-         width: 30%;
+         width: 20%;
          color: white;
          padding: 10px;
          z-index: 5;
@@ -211,14 +211,14 @@
     .div-active {
       display: block;
     }
-    /*#caseInfo::after {*/
-      /*content: '';*/
-      /*position: absolute;*/
-      /*right: 360px;*/
-      /*top: 15px;*/
-      /*border: 10px solid transparent;*/
-      /*border-right: 20px solid #39c2d7;*/
-    /*}*/
+    .caseInfo:after {
+      content: '';
+      position: absolute;
+      right: 360px;
+      top: 15px;
+      border: 10px solid transparent;
+      border-right: 20px solid #39c2d7;
+    }
        .caseInfoText{
          float:left;
        }

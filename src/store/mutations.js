@@ -80,6 +80,10 @@ export default {
     const suitItem = state.activeProject.suits.find(suit => suit.id === parseInt(payload.suitId, 0));
     suitItem.cases = suitItem.cases.filter(item => !payload.removeCaseIds.includes(item.id));
   },
+  saveCaseId(state,payload){
+    debugger;
+    state.saveCaseForMove = payload.data;
+  },
   //* **************HISTORY********************/
   setHistory(state, data) {
     const st = state;

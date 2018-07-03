@@ -68,6 +68,7 @@ export default {
           const sendData = data;
           sendData.id = response.data.id;
           commit('addSuit', sendData);
+
           resolve();
         })
         .catch(() => {
@@ -130,6 +131,7 @@ export default {
         .then((response) => {
           sendData.id = response.data.id;
           commit('addCase', { suitId, data: sendData });
+          commit('saveCaseId', {  data: sendData.id });
           resolve();
         })
         .catch(() => {

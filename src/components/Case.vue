@@ -52,7 +52,7 @@ Choose case
     display: flex;
     flex-wrap: wrap;
     background: white;
-    border: 1px #ebeef0 solid;
+    border: 2px #ebeef0 solid;
     padding: 20px 30px;
       .case-props-main {
         border-right: 1px #ebeef0 solid;
