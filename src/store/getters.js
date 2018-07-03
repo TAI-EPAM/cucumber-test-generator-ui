@@ -39,4 +39,5 @@ export default {
   getCurrentSuggestions: state => state.currentSuggestions,
   getGlobalErrors: state => state.globalErrors,
   getSelectObject: state => state.selectedObject,
+  getUpdateSteps: state => state.updateSteps,
 };

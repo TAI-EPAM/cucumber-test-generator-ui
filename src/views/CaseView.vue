@@ -2,10 +2,11 @@
   <section class="case-view" v-if="$route.params.caseId">
       <case-top-menu :local-case="localCase" v-if="localCase"></case-top-menu>
       <case :local-case="localCase"/>
+      <!-- Steps-->
+      <case-steps :local-case="localCase"></case-steps>
+      <!--<epam-button markup="large transparent" @click="editCase">edit case</epam-button>-->
 
-      <epam-button markup="large transparent" @click="editCase">edit case</epam-button>
-      <epam-button markup="large" class="lime-green">Save Tests</epam-button>
-      <epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>
+      <!--<epam-button markup="large" class="raspberry" @click="removeCase">Delete Case</epam-button>-->
 
       <!--case-history :case-name="localCase.name" :commits="this.getCommits.filter(el => !isCreatedCommit(el))"/-->
   </section>
@@ -13,11 +14,13 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import CaseSteps from '@/components/CaseSteps';
   import Case from '@/components/Case';
-  import Confirmation from '@/components/Confimation';
+  // import Confirmation from '@/components/Confimation';
   import EpamButton from '@/components/ui/EpamButton';
   import CaseEdit from '@/components/case/CaseEdit';
   import CaseTopMenu from '../components/case/CaseTopMenu';
+
 
   /* eslint-disable */
 
@@ -27,6 +30,7 @@
       EpamButton,
       CaseEdit,
       CaseTopMenu,
+      CaseSteps,
     },
     data() {
       return {
@@ -51,30 +55,30 @@
           },
         });
       },
-      removeCase() {
-        const vm = this;
-        this.$vuedals.open({
-          title: 'Delete Case',
-          component: Confirmation,
-          props: {
-            suitId: this.$route.params.suitId,
-            onCancel() {
-              this.$vuedals.close();
-            },
-            onSubmit() {
-              const removeCaseIds = [];
-              removeCaseIds.push(vm.localCase.id);
-              this.$store.dispatch('deleteCaseAsync',
-                { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, removeCaseIds }
-              )
-              .then(() => {
-                 this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
-                 this.$vuedals.close();
-               });
-            },
-          },
-        });
-      },
+      // removeCase() {
+      //   const vm = this;
+      //   this.$vuedals.open({
+      //     title: 'Delete Case',
+      //     component: Confirmation,
+      //     props: {
+      //       suitId: this.$route.params.suitId,
+      //       onCancel() {
+      //         this.$vuedals.close();
+      //       },
+      //       onSubmit() {
+      //         const removeCaseIds = [];
+      //         removeCaseIds.push(vm.localCase.id);
+      //         this.$store.dispatch('deleteCaseAsync',
+      //           { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, removeCaseIds }
+      //         )
+      //         .then(() => {
+      //            this.$router.push({ path: `/projects/${this.$route.params.projectId}` });
+      //            this.$vuedals.close();
+      //          });
+      //       },
+      //     },
+      //   });
+      // },
       // saveTests(){},
       getData(projectId = this.$route.params.projectId,
         suitId = this.$route.params.suitId,
@@ -114,7 +118,9 @@
 
 <style lang="less" scoped>
   .case-view {
-
+    border-left: 1px solid #d8d8d8;
+    margin-left: 20px;
+    padding-left: 50px;
   }
 </style>
 

@@ -18,8 +18,8 @@
     </div>
    </div>
 
-    <!-- Steps-->
-    <case-steps v-model="localCase.steps"></case-steps>
+    <!--&lt;!&ndash; Steps&ndash;&gt;-->
+    <!--<case-steps v-model="localCase.steps"></case-steps>-->
 
 </div>
 <div v-else>

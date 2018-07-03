@@ -32,6 +32,7 @@
     },
     methods: {
       reset() {
+        debugger;
         Object.assign(this.entity, {
           id: null,
           content: null,

@@ -97,7 +97,6 @@
     flex-grow: 2;
     color: black;
     outline: none;
-    border: none;
     border: 1px solid @gray_border;
     background-color: @gray_input_bg;
   }

@@ -1,8 +1,24 @@
 <template>
   <section class="caseTopPanel">
-    <div class="caseName">Case {{this.localCase.name}}<button @click=""><svgicon name="info"></svgicon></button></div>
+    <div class="caseNamePanel">
+      <div class="caseName">Case {{this.localCase.name}}</div>
+      <button @click="getInfo"><svgicon v-bind:class="{ 'svg-active': this.getInfoStatus }" name="info" class="imgButton" id="imgButton"></svgicon></button>
+    </div>
+    <div class="caseInfo" v-bind:class="{ 'div-active': this.getInfoCaseStatus }">
+      <div class="caseInfoText">
+        <p>Project: {{this.$store.state.activeProject.name}}</p>
+        <p>Test Suit: {{this.activeSuit.name}}</p>
+        <p>Creation Date: {{this.activeSuit.creationDate | formatDate}}</p>
+        <p>Last Update Date: {{this.activeSuit.updateDate | formatDate}}</p>
+        <p>Test Suit Tags: {{this.activeSuit.tags}}</p>
+        <p>Description: {{this.activeSuit.description}}</p>
+      </div>
+      <div class="caseInfoButton">
+        <button @click="getInfo"><i class="fa fa-xl fa-remove icon"></i></button>
+      </div>
+    </div>
     <div class="nextCase">
-      <a href="#" class="nextCaseButton" @click.prevent="saveAndCreateNewCase"></a>
+      <a href="#" class="nextCaseButton" @click.prevent="saveAndOpenNext"></a>
     </div>
     <div class="history">
       <curtain
@@ -29,19 +45,35 @@
   import Curtain from '@/components/ui/Curtain';
   import CaseEdit from '@/components/case/CaseEdit';
   import CaseAdd from '@/components/case/CaseAdd';
-
+  import Case from '@/components/Case';
+  import CaseSteps from '@/components/CaseSteps';
+  import '../../assets/converted/info';
+  /* eslint-disable */
   export default {
     components: {
+      CaseSteps,
       CaseHistory,
       Curtain,
       CaseEdit,
       CaseAdd,
+      Case,
     },
     name: 'case-top-menu',
     data() {
-      return {};
+      return {
+        activeSuit: false,
+        activeCase: false,
+        nextCase: false,
+        getInfoStatus: false,
+        getInfoCaseStatus: false,
+      };
     },
     methods: {
+      getInfo() {
+        this.activeSuit = this.$store.getters.getActiveSuitById(this.$route.params.suitId);
+        this.getInfoStatus = !this.getInfoStatus;
+        this.getInfoCaseStatus = !this.getInfoCaseStatus;
+      },
       editCase() {
         this.$vuedals.open({
           title: 'Edit Case',
@@ -59,24 +91,36 @@
           },
         });
       },
-      saveAndCreateNewCase() {
+      saveAndOpenNext() {
+        this.saveTest();
         const suitId = this.$route.params.suitId;
         const projectId = this.$route.params.projectId;
-        this.$vuedals.open({
-          title: 'Add New Case',
-          component: CaseAdd,
-          props: {
-            onCancel() {
-              this.$vuedals.close();
-            },
-            onSubmit() {
-              this.$vuedals.close();
-              this.$router.push({ path: `/projects/${projectId}/suits/${suitId}/case/${this.data.entity.id}` });
-            },
-            suitId,
-            projectId,
-          },
-        });
+        const caseId = +this.$route.params.caseId;
+        this.activeSuit = this.$store.getters.getActiveSuitById(suitId);
+        for(let index in this.activeSuit.cases){
+          if((this.activeSuit.cases[index].id === caseId)&&(index < this.activeSuit.cases.length)){
+            this.nextCase = this.activeSuit.cases[++index];
+            this.$router.push({ path: `/projects/${projectId}/suits/${suitId}/case/${this.nextCase.id}` });
+          }
+        }
+      },
+      saveTest(){
+        debugger;
+        for(let item of this.$store.state.updateSteps) {
+          let sandData = {
+            description: item.description,
+          };
+          this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+            .then(() => {
+            });
+        }
+        for(let item of this.localCase.steps){
+          if (item.description === ' '){
+            this.$store.dispatch('deleteStepAsync', { stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+              .then(() => {
+              });
+          }
+        }
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
@@ -92,7 +136,10 @@
       },
       getCertainComponent() {
         return {
-          component: CaseHistory,
+          component: {
+            CaseHistory,
+            CaseSteps
+          },
           props: [
             { caseName: this.localCase.name },
             { commits: this.getCommits.filter(el => !this.isCreatedCommit(el)) },
@@ -103,11 +150,19 @@
     computed: {
       ...mapGetters({
         getCommits: 'getCurrentCommits',
+        getSuit: 'getActiveSuitById',
+        updateSteps: 'getUpdateSteps'
       }),
     },
-    props: ['localCase'],
+    props: ['localCase','updateSteps'],
   };
 </script>
+
+<style lang="less">
+  .svg-active .cls-1{
+    fill: #39c2d7;
+  }
+</style>
 
 <style lang="less" scoped>
   @import "../../assets/vendors/epam-ui/less/uui-colors";
@@ -115,20 +170,66 @@
 
   .caseTopPanel {
     height: 68px;
-    margin: -30px -30px 42px -30px;
+    margin: -30px -30px 42px -100px;
     background-color: @white;
     display: flex;
     box-shadow: 0px 1px 1px @gray_light;
     align-items: center;
     font-family: @Oswald_Regular;
 
-    .caseName {
+    .caseNamePanel{
       flex-grow: 1;
+    }
+    .caseName {
       padding-left: 25px;
       font-size: 30px;
       color: @gray_dark;
       text-transform: capitalize;
+      display: inline-block;
     }
+    button{
+      border: none;
+      background: none;
+    }
+    .imgButton{
+      width: 15px;
+      height: 15px;
+      margin-bottom: 20px;
+    }
+       .caseInfo{
+         display: none;
+         /*opacity: 0.8;*/
+         background: #39c2d7;
+         width: 30%;
+         color: white;
+         padding: 10px;
+         z-index: 5;
+         margin-top: 30px;
+         margin-left: 200px;
+         position: fixed;
+       }
+    .div-active {
+      display: block;
+    }
+    /*#caseInfo::after {*/
+      /*content: '';*/
+      /*position: absolute;*/
+      /*right: 360px;*/
+      /*top: 15px;*/
+      /*border: 10px solid transparent;*/
+      /*border-right: 20px solid #39c2d7;*/
+    /*}*/
+       .caseInfoText{
+         float:left;
+       }
+       .caseInfoButton{
+         float:right;
+           .icon {
+             color: white;
+             width: 20px;
+             height: 20px;
+           }
+         }
 
     .nextCase, .history, .editCase {
       width: 66px;

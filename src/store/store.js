@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     selectedObject: null,
+    updateSteps: [],
     debug: false,
     projects: [],
     currentCommits: [],

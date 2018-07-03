@@ -90,7 +90,6 @@ export default {
   },
   //* **************SUGGESTIONS********************/
   setSuggestions(state, data) {
-    debugger;
     const st = state;
     if (st.currentSuggestions) {
       st.currentSuggestions = data;
@@ -110,6 +109,25 @@ export default {
     const st = state;
     const target = st.currentSuggestions.find(item => item.id === data.id);
     Object.assign(target, data);
+  },
+  //****************STEPS******************* */
+  deleteStep(state, payload){
+    const suitItem = state.activeProject.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+    const caseItem = suitItem.cases.filter(item => item.id === parseInt(payload.caseId, 0))[0];
+    caseItem.steps.splice(caseItem.steps.findIndex(item => item.id ===payload.stepId),1);
+  },
+  addStep(state, payload){
+    const stepItem = payload.sendData;
+    const suitItem = state.activeProject.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+    const caseItem = suitItem.cases.filter(item => item.id === parseInt(payload.caseId, 0))[0];
+    caseItem.steps.push(stepItem);
+  },
+  updateStep(state,payload){
+    debugger;
+    const suitItem = state.activeProject.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
+    const caseItem = suitItem.cases.filter(item => item.id === parseInt(payload.caseId, 0))[0];
+    const stepItem = caseItem.filter(item => item.id === parseInt(payload.stepId, 0))[0];
+    Object.assign(stepItem, payload.data);
   },
   //* **************TAGS******************** */
   createTags(state) {

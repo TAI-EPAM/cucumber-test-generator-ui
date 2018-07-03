@@ -124,6 +124,7 @@ export default {
   },
   //* *************CASES******************** */
   addCaseAsync({ commit }, { projectId, suitId, data }) {
+    debugger;
     const sendData = Object.assign({}, data);
     sendData.creationDate = Date.now();
     sendData.updateDate = Date.now();
@@ -185,7 +186,6 @@ export default {
   getSuggestionsByStepTypeAsync({ state, commit }, {type, projectId}) {
     return AxiosClient.get(`/projects/${projectId}/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
       .then((response) => {
-        debugger;
         const first = response.data.length >= 7 ? response.data.length - 7 : 0;
         const last = response.data.length;
         const res = response.data.slice(first, last);
@@ -198,7 +198,7 @@ export default {
       AxiosClient.post(`/projects/${projectId}/step-suggestions`, data)
         .then((response) => {
           const sendData = Object.assign({}, data);
-          sendData.id = response.data;
+          sendData.id = response.data.id;
           commit('addSuggestion', sendData);
           resolve();
         })
@@ -222,6 +222,40 @@ export default {
       .catch(() => {
       });
   },
+  //***************STEPS*****************************/
+  deleteStepAsync({ state, commit }, {stepId, projectId, suitId, caseId}) {
+    return new Promise((resolve) => {
+    AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, stepId)
+      .then(() => {
+        commit('deleteStep', {stepId, suitId, caseId});
+        resolve();
+      })
+      .catch(() => {
+      });
+    });
+  },
+  addStepAsync({ state, commit }, { data, projectId, suitId, caseId }) {
+    return new Promise((resolve) => {
+      AxiosClient.post(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps`,data)
+        .then((response) => {
+          const sendData = Object.assign({}, data);
+                sendData.id = response.data.id;
+        commit('addStep', { suitId, caseId, sendData });
+        resolve();
+      })
+        .catch(() => {
+        });
+    });
+  },
+  updateStepAsync({ commit }, { data, projectId, suitId, caseId,stepId }) {
+    debugger;
+    AxiosClient.put(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, data)
+      .then(() => {
+        commit('updateStep', { data, suitId, caseId,stepId });
+      })
+      .catch(() => {
+      });
+  },
   //* *************REGISTRATION******************** */
   registerAsync(state, entity) {
     return AxiosClient.post('/user/registration', entity);
@@ -239,10 +273,10 @@ export default {
         const saveData = (function () {
           const a = document.createElement("a");
           document.body.appendChild(a);
-          a.style = "display: none";
-          return function (data, fileName) {
-            if(response.request.readyState === 4){
-              if(response.request.status === 200){
+          a.style = 'display: none';
+          return function(data, fileName) {
+            if (response.request.readyState === 4) {
+              if (response.request.status === 200) {
                 const jsonSave = data,
                   blob = new Blob([jsonSave], {type: "application/octet-stream"}),
                   url = window.URL.createObjectURL(blob);

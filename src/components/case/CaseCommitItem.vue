@@ -3,7 +3,7 @@
     <div v-if="commit">
         <div @click="changeView" class="commit-title">
                         <span class="fa fa-lg caret-gray" v-bind:class="isShownArrow"></span>
-                        {{ commit.updatedDate }}
+                        {{ Date.now(commit.updatedDate) | formatDate}}
                         <b>{{ commit.author}}</b>
                         <span v-html="commitTitle"></span>
         </div>
@@ -13,13 +13,25 @@
                   <td class="row-title">Old Value</td>
                   <td class="row-title">New Value</td>
                 </tr>
-                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps')">
-                    <td>{{ item.oldValue || '-'}}</td>
-                    <td>{{ item.newValue || '-'}}</td>
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps').filter(el => el.propertyName!=='lastModifiedDate').filter(el => el.propertyName!=='creationDate').filter(el => el.propertyName!=='updateDate')">
+                  <td>{{ item.oldValue || '-'}}</td>
+                  <td>{{ item.newValue || '-'}}</td>
                 </tr>
                 <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName==='steps')">
                     <td>{{ item.oldValue.description || '-'}}</td>
                     <td>{{ item.newValue.description || '-'}}</td>
+                </tr>
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName === 'lastModifiedDate')">
+                  <td>{{ Date.now(item.oldValue) | formatDate }}</td>
+                  <td>{{ Date.now(item.newValue) | formatDate }}</td>
+                </tr>
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName === 'creationDate')">
+                  <td>{{ Date.now(item.oldValue) | formatDate }}</td>
+                  <td>{{ Date.now(item.newValue) | formatDate }}</td>
+                </tr>
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName === 'updateDate')">
+                  <td>{{ Date.now(item.oldValue) | formatDate }}</td>
+                  <td>{{ Date.now(item.newValue) | formatDate }}</td>
                 </tr>
             </tbody>
         </table>
