@@ -9,6 +9,8 @@ import App from './App';
 import router from './router';
 
 import store from './store/store';
+import lodash from 'lodash';
+Object.defineProperty(Vue.prototype, '$lodash', { value: lodash });
 
 // eslint-disable-next-line no-unused-vars
 import { Vuedals, Component as Vuedal, Bus as VuedalsBus } from './components/ui/popoup-vuedals';
