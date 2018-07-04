@@ -17,6 +17,7 @@
   import { mapGetters } from 'vuex';
   import CaseSteps from '@/components/CaseSteps';
   import Case from '@/components/Case';
+  import Confirmation from '@/components/Confimation';
   import EpamButton from '@/components/ui/EpamButton';
   import CaseEdit from '@/components/case/CaseEdit';
   import CaseTopMenu from '../components/case/CaseTopMenu';
@@ -63,7 +64,6 @@
           });
       },
       saveTest(){
-        debugger;
         let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
         for(let item of saveUpdateSteps) {
           let sandData = {
@@ -96,6 +96,7 @@
           this.$store.dispatch('addCaseAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, data: this.entity })
             .then(() => {
               let saveCaseId = this.$store.state.saveCaseForMove;
+              console.log(saveCaseId);
               this.$store.dispatch('getCaseHistoryAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, caseId: saveCaseId })
                 .then(() => {
                   this.$router.push({ path: `/projects/${this.$route.params.projectId}/suits/${this.$route.params.suitId}/case/${saveCaseId}` });

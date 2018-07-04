@@ -105,8 +105,8 @@
         }
       },
       saveTest(){
-        debugger;
-        for(let item of this.$store.state.updateSteps) {
+        let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
+        for(let item of saveUpdateSteps) {
           let sandData = {
             description: item.description,
           };
@@ -138,7 +138,6 @@
         return {
           component: {
             CaseHistory,
-            CaseSteps
           },
           props: [
             { caseName: this.localCase.name },

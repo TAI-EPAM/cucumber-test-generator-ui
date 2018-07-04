@@ -76,7 +76,7 @@
       </div>
       <div class="contentCaseSteps WHEN">
         <div class="contentCaseStep" v-for="(item,index) in this.localCase.steps.filter(item => item.type === 'WHEN')">
-          <p>{{index+1+localCase.steps.filter(item => item.type === 'THEN').length}}</p>
+          <p>{{index+1+localCase.steps.filter(i => i.type === 'THEN').length}}</p>
           <input type="text"
                  class="input-steps uui-form-element "
                  v-model="item.description"
@@ -134,9 +134,9 @@
         this.visible = null;
       },
       toggleVisible(numb){
-        console.log(this.given,this.when, this.then)
         this.count++;
         this.stepsNum = this.localCase.steps.map(item => item.description).slice(0,10);
+        console.log(this.stepsNum);
         this.visible = numb;
       },
       setCheck(id) {

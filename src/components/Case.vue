@@ -29,11 +29,9 @@ Choose case
 </template>
 
 <script>
-  import CaseSteps from './CaseSteps';
 
   export default {
     components: {
-      CaseSteps,
     },
     computed: {
     },

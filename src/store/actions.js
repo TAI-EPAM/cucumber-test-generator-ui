@@ -109,8 +109,7 @@ export default {
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient
-        .get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+      AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
           .then(resp => resp.data.map(item => convertSteps(item)))
           .then((data) => {
             commit('setHistory', data);
@@ -122,7 +121,6 @@ export default {
   },
   //* *************CASES******************** */
   addCaseAsync({ commit }, { projectId, suitId, data }) {
-    debugger;
     const sendData = Object.assign({}, data);
     sendData.creationDate = Date.now();
     sendData.updateDate = Date.now();
@@ -131,7 +129,7 @@ export default {
         .then((response) => {
           sendData.id = response.data.id;
           commit('addCase', { suitId, data: sendData });
-          commit('saveCaseId', {  data: sendData.id });
+          commit('saveCaseId', {  data: sendData});
           resolve();
         })
         .catch(() => {
@@ -243,7 +241,6 @@ export default {
     });
   },
   updateStepAsync({ commit }, { data, projectId, suitId, caseId,stepId }) {
-    debugger;
     AxiosClient.put(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, data)
       .then(() => {
         commit('updateStep', { data, suitId, caseId,stepId });

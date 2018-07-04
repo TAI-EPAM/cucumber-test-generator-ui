@@ -81,8 +81,7 @@ export default {
     suitItem.cases = suitItem.cases.filter(item => !payload.removeCaseIds.includes(item.id));
   },
   saveCaseId(state,payload){
-    debugger;
-    state.saveCaseForMove = payload.data;
+    state.saveCaseForMove = payload.data.id;
   },
   //* **************HISTORY********************/
   setHistory(state, data) {
@@ -124,7 +123,6 @@ export default {
     caseItem.steps.push(stepItem);
   },
   updateStep(state,payload){
-    debugger;
     const suitItem = state.activeProject.suits.filter(suit => suit.id === parseInt(payload.suitId, 0))[0];
     const caseItem = suitItem.cases.filter(item => item.id === parseInt(payload.caseId, 0))[0];
     const stepItem = caseItem.filter(item => item.id === parseInt(payload.stepId, 0))[0];
