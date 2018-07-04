@@ -114,13 +114,13 @@
             .then(() => {
             });
         }
-        for(let item of this.localCase.steps){
-          if (item.description === ' '){
-            this.$store.dispatch('deleteStepAsync', { stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
-              .then(() => {
-              });
-          }
-        }
+        // for(let item of this.localCase.steps){
+        //   if (item.description === ' '){
+        //     this.$store.dispatch('deleteStepAsync', { stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+        //       .then(() => {
+        //       });
+        //   }
+        // }
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
@@ -197,7 +197,7 @@
     }
        .caseInfo{
          display: none;
-         opacity: 0.8;
+         /*opacity: 0.8;*/
          background: #39c2d7;
          width: 20%;
          color: white;
@@ -210,14 +210,14 @@
     .div-active {
       display: block;
     }
-    .caseInfo:after {
-      content: '';
-      position: absolute;
-      right: 360px;
-      top: 15px;
-      border: 10px solid transparent;
-      border-right: 20px solid #39c2d7;
-    }
+    /*.caseInfo:after {*/
+      /*content: '';*/
+      /*position: absolute;*/
+      /*right: 360px;*/
+      /*top: 15px;*/
+      /*border: 10px solid transparent;*/
+      /*border-right: 20px solid #39c2d7;*/
+    /*}*/
        .caseInfoText{
          float:left;
        }

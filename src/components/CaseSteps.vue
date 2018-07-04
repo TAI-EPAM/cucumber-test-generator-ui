@@ -136,7 +136,6 @@
       toggleVisible(numb){
         this.count++;
         this.stepsNum = this.localCase.steps.map(item => item.description).slice(0,10);
-        console.log(this.stepsNum);
         this.visible = numb;
       },
       setCheck(id) {
@@ -154,11 +153,11 @@
           .then(() => {
           });
       },
-      deleteStep(stepId){
-        this.$store.dispatch('deleteStepAsync', { stepId: stepId, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
-          .then(() => {
-          });
-      }
+      // deleteStep(stepId){
+      //   this.$store.dispatch('deleteStepAsync', { stepId: stepId, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+      //     .then(() => {
+      //     });
+      // }
     },
     props: ['localCase', 'stepsNum'],
     name: 'CaseSteps',
