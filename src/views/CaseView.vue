@@ -64,20 +64,16 @@
           });
       },
       saveTest(){
-        let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
-        for(let item of saveUpdateSteps) {
-          let sandData = {
-            description: item.description,
-          };
-          this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
-            .then(() => {
-              this.$store.state.updateSteps=[];
-            });
-        }
-        for(let item of this.localCase.steps){
-          if (item.description === ' '){
-            this.$store.dispatch('deleteStepAsync', { stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+        debugger;
+        if(this.$store.state.updateSteps.length>0){
+          let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
+          for(let item of saveUpdateSteps) {
+            let sandData = {
+              description: item.description,
+            };
+            this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
               .then(() => {
+                this.$store.state.updateSteps=[];
               });
           }
         }
@@ -96,11 +92,13 @@
           this.$store.dispatch('addCaseAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, data: this.entity })
             .then(() => {
               let saveCaseId = this.$store.state.saveCaseForMove;
-              console.log(saveCaseId);
+              debugger;
               this.$store.dispatch('getCaseHistoryAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, caseId: saveCaseId })
                 .then(() => {
+                  debugger;
                   this.$router.push({ path: `/projects/${this.$route.params.projectId}/suits/${this.$route.params.suitId}/case/${saveCaseId}` });
                   this.localCase = this.getCase(this.$route.params.suitId, saveCaseId);
+                  console.log(this.localCase);
                 });
             });
         }

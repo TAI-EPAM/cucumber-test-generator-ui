@@ -38,45 +38,11 @@
     <hr class="line">
     <div class="caseStep">
       <div class="nameCaseSteps">
-        <p>THEN:</p>
-      </div>
-      <div class="contentCaseSteps THEN">
-        <div class="contentCaseStep" v-for="(item,index) in this.localCase.steps.filter(item => item.type === 'THEN')" >
-         <p>{{index+1+localCase.steps.filter(item => item.type === 'GIVEN').length}}</p>
-          <input type="text"
-                 class="input-steps uui-form-element"
-                 v-model="item.description"
-                 v-on:input.once="setCheck(item.id)"
-                 @click ="toggleVisible(item.id)"
-          />
-          <ul v-show="(visible === item.id)&&(count% 2 !== 0)" class="autocomplete">
-            <li v-for="item in stepsNum"
-                @click="getValue(item)"
-                class="autocomplete-item"
-            >{{item}}</li>
-          </ul>
-          <button
-            @click="addStep('THEN')"
-            class="step-add">
-            <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
-          </button>
-          <button
-            @click="deleteStep(item.id)"
-            class="step-delete"
-            v-if=" localCase.steps.filter(item => item.type ==='THEN').length > 1 ">
-            <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-    <hr class="line">
-    <div class="caseStep">
-      <div class="nameCaseSteps">
         <p>WHEN:</p>
       </div>
       <div class="contentCaseSteps WHEN">
         <div class="contentCaseStep" v-for="(item,index) in this.localCase.steps.filter(item => item.type === 'WHEN')">
-          <p>{{index+1+localCase.steps.filter(i => i.type === 'THEN').length}}</p>
+          <p>{{index+1+localCase.steps.filter(item => item.type === 'GIVEN').length}}</p>
           <input type="text"
                  class="input-steps uui-form-element "
                  v-model="item.description"
@@ -99,6 +65,40 @@
             <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
           </button>
 
+        </div>
+      </div>
+    </div>
+    <hr class="line">
+    <div class="caseStep">
+      <div class="nameCaseSteps">
+        <p>THEN:</p>
+      </div>
+      <div class="contentCaseSteps THEN">
+        <div class="contentCaseStep" v-for="(item,index) in this.localCase.steps.filter(item => item.type === 'THEN')" >
+         <p>{{index+1+localCase.steps.filter(item => item.type === 'WHEN').length+localCase.steps.filter(item => item.type === 'GIVEN').length}}</p>
+          <input type="text"
+                 class="input-steps uui-form-element"
+                 v-model="item.description"
+                 @input="setCheck(item.id)"
+                 @click ="toggleVisible(item.id)"
+          />
+          <ul v-show="(visible === item.id)&&(count% 2 !== 0)" class="autocomplete">
+            <li v-for="item in stepsNum"
+                @click="getValue(item)"
+                class="autocomplete-item"
+            >{{item}}</li>
+          </ul>
+          <button
+            @click="addStep('THEN')"
+            class="step-add">
+            <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
+          </button>
+          <button
+            @click="deleteStep(item.id)"
+            class="step-delete"
+            v-if=" localCase.steps.filter(item => item.type ==='THEN').length > 1 ">
+            <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -130,7 +130,14 @@
       getValue(value){
         let update = this.localCase.steps.find(item => item.id === this.visible);
         update.description = value;
-        this.$store.state.updateSteps.push(update);
+        if((this.$store.state.updateSteps.length > 0)&&(this.$store.state.updateSteps.find(item=> item.id === update.id))){
+          debugger;
+          let updatedStep = this.$store.state.updateSteps.find(item=> item.id === update.id);
+          updatedStep.description = update.description;
+        }else{
+          this.$store.state.updateSteps.push(update);
+        }
+        console.log(this.$store.state.updateSteps);
         this.visible = null;
       },
       toggleVisible(numb){
@@ -140,7 +147,14 @@
       },
       setCheck(id) {
         let step = this.localCase.steps.find(item => item.id === id);
-        this.$store.state.updateSteps.push(step);
+        console.log(step,'rtyu');
+        if((this.$store.state.updateSteps.length > 0)&&(this.$store.state.updateSteps.find(item=> item.id === step.id))){
+          let updatedStep = this.$store.state.updateSteps.find(item=> item.id === step.id);
+          updatedStep.description = step.description;
+        }else{
+          this.$store.state.updateSteps.push(step);
+        }
+        console.log(this.$store.state.updateSteps);
       },
       addStep(className){
         this.entity = {
@@ -153,11 +167,11 @@
           .then(() => {
           });
       },
-      // deleteStep(stepId){
-      //   this.$store.dispatch('deleteStepAsync', { stepId: stepId, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
-      //     .then(() => {
-      //     });
-      // }
+      deleteStep(stepId){
+        this.$store.dispatch('deleteStepAsync', { stepId: stepId, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+          .then(() => {
+          });
+      }
     },
     props: ['localCase', 'stepsNum'],
     name: 'CaseSteps',

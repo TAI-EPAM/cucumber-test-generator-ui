@@ -105,22 +105,17 @@
         }
       },
       saveTest(){
-        let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
-        for(let item of saveUpdateSteps) {
-          let sandData = {
-            description: item.description,
-          };
-          this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
-            .then(() => {
-            });
+        if(this.$store.state.updateSteps.length>0){
+          let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
+          for(let item of saveUpdateSteps) {
+            let sandData = {
+              description: item.description,
+            };
+            this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+              .then(() => {
+              });
+          }
         }
-        // for(let item of this.localCase.steps){
-        //   if (item.description === ' '){
-        //     this.$store.dispatch('deleteStepAsync', { stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
-        //       .then(() => {
-        //       });
-        //   }
-        // }
       },
       isCreatedCommit(commit) {
         const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
