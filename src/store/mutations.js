@@ -67,7 +67,7 @@ export default {
   //* *************CASES******************** */
   addCase(state, payload) {
     const caseItem = payload.data;
-    const suitItem = state.activeProject.suits.filter(suit => suit.id === payload.suitId)[0];
+    const suitItem = state.activeProject.suits.find(suit => suit.id === parseInt(payload.suitId, 0));
     caseItem.steps = [];
     suitItem.cases.push(caseItem);
   },

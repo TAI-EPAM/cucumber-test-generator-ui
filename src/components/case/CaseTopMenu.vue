@@ -2,7 +2,7 @@
   <section class="caseTopPanel">
     <div class="caseNamePanel">
       <div class="caseName">Case {{this.localCase.name}}</div>
-      <button @click="getInfo"><svgicon v-bind:class="{ 'svg-active': this.getInfoStatus }" name="info" class="imgButton" id="imgButton"></svgicon></button>
+      <button @click="getInfo"><svgicon v-bind:class="{ 'svg-active': this.getInfoStatusCheck }" name="info" class="imgButton" id="imgButton"></svgicon></button>
     </div>
     <div class="caseInfo" v-bind:class="{ 'div-active': this.getInfoCaseStatus }">
       <div class="caseInfoText">
@@ -45,7 +45,6 @@
   import Curtain from '@/components/ui/Curtain';
   import CaseEdit from '@/components/case/CaseEdit';
   import CaseAdd from '@/components/case/CaseAdd';
-  import Case from '@/components/Case';
   import CaseSteps from '@/components/CaseSteps';
   import '../../assets/converted/info';
 
@@ -56,7 +55,6 @@
       Curtain,
       CaseEdit,
       CaseAdd,
-      Case,
     },
     name: 'case-top-menu',
     data() {
@@ -64,14 +62,14 @@
         activeSuit: false,
         activeCase: false,
         nextCase: false,
-        getInfoStatus: false,
+        getInfoStatusCheck: false,
         getInfoCaseStatus: false,
       };
     },
     methods: {
       getInfo() {
         this.activeSuit = this.$store.getters.getActiveSuitById(this.$route.params.suitId);
-        this.getInfoStatus = !this.getInfoStatus;
+        this.getInfoStatusCheck = !this.getInfoStatusCheck;
         this.getInfoCaseStatus = !this.getInfoCaseStatus;
       },
       editCase() {
@@ -97,21 +95,22 @@
         const projectId = this.$route.params.projectId;
         const caseId = +this.$route.params.caseId;
         this.activeSuit = this.$store.getters.getActiveSuitById(suitId);
-        for(let index in this.activeSuit.cases){
-          if((this.activeSuit.cases[index].id === caseId)&&(index < this.activeSuit.cases.length)){
+        for (let index in this.activeSuit.cases) {
+          if ((this.activeSuit.cases[index].id === caseId)&&( index < this.activeSuit.cases.length-1)) {
             this.nextCase = this.activeSuit.cases[++index];
             this.$router.push({ path: `/projects/${projectId}/suits/${suitId}/case/${this.nextCase.id}` });
           }
         }
       },
-      saveTest(){
-        if(this.$store.state.updateSteps.length>0){
+      saveTest() {
+        const suitId = this.$route.params.suitId;
+        const projectId = this.$route.params.projectId;
+        const caseId = +this.$route.params.caseId;
+        if (this.$store.state.updateSteps.length > 0) {
           let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
-          for(let item of saveUpdateSteps) {
-            let sandData = {
-              description: item.description,
-            };
-            this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+          for (let item of saveUpdateSteps) {
+            let sandData = { description: item.description };
+            this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: projectId, suitId: suitId, caseId: caseId})
               .then(() => {
               });
           }
@@ -131,9 +130,7 @@
       },
       getCertainComponent() {
         return {
-          component: {
-            CaseHistory,
-          },
+          component: CaseHistory,
           props: [
             { caseName: this.localCase.name },
             { commits: this.getCommits.filter(el => !this.isCreatedCommit(el)) },
@@ -192,7 +189,6 @@
     }
        .caseInfo{
          display: none;
-         /*opacity: 0.8;*/
          background: #39c2d7;
          width: 20%;
          color: white;
@@ -205,14 +201,6 @@
     .div-active {
       display: block;
     }
-    /*.caseInfo:after {*/
-      /*content: '';*/
-      /*position: absolute;*/
-      /*right: 360px;*/
-      /*top: 15px;*/
-      /*border: 10px solid transparent;*/
-      /*border-right: 20px solid #39c2d7;*/
-    /*}*/
        .caseInfoText{
          float:left;
        }

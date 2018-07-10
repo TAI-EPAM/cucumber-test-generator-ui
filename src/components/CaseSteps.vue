@@ -12,7 +12,7 @@
                  class="input-steps uui-form-element "
                  v-model="item.description"
                  v-on:input.once="setCheck(item.id)"
-                 @click ="toggleVisible(item.id)"
+                 @click ="toggleVisible(item.id,{type:'GIVEN'})"
           />
           <ul v-show="(visible === item.id)&&(count% 2 !== 0)" class="autocomplete">
             <li v-for="item in stepsNum"
@@ -31,7 +31,6 @@
             class="step-delete">
             <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
           </button>
-
         </div>
       </div>
     </div>
@@ -47,7 +46,7 @@
                  class="input-steps uui-form-element "
                  v-model="item.description"
                  v-on:input.once="setCheck(item.id)"
-                 @click ="toggleVisible(item.id)"
+                 @click ="toggleVisible(item.id,{type:'WHEN'})"
           />
           <ul v-show="(visible === item.id)&&(count% 2 !== 0)" class="autocomplete">
             <li v-for="item in stepsNum"
@@ -64,7 +63,6 @@
             v-if=" localCase.steps.filter(item => item.type ==='WHEN').length > 1 ">
             <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
           </button>
-
         </div>
       </div>
     </div>
@@ -80,7 +78,7 @@
                  class="input-steps uui-form-element"
                  v-model="item.description"
                  @input="setCheck(item.id)"
-                 @click ="toggleVisible(item.id)"
+                 @click ="toggleVisible(item.id, {type:'THEN'})"
           />
           <ul v-show="(visible === item.id)&&(count% 2 !== 0)" class="autocomplete">
             <li v-for="item in stepsNum"
@@ -109,54 +107,57 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    components: {
-    },
     data() {
       return {
         count:null,
         visible:null,
         entity: null,
         stepsNum: [],
+        suggestions: [],
+        type: null,
       };
     },
     computed: {
-      ...mapGetters(
-        {
-          updateSteps: 'getUpdateSteps'
+      ...mapGetters({
+          updateSteps: 'getUpdateSteps',
+          getSuggestionsByType: 'getSuggestionsByStepTypeAsync',
         },
       ),
     },
     methods: {
-      getValue(value){
+      getValue(value) {
         let update = this.localCase.steps.find(item => item.id === this.visible);
         update.description = value;
-        if((this.$store.state.updateSteps.length > 0)&&(this.$store.state.updateSteps.find(item=> item.id === update.id))){
-          debugger;
+        if ((this.$store.state.updateSteps.length > 0)&&(this.$store.state.updateSteps.find(item=> item.id === update.id))) {
           let updatedStep = this.$store.state.updateSteps.find(item=> item.id === update.id);
           updatedStep.description = update.description;
-        }else{
+        } else {
           this.$store.state.updateSteps.push(update);
         }
-        console.log(this.$store.state.updateSteps);
         this.visible = null;
       },
-      toggleVisible(numb){
+      toggleVisible(numb, stepType) {
+        this.type = stepType.type;
+        if (this.type) {
+          this.$store.dispatch('getSuggestionsByStepTypeAsync', { type: this.type, projectId: this.$route.params.projectId })
+            .then(() => {
+              this.suggestions = this.getSuggestions;
+            });
+        }
         this.count++;
-        this.stepsNum = this.localCase.steps.map(item => item.description).slice(0,10);
+        this.stepsNum = this.$store.state.currentSuggestions.map(item => item.content).slice(0,10);
         this.visible = numb;
       },
       setCheck(id) {
         let step = this.localCase.steps.find(item => item.id === id);
-        console.log(step,'rtyu');
-        if((this.$store.state.updateSteps.length > 0)&&(this.$store.state.updateSteps.find(item=> item.id === step.id))){
+        if ((this.$store.state.updateSteps.length > 0)&&(this.$store.state.updateSteps.find(item=> item.id === step.id))) {
           let updatedStep = this.$store.state.updateSteps.find(item=> item.id === step.id);
           updatedStep.description = step.description;
-        }else{
+        } else {
           this.$store.state.updateSteps.push(step);
         }
-        console.log(this.$store.state.updateSteps);
       },
-      addStep(className){
+      addStep(className) {
         this.entity = {
           comment: " ",
           description: " ",
@@ -173,11 +174,12 @@
           });
       }
     },
-    props: ['localCase', 'stepsNum'],
+    props: ['localCase'],
     name: 'CaseSteps',
   };
 
 </script>
+
 <style lang="less">
   .icon{
     color: #d8d8d8;
@@ -192,105 +194,114 @@
   @import "../assets/vendors/epam-ui/less/uui-colors";
   @import "../assets/vendors/epam-ui/less/uui-fonts";
 
-  .caseStep{
-    margin-bottom:20px;
-    background: white;
-    border: 2px #ebeef0 solid;
-    padding: 20px 10px 20px 30px;
-    display: flex;
-    flex-wrap: wrap;
-  }
   .caseSteps{
     font-family: @Oswald_Regular;
     border-left: 1px solid #d8d8d8;
     margin-top: 0;
-    padding-bottom: 40px;
-    padding-top: 40px;
-    padding-left: 40px;
+    padding: 40px 0 40px 40px;
 
-  }
-  .nameCaseSteps{
-    color: #d8d8d8;
-    font-size: 20px;
-    padding-right: 10px;
+    .caseStep{
+      margin-bottom:20px;
+      background: white;
+      border: 2px #ebeef0 solid;
+      padding: 20px 10px 20px 30px;
+      display: flex;
+      flex-wrap: wrap;
 
-  }
-  .contentCaseSteps{
-    width: 95%;
-    max-height: 250px;
-    overflow-y: auto;
-  }
-  .contentCaseStep{
-    margin-left: 20px;
-    p{
-      float: left;
-      margin: 10px 10px 10px 10px;
+      .nameCaseSteps{
+        color: #d8d8d8;
+        font-size: 20px;
+        padding-right: 10px;
+
+      }
+      .contentCaseSteps{
+        width: 95%;
+        max-height: 250px;
+        overflow-y: auto;
+
+        .contentCaseStep{
+          margin-left: 20px;
+
+          p{
+            float: left;
+            margin: 10px 20px 10px 10px;
+            width: 20px;
+            text-align: center;
+          }
+          .input-steps {
+            width: 88%;
+            margin-right: 10px;
+            flex-grow: 2;
+            color: black;
+            outline: none;
+            margin-bottom: 5px;
+            border: 1px solid @gray_border;
+            background-color: @gray_input_bg;
+
+            &:focus, &:hover {
+              background-color: @white;
+              border-color: @blue;
+            }
+          }
+          .step-delete{
+            display: inline-block;
+            height: 36px;
+            padding: 8px 11px;
+            vertical-align: middle;
+            background-color: @white;
+            border: 1px solid @white;
+            border-radius: 50%;
+
+            &:hover{
+              background-color:#e6425d;
+              border: 1px solid #e6425d;
+            }
+          }
+          .step-add{
+            display: inline-block;
+            height: 36px;
+            padding: 8px 11px;
+            vertical-align: middle;
+            transform: rotate(45deg);
+            justify-content: flex-end;
+            background-color: @white;
+            border: 1px solid @white;
+            border-radius: 50%;
+
+            &:hover{
+              border: 1px solid #accb59;
+              background-color:#accb59;
+            }
+          }
+          .autocomplete{
+            list-style-type: none;
+            position: absolute;
+            margin-left: 50px;
+            width: 50%;
+            background: white;
+            border:1px solid @blue;
+
+            .autocomplete-item{
+              cursor: pointer;
+              color: @gray_border;
+              padding: 5px;
+
+              &:hover{
+                background: @blue;
+              }
+            }
+          }
+        }
+      }
     }
   }
-  .input-steps {
-    width: 90%;
-    margin-right: 10px;
-    flex-grow: 2;
-    color: black;
-    outline: none;
-    margin-bottom: 5px;
-    border: 1px solid @gray_border;
-    background-color: @gray_input_bg;
-  }
-  .input-steps:focus, .input-steps:hover {
-    background-color: @white;
-    border-color: @blue;
-  }
-  .step-delete{
-    display: inline-block;
-    height: 36px;
-    padding: 8px 11px;
-    vertical-align: middle;
-    background-color: @white;
-    border: 1px solid @white;
-    border-radius: 50%;
-  }
-  .step-delete:hover{
-    background-color:#e6425d;
-    border: 1px solid #e6425d;
-  }
-  .step-add{
-    display: inline-block;
-    height: 36px;
-    padding: 8px 11px;
-    vertical-align: middle;
-    transform: rotate(45deg);
-    justify-content: flex-end;
-    background-color: @white;
-    border: 1px solid @white;
-    border-radius: 50%;
-  }
-  .step-add:hover{
-    border: 1px solid #accb59;
-    background-color:#accb59;
-  }
+
   .line{
     border: 1px solid @gray_border;
     width: 40px;
     margin-left: -40px;
     position: absolute;
     margin-top: 30px;
-  }
-  .autocomplete{
-    list-style-type: none;
-    position: absolute;
-    width: 50%;
-    background: white;
-    border:1px solid @blue;
-  }
-  .autocomplete-item{
-    cursor: pointer;
-    color: @gray_border;
-    padding: 5px;
-
-  }
-  .autocomplete-item:hover{
-    background: @blue;
   }
 
 </style>

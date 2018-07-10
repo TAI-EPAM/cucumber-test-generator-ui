@@ -1,8 +1,6 @@
 <template>
   <section class="case-view" v-if="$route.params.caseId">
       <case-top-menu :local-case="localCase" v-if="localCase"></case-top-menu>
-      <!--<case :local-case="localCase"/>-->
-      <!-- Steps-->
       <case-steps :local-case="localCase"></case-steps>
     <div class="bottomCase">
       <hr class="line">
@@ -17,7 +15,6 @@
   import { mapGetters } from 'vuex';
   import CaseSteps from '@/components/CaseSteps';
   import Case from '@/components/Case';
-  import Confirmation from '@/components/Confimation';
   import EpamButton from '@/components/ui/EpamButton';
   import CaseEdit from '@/components/case/CaseEdit';
   import CaseTopMenu from '../components/case/CaseTopMenu';
@@ -34,6 +31,7 @@
       return {
         checked: false,
         localCase: null,
+        saveCaseId: null,
       };
     },
     methods: {
@@ -63,42 +61,40 @@
             this.localCase = this.getCase(suitId, caseId);
           });
       },
-      saveTest(){
-        debugger;
-        if(this.$store.state.updateSteps.length>0){
+      saveTest() {
+        let projectId = this.$route.params.projectId,
+            suitId = this.$route.params.suitId,
+            caseId = this.$route.params.caseId;
+        if(this.$store.state.updateSteps.length > 0 ){
           let saveUpdateSteps = this.$store.state.updateSteps.filter(item =>  this.localCase.steps.includes(item));
           for(let item of saveUpdateSteps) {
             let sandData = {
               description: item.description,
             };
-            this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: this.$route.params.projectId, suitId:this.$route.params.suitId, caseId:this.$route.params.caseId})
+            this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: projectId, suitId:suitId, caseId:caseId})
               .then(() => {
                 this.$store.state.updateSteps=[];
               });
           }
         }
-        if(this.checked === true){
+        if (this.checked === true) {
           this.entity = {
             comment: "string",
             description: "string",
             name: "string",
             priority: 1,
-            tags: [
-              {
+            tags: [{
                 name: "string"
               }
             ]
           }
-          this.$store.dispatch('addCaseAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, data: this.entity })
+          this.$store.dispatch('addCaseAsync', { projectId: projectId, suitId: suitId, data: this.entity })
             .then(() => {
-              let saveCaseId = this.$store.state.saveCaseForMove;
-              debugger;
-              this.$store.dispatch('getCaseHistoryAsync', { projectId: this.$route.params.projectId, suitId: this.$route.params.suitId, caseId: saveCaseId })
+              this.saveCaseId = this.$store.state.saveCaseForMove;
+              this.$store.dispatch('getCaseHistoryAsync', { projectId: projectId, suitId: suitId, caseId: this.saveCaseId })
                 .then(() => {
-                  debugger;
-                  this.$router.push({ path: `/projects/${this.$route.params.projectId}/suits/${this.$route.params.suitId}/case/${saveCaseId}` });
-                  this.localCase = this.getCase(this.$route.params.suitId, saveCaseId);
-                  console.log(this.localCase);
+                  this.$router.push({ path: `/projects/${projectId}/suits/${suitId}/case/${this.saveCaseId}` });
+                  this.localCase = this.getCase(suitId, this.saveCaseId);
                 });
             });
         }
@@ -128,7 +124,7 @@
         }
       },
     },
-    name: 'CaseView',
+    name: 'CaseView'
   };
 </script>
 
@@ -155,12 +151,12 @@
     align-items: center;
     font-family: @Oswald_Regular;
     font-size: 13px;
+
     .checkbox{
       width: 16px;
       height: 16px;
       margin-left: 20px;
       margin-right: 5px;
-
     }
   }
   .line{

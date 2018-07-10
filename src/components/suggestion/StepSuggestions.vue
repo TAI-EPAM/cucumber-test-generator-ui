@@ -53,11 +53,6 @@
         .then(() => {
           this.suggestions = this.getSuggestions;
         });
-      // this.getSuggestionsByType('ANY')
-      //   .then(() => {
-      //     debugger;
-      //
-      //   });
     },
     methods: {
       ...mapActions({
@@ -70,7 +65,6 @@
           this.$store.dispatch('getSuggestionsByStepTypeAsync', { type, projectId: this.$route.params.projectId })
             .then(() => {
             });
-          // this.getSuggestionsByType(type);
         }
       },
     },
