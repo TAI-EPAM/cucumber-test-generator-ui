@@ -28,6 +28,8 @@ const store = new Vuex.Store({
     activeProject: null,
     globalErrors: [],
     saveCaseForMove: null,
+    startTestRun: false,
+    saveCaseForTestRun: null,
   },
 
   getters,

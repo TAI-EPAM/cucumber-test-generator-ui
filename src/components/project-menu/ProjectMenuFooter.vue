@@ -116,6 +116,7 @@
           });
         }},
       TestRunButton() {
+        this.$store.state.startTestRun = true;
         this.$router.push({ path: '/testRun' });
       },
       GeneratorButton() {
