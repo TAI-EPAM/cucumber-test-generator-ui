@@ -10,7 +10,7 @@
              v-model="entityData.content"
              v-on:input="setCheck"
       />
-      <epam-button @click="deleteSuggestion(suggestion.id)"
+      <epam-button @click="deleteSuggestion"
                    class="suggestion-delete" v-if="!showCheck">
         <i class="fa fa-xl fa-remove icon" aria-hidden="true"></i>
       </epam-button>
@@ -24,12 +24,13 @@
 
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import StepTypeMap from '@/constants/StepType';
   import EpamButton from '../ui/EpamButton';
 
   export default {
     components: {
+      ...mapGetters({ getSuggestions: 'getCurrentSuggestions' }),
       EpamButton,
     },
     data() {
@@ -41,7 +42,7 @@
     },
     computed: {
       entityData() {
-        this.entity = JSON.parse(JSON.stringify(this.suggestion));
+        this.entity = this.suggestion;
         return this.entity;
       },
     },
@@ -55,8 +56,15 @@
       },
       updateValue() {
         const data = { ...this.entity, ...{ version: this.entity.version || 0 } };
-        this.updateSuggestion(data);
+        this.$store.dispatch('updateSuggestionAsync', { data, projectId: this.$route.params.projectId })
+          .then(() => {
+          });
         this.showCheck = false;
+      },
+      deleteSuggestion() {
+        this.$store.dispatch('deleteSuggestionAsync', { suggestionId: this.suggestion.id, projectId: this.$route.params.projectId })
+          .then(() => {
+          });
       },
     },
     name: 'SuggestionItem',
@@ -89,7 +97,6 @@
     flex-grow: 2;
     color: black;
     outline: none;
-    border: none;
     border: 1px solid @gray_border;
     background-color: @gray_input_bg;
   }

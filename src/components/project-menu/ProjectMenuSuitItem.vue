@@ -118,6 +118,7 @@
         });
       },
       removeSuit() {
+        debugger;
         const suitId = this.suit.id;
         const projectId = this.$route.params.projectId;
 

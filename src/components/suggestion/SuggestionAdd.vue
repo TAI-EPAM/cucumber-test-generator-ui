@@ -14,6 +14,7 @@
 
 <script>
   import EpamButton from '../ui/EpamButton';
+  /* eslint-disable */
 
   export default {
     components: {
@@ -22,9 +23,8 @@
     data() {
       return {
         entity: {
-          id: 0,
           content: '',
-          type: 'GIVEN',
+          type : 'GIVEN',
         },
         searchContent: '',
         searchSteps: false,
@@ -32,6 +32,7 @@
     },
     methods: {
       reset() {
+        debugger;
         Object.assign(this.entity, {
           id: null,
           content: null,
@@ -39,7 +40,7 @@
         });
       },
       send() {
-        this.$store.dispatch('addSuggestionAsync', this.entity)
+        this.$store.dispatch('addSuggestionAsync', { data: this.entity, projectId: this.$route.params.projectId})
           .then(() => {
             this.reset();
           });

@@ -1,7 +1,7 @@
 <template>
   <section class="panel">
   <div v-if="localCase">
-    <div class="case-props">
+    <div class="case-props" >
       <div class="case-props-main">
          <h2>{{ localCase.name }}</h2>
          <ul>
@@ -18,8 +18,8 @@
     </div>
    </div>
 
-    <!-- Steps-->
-    <case-steps v-model="localCase.steps"></case-steps>
+    <!--&lt;!&ndash; Steps&ndash;&gt;-->
+    <!--<case-steps v-model="localCase.steps"></case-steps>-->
 
 </div>
 <div v-else>
@@ -29,11 +29,9 @@ Choose case
 </template>
 
 <script>
-  import CaseSteps from './CaseSteps';
 
   export default {
     components: {
-      CaseSteps,
     },
     computed: {
     },
@@ -52,7 +50,7 @@ Choose case
     display: flex;
     flex-wrap: wrap;
     background: white;
-    border: 1px #ebeef0 solid;
+    border: 2px #ebeef0 solid;
     padding: 20px 30px;
       .case-props-main {
         border-right: 1px #ebeef0 solid;

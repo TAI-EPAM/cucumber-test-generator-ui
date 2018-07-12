@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     selectedObject: null,
+    updateSteps: [],
     debug: false,
     projects: [],
     currentCommits: [],
@@ -26,6 +27,7 @@ const store = new Vuex.Store({
     },
     activeProject: null,
     globalErrors: [],
+    saveCaseForMove: null,
   },
 
   getters,

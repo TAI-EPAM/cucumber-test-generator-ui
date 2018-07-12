@@ -31,7 +31,7 @@ export default {
   getActiveCaseById: (state, getters) => (suitId, caseId) => {
     const suit = getters.getActiveSuitById(suitId);
     if (suit) {
-      return suit.cases.filter(_case => _case.id === parseInt(caseId, 0))[0];
+      return suit.cases.find(_case => _case.id === parseInt(caseId, 0));
     }
     return false;
   },
@@ -39,4 +39,6 @@ export default {
   getCurrentSuggestions: state => state.currentSuggestions,
   getGlobalErrors: state => state.globalErrors,
   getSelectObject: state => state.selectedObject,
+  getUpdateSteps: state => state.updateSteps,
+  getSaveCaseForMove: state =>state.saveCaseForMove,
 };

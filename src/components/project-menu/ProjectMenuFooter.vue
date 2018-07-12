@@ -164,8 +164,6 @@
       }
 
       .imgButton{
-        width: 15px;
-        vertical-align: middle;
       }
 
       &:disabled {

@@ -68,6 +68,7 @@ export default {
           const sendData = data;
           sendData.id = response.data.id;
           commit('addSuit', sendData);
+
           resolve();
         })
         .catch(() => {
@@ -108,8 +109,7 @@ export default {
   //* *************HISTORY******************** */
   getCaseHistoryAsync({ state, commit }, { projectId, suitId, caseId }) {
     return new Promise((resolve) => {
-      AxiosClient
-        .get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+      AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
           .then(resp => resp.data.map(item => convertSteps(item)))
           .then((data) => {
             commit('setHistory', data);
@@ -129,6 +129,7 @@ export default {
         .then((response) => {
           sendData.id = response.data.id;
           commit('addCase', { suitId, data: sendData });
+          commit('saveCaseId', {  data: sendData});
           resolve();
         })
         .catch(() => {
@@ -161,36 +162,36 @@ export default {
     });
   },
   //* *************SUGGESTIONS******************** */
-  getSuggestionsAsync({ state, commit }, type) {
-    return new Promise((resolve) => {
-      AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
-        .then((response) => {
-          const first = response.data.length - 7;
-          const last = response.data.length;
-          const res = response.data.slice(first, last);
-          commit('step-suggestions', res);
-          resolve();
-        })
-        .catch(() => {
-        });
-    });
-  },
-  getSuggestionsByStepTypeAsync({ state, commit }, type) {
-    return AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+  // getSuggestionsAsync({ state, commit }, type) {
+  //   return new Promise((resolve) => {
+  //     AxiosClient.get(`/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
+  //       .then((response) => {
+  //         const first = response.data.length - 7;
+  //         const last = response.data.length;
+  //         const res = response.data.slice(first, last);
+  //         commit('step-suggestions', res);
+  //         resolve();
+  //       })
+  //       .catch(() => {
+  //       });
+  //   });
+  // },
+  getSuggestionsByStepTypeAsync({ state, commit }, {type, projectId}) {
+    return AxiosClient.get(`/projects/${projectId}/step-suggestions/${type}`, { headers: { authorization: `Bearer ${state.auth.token}` } })
       .then((response) => {
         const first = response.data.length >= 7 ? response.data.length - 7 : 0;
         const last = response.data.length;
         const res = response.data.slice(first, last);
-        commit('step-suggestions', res);
+        commit('setSuggestions', res);
       }).catch(() => {
       });
   },
-  addSuggestionAsync({ state, commit }, data) {
+  addSuggestionAsync({ state, commit }, { data, projectId }) {
     return new Promise((resolve) => {
-      AxiosClient.post('/step-suggestions', data)
+      AxiosClient.post(`/projects/${projectId}/step-suggestions`, data)
         .then((response) => {
           const sendData = Object.assign({}, data);
-          sendData.id = response.data;
+          sendData.id = response.data.id;
           commit('addSuggestion', sendData);
           resolve();
         })
@@ -198,18 +199,51 @@ export default {
         });
     });
   },
-  deleteSuggestionAsync({ state, commit }, suggestionId) {
-    AxiosClient.delete(`/step-suggestions/${suggestionId}`, suggestionId)
+  deleteSuggestionAsync({ state, commit }, {suggestionId, projectId}) {
+    AxiosClient.delete(`/projects/${projectId}/step-suggestions/${suggestionId}`, suggestionId)
       .then(() => {
         commit('deleteSuggestion', suggestionId);
       })
       .catch(() => {
       });
   },
-  updateSuggestionAsync({ commit }, data) {
-    AxiosClient.put(`/step-suggestions/${data.id}`, data)
+  updateSuggestionAsync({ commit }, { data, projectId }) {
+    AxiosClient.put(`/projects/${projectId}/step-suggestions/${data.id}`, data)
       .then(() => {
         commit('updateSuggestion', data);
+      })
+      .catch(() => {
+      });
+  },
+  //***************STEPS*****************************/
+  deleteStepAsync({ state, commit }, {stepId, projectId, suitId, caseId}) {
+    return new Promise((resolve) => {
+    AxiosClient.delete(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, stepId)
+      .then(() => {
+        commit('deleteStep', {stepId, suitId, caseId});
+        resolve();
+      })
+      .catch(() => {
+      });
+    });
+  },
+  addStepAsync({ state, commit }, { data, projectId, suitId, caseId }) {
+    return new Promise((resolve) => {
+      AxiosClient.post(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps`,data)
+        .then((response) => {
+          const sendData = Object.assign({}, data);
+                sendData.id = response.data.id;
+        commit('addStep', { suitId, caseId, sendData });
+        resolve();
+      })
+        .catch(() => {
+        });
+    });
+  },
+  updateStepAsync({ commit }, { data, projectId, suitId, caseId,stepId }) {
+    AxiosClient.put(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, data)
+      .then(() => {
+        commit('updateStep', { data, suitId, caseId,stepId });
       })
       .catch(() => {
       });
@@ -231,10 +265,10 @@ export default {
         const saveData = (function () {
           const a = document.createElement('a');
           document.body.appendChild(a);
-          a.style = "display: none";
-          return function (data, fileName) {
-            if(response.request.readyState === 4){
-              if(response.request.status === 200){
+          a.style = 'display: none';
+          return function(data, fileName) {
+            if (response.request.readyState === 4) {
+              if (response.request.status === 200) {
                 const jsonSave = data,
                   blob = new Blob([jsonSave], { type: 'application/octet-stream' }),
                   url = window.URL.createObjectURL(blob);
