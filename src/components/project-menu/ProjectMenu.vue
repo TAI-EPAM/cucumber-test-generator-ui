@@ -2,8 +2,10 @@
   <div class="project-menu">
     <project-menu-filters v-bind="{applyFilters, resetFilters, selectAll, resetSearch}"
                           v-model="modificators"
-                          :check="selectedObject.checkAll"></project-menu-filters>
-    <div class="uui-side-bar">
+                          :check="selectedObject.checkAll">
+
+    </project-menu-filters>
+    <div class="uui-side-bar" >
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem
           v-bind="{selectSuit, selectCase}"

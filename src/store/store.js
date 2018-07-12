@@ -30,6 +30,7 @@ const store = new Vuex.Store({
     saveCaseForMove: null,
     startTestRun: false,
     saveCaseForTestRun: null,
+    updateStatus: null,
   },
 
   getters,

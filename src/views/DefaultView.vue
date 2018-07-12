@@ -9,7 +9,7 @@
       <main class="uui-main-container">
         <div class="app-wrapper">
           <global-errors></global-errors>
-          <div class="content-view">
+          <div class="content-view" >
             <router-view />
           </div>
         </div>

@@ -1,9 +1,6 @@
 <template>
   <section class="test-run" >
-  <p v-if="!this.$store.state.saveCaseForTestRun">TEST RUN VIEW</p>
-  <test-run-case v-else="this.$store.state.saveCaseForTestRun">
-
-  </test-run-case>
+    <test-run-case :local-case="this.localCase" ></test-run-case>
   </section>
 </template>
 
@@ -13,6 +10,12 @@
 
   export default {
     name: 'test-run',
+    data(){
+      return{
+        localSuit: null,
+        localCase: null,
+      }
+    },
     components:{
       TestRunCase,
     },
@@ -23,6 +26,24 @@
         },
       ),
     },
+  methods: {
+    getCases (
+      suitId = this.$route.params.suitId,
+      caseId = this.$route.params.caseId ) {
+      this.localSuit = this.$store.state.activeProject.suits.find(item => item.id === +suitId);
+      this.localCase = JSON.parse(JSON.stringify(this.localSuit)).cases.find(item => item.id === +caseId);
+    },
+  },
+  mounted() {
+    this.getCases();
+  },
+  watch: {
+    '$route'(n) {
+      if ( n.params.suitId && n.params.caseId) {
+        this.getCases( n.params.suitId, n.params.caseId);
+      }
+    },
+  }
   };
 
 </script>

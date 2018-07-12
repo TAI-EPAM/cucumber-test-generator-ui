@@ -117,7 +117,7 @@
         }},
       TestRunButton() {
         this.$store.state.startTestRun = true;
-        this.$router.push({ path: '/testRun' });
+        this.$router.push({ path: `/testRun/projects/${this.$route.params.projectId}` });
       },
       GeneratorButton() {
         const suitActiveIds = this.$store.state.selectedObject.suits;

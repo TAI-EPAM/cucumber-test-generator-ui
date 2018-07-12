@@ -240,10 +240,10 @@ export default {
         });
     });
   },
-  updateStepAsync({ commit }, { data, projectId, suitId, caseId,stepId }) {
+  updateStepAsync({ commit }, { data, projectId, suitId, caseId, stepId }) {
     AxiosClient.put(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, data)
       .then(() => {
-        commit('updateStep', { data, suitId, caseId,stepId });
+        commit('updateStep', { data, suitId, caseId, stepId });
       })
       .catch(() => {
       });
