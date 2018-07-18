@@ -68,7 +68,6 @@ export default {
           const sendData = data;
           sendData.id = response.data.id;
           commit('addSuit', sendData);
-
           resolve();
         })
         .catch(() => {
@@ -112,6 +111,7 @@ export default {
       AxiosClient.get(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/versions`, { headers: { authorization: `Bearer ${state.auth.token}` } })
           .then(resp => resp.data.map(item => convertSteps(item)))
           .then((data) => {
+            debugger;
             commit('setHistory', data);
             resolve();
           })
@@ -240,10 +240,10 @@ export default {
         });
     });
   },
-  updateStepAsync({ commit }, { data, projectId, suitId, caseId,stepId }) {
+  updateStepAsync({ commit }, { data, projectId, suitId, caseId, stepId }) {
     AxiosClient.put(`/projects/${projectId}/suits/${suitId}/cases/${caseId}/steps/${stepId}`, data)
       .then(() => {
-        commit('updateStep', { data, suitId, caseId,stepId });
+        commit('updateStep', { data, suitId, caseId, stepId });
       })
       .catch(() => {
       });
@@ -267,8 +267,7 @@ export default {
           document.body.appendChild(a);
           a.style = 'display: none';
           return function(data, fileName) {
-            if (response.request.readyState === 4) {
-              if (response.request.status === 200) {
+            if ((response.request.readyState === 4)&&(response.request.status === 200)) {
                 const jsonSave = data,
                   blob = new Blob([jsonSave], { type: 'application/octet-stream' }),
                   url = window.URL.createObjectURL(blob);
@@ -277,7 +276,6 @@ export default {
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
-              }
             } else {
               if (response.request.readyState === 2) {
                 if (response.request.status === 200) {

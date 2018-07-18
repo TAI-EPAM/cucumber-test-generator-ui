@@ -116,7 +116,8 @@
           });
         }},
       TestRunButton() {
-        this.$router.push({ path: '/testRun' });
+        this.$store.state.startTestRun = true;
+        this.$router.push({ path: `/testRun/projects/${this.$route.params.projectId}` });
       },
       GeneratorButton() {
         const suitActiveIds = this.$store.state.selectedObject.suits;
@@ -162,10 +163,6 @@
       &:hover {
         background: #b22746;
       }
-
-      .imgButton{
-      }
-
       &:disabled {
         cursor: not-allowed;
         background: #e5e5e5;

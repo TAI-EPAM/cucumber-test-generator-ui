@@ -1,22 +1,49 @@
 <template>
   <section class="test-run" >
-  <p>Test Run start</p>
-    <p>{{ this.$store.state.selectedObject }}}</p>
+    <test-run-case :local-case="this.localCase" ></test-run-case>
   </section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
+  import TestRunCase from '../test run components/TestRunCase';
 
   export default {
     name: 'test-run',
+    data() {
+      return{
+        localSuit: null,
+        localCase: null,
+      }
+    },
+    components: {
+      TestRunCase,
+    },
     computed: {
       ...mapGetters(
         {
-          selectedObject: 'getSelectObject',
+          activeProject: 'getActiveProject',
         },
       ),
     },
+  methods: {
+    getCases (
+      suitId = this.$route.params.suitId,
+      caseId = this.$route.params.caseId ) {
+      this.localSuit = this.activeProject.suits.find(item => item.id === +suitId);
+      this.localCase = this.localSuit.cases.find(item => item.id === +caseId);
+    },
+  },
+  mounted() {
+    this.getCases();
+  },
+  watch: {
+    '$route'(n) {
+      if ( n.params.suitId && n.params.caseId) {
+        this.getCases( n.params.suitId, n.params.caseId);
+      }
+    },
+  }
   };
 
 </script>

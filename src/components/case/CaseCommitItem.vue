@@ -13,7 +13,7 @@
                   <td class="row-title">Old Value</td>
                   <td class="row-title">New Value</td>
                 </tr>
-                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps').filter(el => el.propertyName!=='creationDate').filter(el => el.propertyName!=='updateDate').filter(el => el.propertyName!=='lastModifiedDate')">
+                <tr v-for="item in commit.propertyDifferences.filter(el => el.propertyName!=='steps' && el.propertyName!=='creationDate' &&  el.propertyName!=='updateDate' && el.propertyName!=='lastModifiedDate')">
                   <td>{{ item.oldValue || '-'}}</td>
                   <td>{{ item.newValue || '-'}}</td>
                 </tr>

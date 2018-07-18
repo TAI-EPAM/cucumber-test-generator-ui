@@ -1,14 +1,15 @@
 <template>
   <div class="wrapper" id="app" :class="selectCssClass()" v-if="dataIsLoaded">
     <aside>
-      <project-menu v-if="getActiveProject"></project-menu>
+      <project-menu v-if="(getActiveProject)&&(!this.$store.state.startTestRun)"></project-menu>
+      <test-run-menu v-if="this.$store.state.startTestRun"></test-run-menu>
     </aside>
     <div id="content-side">
       <app-header />
       <main class="uui-main-container">
         <div class="app-wrapper">
           <global-errors></global-errors>
-          <div class="content-view">
+          <div class="content-view" >
             <router-view />
           </div>
         </div>
@@ -27,9 +28,11 @@
   import ProjectMenu from '../components/project-menu/ProjectMenu';
   import GlobalErrors from '../components/ui/GlobalErrors';
   import TestRun from '../components/ui/TestRun';
+  import TestRunMenu from "../components/test run components/TestRunMenu";
 
   export default {
     components: {
+      TestRunMenu,
       TestRun,
       GlobalErrors,
       AppHeader,

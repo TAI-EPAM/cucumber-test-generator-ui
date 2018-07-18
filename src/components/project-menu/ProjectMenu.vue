@@ -2,8 +2,10 @@
   <div class="project-menu">
     <project-menu-filters v-bind="{applyFilters, resetFilters, selectAll, resetSearch}"
                           v-model="modificators"
-                          :check="selectedObject.checkAll"></project-menu-filters>
-    <div class="uui-side-bar">
+                          :check="selectedObject.checkAll">
+
+    </project-menu-filters>
+    <div class="uui-side-bar" >
       <ul class="sidebar-menu">
         <ProjectMenuSuitItem
           v-bind="{selectSuit, selectCase}"
@@ -15,7 +17,6 @@
       <div class="add-suit">
         <epam-button @click="addSuit" markup="lime-green">+ Add New Suit</epam-button>
       </div>
-
       <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">
         {{ filterController }}
       </div>

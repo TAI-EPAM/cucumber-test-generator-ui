@@ -8,6 +8,7 @@ import ProjectView from '@/views/ProjectView';
 import PasswordForgot from '@/components/PasswordForgot';
 import Registration from '@/components/Registration';
 import TestRun from '@/components/ui/TestRun';
+import TestRunCase from '@/components/test run components/TestRunCase';
 
 Vue.use(Router);
 
@@ -58,7 +59,7 @@ const router = new Router({
       component: PasswordForgot,
     },
     {
-      path: '/testRun',
+      path: '/testRun/projects/:projectId/suits/:suitId/case/:caseId',
       name: 'TestRun',
       component: TestRun,
       meta: { requiresAuth: true },

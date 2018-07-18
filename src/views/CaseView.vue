@@ -1,7 +1,8 @@
 <template>
   <section class="case-view" v-if="$route.params.caseId">
       <case-top-menu :local-case="localCase" v-if="localCase"></case-top-menu>
-      <case-steps :local-case="localCase"></case-steps>
+      <case-steps :local-case="localCase" ></case-steps>
+
     <div class="bottomCase">
       <hr class="line">
       <epam-button markup="large" class="lime-green" @click="saveTest">Save Tests</epam-button>
@@ -129,8 +130,15 @@
 </script>
 
 <style lang="less" scoped>
+  @import "../assets/vendors/epam-ui/less/uui-colors";
   .case-view {
     margin-left: 20px;
+  }
+  .line{
+
+    border: 1px solid @gray_border;
+    height: 0;
+    width: 40px;
   }
 </style>
 
@@ -159,10 +167,6 @@
       margin-right: 5px;
     }
   }
-  .line{
-    border: 1px solid @gray_border;
-    height: 0;
-    width: 40px;
-  }
+
 
 </style>
