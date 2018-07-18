@@ -10,19 +10,19 @@
 
   export default {
     name: 'test-run',
-    data(){
+    data() {
       return{
         localSuit: null,
         localCase: null,
       }
     },
-    components:{
+    components: {
       TestRunCase,
     },
     computed: {
       ...mapGetters(
         {
-          selectedObject: 'getSelectObject',
+          activeProject: 'getActiveProject',
         },
       ),
     },
@@ -30,8 +30,8 @@
     getCases (
       suitId = this.$route.params.suitId,
       caseId = this.$route.params.caseId ) {
-      this.localSuit = this.$store.state.activeProject.suits.find(item => item.id === +suitId);
-      this.localCase = JSON.parse(JSON.stringify(this.localSuit)).cases.find(item => item.id === +caseId);
+      this.localSuit = this.activeProject.suits.find(item => item.id === +suitId);
+      this.localCase = this.localSuit.cases.find(item => item.id === +caseId);
     },
   },
   mounted() {

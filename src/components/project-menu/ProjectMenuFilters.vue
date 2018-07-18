@@ -1,7 +1,7 @@
 <template>
   <div class="project-menu-filter" :class="{ extendSearch: panels.search, extendFilter: panels.filter }">
     <ul class="filter-nav">
-      <li>
+      <li v-if="!this.$store.state.startTestRun">
         <check-box @click="selectAll" :check="check"></check-box>
       </li>
       <li :class="{'active': panels.search}">
@@ -162,6 +162,7 @@
     color: white;
     height: 60px;
     font-size: 11px;
+    border-bottom: 1px solid @almost_black;
 
     .closeIcon{
       font-size: 24px;
@@ -288,7 +289,6 @@
         padding-top: 20px;
         padding-left: 20px;
         border-bottom: 1px solid @almost_black;
-
         a {
           cursor: pointer;
         }

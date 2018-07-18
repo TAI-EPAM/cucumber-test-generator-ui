@@ -17,7 +17,6 @@
       <div class="add-suit">
         <epam-button @click="addSuit" markup="lime-green">+ Add New Suit</epam-button>
       </div>
-
       <div style="color: white; text-align: center; margin: 10px 0" v-if="$route.query.debug">
         {{ filterController }}
       </div>

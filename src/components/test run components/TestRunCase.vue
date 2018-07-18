@@ -8,14 +8,14 @@
         <a href="#" class="nextCaseButton" @click.prevent="saveAndOpenNext"></a>
       </div>
       <div class="history">
-        <!--<curtain-->
-          <!--buttonClass="historyButton"-->
-          <!--buttonText="H"-->
-          <!--headerText="History"-->
-          <!--headerMarkup="orange"-->
-          <!--:component="getCertainComponent()"-->
-          <!--v-if="this.localCase">-->
-        <!--</curtain>-->
+        <curtain
+          buttonClass="historyButton"
+          buttonText="H"
+          headerText="History"
+          headerMarkup="orange"
+          :component="getCertainComponent()"
+          v-if="this.localCase">
+        </curtain>
       </div>
     </div>
     <div class="test-case-view">
@@ -84,10 +84,10 @@
     </div>
     <div class="test-case-bottom">
       <hr class="line">
-      <epam-button @click="testPassed" class="lime-green">
+      <epam-button @click="testPassed" class="lime-green button">
         TEST PASSED
       </epam-button>
-      <epam-button @click="testNotPassed" class="raspberry">
+      <epam-button @click="testNotPassed" class="raspberry button">
         TEST NOT PASSED
       </epam-button>
     </div>
@@ -100,6 +100,7 @@
   import { mapGetters } from 'vuex';
   import CaseHistory from '../case/CaseHistory';
   import Curtain from '../ui/Curtain';
+  import Confirmation from '../Confimation';
   import EpamButton from '../ui/EpamButton';
   import '../../assets/converted/info';
 
@@ -121,41 +122,105 @@
         updateStatus: null,
       };
     },
-    ...mapGetters({
-      getCommits: 'getCurrentCommits',
-      getSuit: 'getActiveSuitById',
-    }),
+    computed: {
+      ...mapGetters(
+        {
+          activeProject: 'getActiveProject',
+          getCommits: 'getCurrentCommits',
+          getSuit: 'getActiveSuitById',
+        },
+      ),
+    },
     methods:{
       setCheck(value) {
+        switch (value.displayedStatusName) {
+          case 'NOT DONE': value.displayedStatusName = 'NOT_DONE';
+          break;
+          case 'NOT RUN': value.displayedStatusName = 'NOT_RUN';
+          break;
+        }
         this.saveStatus.push(value);
       },
       saveAndOpenNext() {
-        //вставить save
-        const suitId = this.$route.params.suitId;
-        const projectId = this.$route.params.projectId;
-        const caseId = +this.$route.params.caseId;
-        this.activeSuit = this.$store.state.activeProject.suits.find(item => item.id === +suitId);
-        this.localCases = this.activeSuit.cases.filter(item => this.$store.state.selectedObject.cases.has(item.id));
-        for( let index in this.localCases){
-          if((this.localCases[index].id === caseId)&&( index < this.localCases.length-1)){
-            this.nextCase = this.localCases[++index];
-            this.$router.push({ path: `/testRun/projects/${projectId}/suits/${suitId}/case/${this.nextCase.id}` });
-          }
-        }
+        this.$store.state.updateStatus = this.saveStatus.filter((item, pos) => {
+          return this.saveStatus.indexOf(item) === pos;
+        });
+          this.$vuedals.open({
+            title: 'Save all changes',
+            component: Confirmation,
+            props: {
+              onCancel() {
+                this.$vuedals.close();
+                const suitId = this.$route.params.suitId;
+                const projectId = this.$route.params.projectId;
+                const caseId = +this.$route.params.caseId;
+                this.activeSuit = this.activeProject.suits.find(item => item.id === suitId);
+                this.localCases = this.activeSuit.cases.filter(item => this.$store.state.selectedObject.cases.has(item.id));
+                for (let index in this.localCases) {
+                  if ((this.localCases[index].id === caseId)&&( index < this.localCases.length-1)) {
+                    this.nextCase = this.localCases[++index];
+                    this.$router.push({ path: `/testRun/projects/${projectId}/suits/${suitId}/case/${this.nextCase.id}`});
+                  }
+                }
+
+              },
+              onSubmit() {
+                this.$vuedals.close();
+                const suitId = this.$route.params.suitId;
+                const projectId = this.$route.params.projectId;
+                const caseId = +this.$route.params.caseId;
+                if (this.$store.state.updateStatus) {
+                  for (let item of this.$store.state.updateStatus) {
+                    let sandData = { status: item.displayedStatusName };
+                    this.$store.dispatch('updateStepAsync', { data: sandData, stepId: item.id, projectId: projectId, suitId: suitId, caseId: caseId })
+                      .then(() => {
+                      });
+                  }
+                }
+                this.activeSuit = this.$store.state.activeProject.suits.find(item => item.id === +suitId);
+                this.localCases = this.activeSuit.cases.filter(item => this.$store.state.selectedObject.cases.has(item.id));
+                for (let index in this.localCases) {
+                  if ((this.localCases[index].id === caseId)&&( index < this.localCases.length-1)) {
+                    this.nextCase = this.localCases[++index];
+                    this.$router.push({ path: `/testRun/projects/${projectId}/suits/${suitId}/case/${this.nextCase.id}` });
+                  }
+                }
+
+              } },
+      });
       },
       testNotPassed() {
         this.saveStatus = [];
         const caseId = +this.$route.params.caseId;
         const suitId = this.$route.params.suitId;
-        let localSuit = this.$store.state.activeProject.suits.find(item => item.id === +suitId);
+        let localSuit = this.activeProject.suits.find(item => item.id === +suitId);
         this.localCase = JSON.parse(JSON.stringify(localSuit)).cases.find(item => item.id === +caseId);
-        console.log(this.$store.state.activeProject.suits);
       },
       testPassed() {
         this.$store.state.updateStatus = this.saveStatus.filter((item, pos) => {
           return this.saveStatus.indexOf(item) === pos;
         });
-        console.log(this.$store.state.updateStatus);
+      },
+      isCreatedCommit(commit) {
+        const attributes = ['id', 'name', 'description', 'creationDate', 'updateDate', 'priority', 'status'];
+        const oldValues = [];
+        const existAttributes = commit.propertyDifferences.map((el) => {
+          oldValues.push(el.oldValue);
+          return el.propertyName;
+        });
+        if (oldValues.find(el => el != null) || !equal(attributes, existAttributes)) {
+          return false;
+        }
+        return true;
+      },
+      getCertainComponent() {
+        return {
+          component: CaseHistory,
+          props: [
+            { caseName: this.localCase.name },
+            { commits: this.$store.state.currentCommits.filter(el => !this.isCreatedCommit(el)) },
+          ],
+        };
       },
     },
     props: ['localCase'],
@@ -229,13 +294,15 @@
     }
 
   }
+
 </style>
 
 <style lang="less">
   @import "../../assets/vendors/epam-ui/less/uui-colors";
   @import "../../assets/vendors/epam-ui/less/uui-fonts";
+
   .imgButton{
-    width: 13px;
+    width: 10px;
     fill: #39c2d7;
   }
   .caseSteps{
@@ -287,22 +354,6 @@
             font-family: @Oswald_Regular;
             padding: 8px;
             border:none;
-            :first-child{
-              background-color:@raspberry;
-              color: white;
-            }
-            :nth-child(2){
-              color: #666666;
-              background-color: #9e9e9e;
-            }
-            :nth-child(3){
-              color: white;
-              background-color: @orange;
-            }
-            :nth-child(4){
-              color: white;
-              background-color: @green_lime;
-            }
           }
         }
       }
@@ -364,6 +415,9 @@
       width: 40px;
       margin-left: -40px;
       margin-top: 20px;
+    }
+    .button{
+      margin-right:20px;
     }
   }
 </style>
